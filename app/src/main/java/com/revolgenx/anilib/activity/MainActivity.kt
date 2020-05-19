@@ -11,12 +11,10 @@ import androidx.annotation.Nullable
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.AppCompatDrawableManager
 import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.SharedElementCallback
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
-import androidx.core.view.ViewCompat
 import androidx.core.view.forEachIndexed
 import androidx.core.view.iterator
 import androidx.lifecycle.Observer
@@ -37,12 +35,12 @@ import com.revolgenx.anilib.fragment.*
 import com.revolgenx.anilib.fragment.base.BaseFragment
 import com.revolgenx.anilib.fragment.base.ParcelableFragment
 import com.revolgenx.anilib.fragment.home.discover.DiscoverFragment
-import com.revolgenx.anilib.fragment.home.DownloadFragment
+import com.revolgenx.anilib.fragment.home.TorrentFragment
 import com.revolgenx.anilib.fragment.home.RecommendationFragment
 import com.revolgenx.anilib.fragment.home.SeasonFragment
-import com.revolgenx.anilib.meta.DraweeViewerMeta
 import com.revolgenx.anilib.meta.UserMeta
 import com.revolgenx.anilib.preference.*
+import com.revolgenx.anilib.torrent.core.TorrentEngine
 import com.revolgenx.anilib.type.MediaType
 import com.revolgenx.anilib.util.*
 import com.revolgenx.anilib.view.navigation.BrowseFilterNavigationView
@@ -56,6 +54,7 @@ import kotlinx.coroutines.launch
 import net.openid.appauth.*
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
@@ -100,7 +99,7 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
                     DiscoverFragment::class.java,
                     SeasonFragment::class.java,
                     RecommendationFragment::class.java,
-                    DownloadFragment::class.java
+                    TorrentFragment::class.java
                 )
             )
         )
@@ -258,7 +257,7 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
                             clientId,
                             ResponseTypeValues.CODE,
                             redirectUri
-                        )
+                        ).setPromptValues(listOf("login"))
                         val request = builder.build()
                         val authorizationService = AuthorizationService(this)
 
@@ -273,6 +272,7 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
                             postAuthorizationIntent,
                             0
                         )
+
                         launch(Dispatchers.IO) {
                             authorizationService.performAuthorizationRequest(request, pendingIntent)
                         }
@@ -328,8 +328,11 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
 
     override fun onNewIntent(intent: Intent?) {
         checkIntent(intent)
+        checkNewTorrentIntent(intent)
         super.onNewIntent(intent)
+
     }
+
 
     private fun checkIntent(@Nullable intent: Intent?) {
         if (intent != null) {
@@ -356,11 +359,12 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
                 } else {
                     val accessToken = tokenResponse?.accessToken!!
                     logIn(accessToken)
+                    SessionEvent(true).postEvent
                     startActivity(Intent(this.context, MainActivity::class.java).apply {
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     })
-                    finish()
                     (supportFragmentManager.findFragmentByTag(authDialogTag) as? DynamicDialogFragment)?.dismiss()
+                    finish()
                 }
             }
         }
@@ -510,6 +514,71 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
             onDoneListener(this@MainActivity)
             show(supportFragmentManager, dialogTag)
         }
+    }
+
+
+
+    //torrent
+
+    private val torrentPreferenceModel by inject<TorrentPreference>()
+    private val torrentEngine by inject<TorrentEngine>()
+    private var uri: Uri? = null
+    private val uriKey = "uri_key"
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onTorrentEngineEvent(event: TorrentEngineEvent) {
+        when (event.engineEventTypes) {
+            TorrentEngineEventTypes.ENGINE_STARTED -> {
+                initDecode()
+            }
+        }
+    }
+
+
+    private fun checkNewTorrentIntent(intent: Intent?) {
+        if (intent == null) return
+        if (intent.data != null) {
+            uri = intent.data
+        } else if (intent.hasExtra("uri")) {
+            uri = intent.getParcelableExtra("uri")
+        }
+
+        if (torrentEngine.isEngineRunning()) {
+            initDecode()
+        }
+    }
+
+    private fun initDecode() {
+        if (uri == null) return
+
+        when (uri!!.scheme) {
+            MAGNET_PREFIX -> {
+//                AddTorrentBottomSheetDialog.newInstance(uri!!)
+//                    .show(supportFragmentManager, "add_torrent_bottom_sheet_dialog")
+            }
+            FILE_PREFIX -> {
+//                AddTorrentBottomSheetDialog.newInstance(uri!!)
+//                    .show(supportFragmentManager, "add_torrent_bottom_sheet_dialog")
+            }
+            HTTP_PREFIX, HTTPS_PREFIX -> {
+//                if (CheckUtil.checkUrl(uri.toString())) {
+//                    AddBookBottomSheetDialog.newInstance(uri.toString().trim())
+//                        .show(supportFragmentManager, "add_book_fragment_tag")
+//
+//                } else {
+//                    showErrorDialog(getString(R.string.invalid_url))
+//                }
+            }
+            CONTENT_PREFIX -> {
+//                AddTorrentBottomSheetDialog.newInstance(uri!!)
+//                    .show(supportFragmentManager, "add_torrent_bottom_sheet_dialog")
+            }
+            else -> {
+//                showErrorDialog(getString(R.string.unsupported_format))
+            }
+        }
+        uri = null
     }
 
 }

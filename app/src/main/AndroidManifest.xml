@@ -55,6 +55,7 @@
         <activity android:name=".activity.NavViewPagerContainerActivity" />
         <activity android:name=".activity.ToolbarContainerActivity" />
 
+        <service android:name=".torrent.service.MainService" />
     </application>
 
 </manifest>

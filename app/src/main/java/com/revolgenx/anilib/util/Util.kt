@@ -8,6 +8,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.TextView
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +16,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
+import com.github.razir.progressbutton.hideProgress
+import com.github.razir.progressbutton.showProgress
 import com.google.android.material.snackbar.Snackbar
+import com.pranavpandey.android.dynamic.support.theme.DynamicTheme
 import com.pranavpandey.android.dynamic.support.widget.DynamicSpinner
 import com.pranavpandey.android.dynamic.toasts.DynamicToast
 import com.pranavpandey.android.dynamic.utils.DynamicUnitUtils
@@ -36,6 +40,14 @@ import java.util.*
 
 const val COLLAPSED = 0
 const val EXPANDED = 1
+
+
+const val MAGNET_PREFIX = "magnet"
+const val HTTP_PREFIX = "http"
+const val HTTPS_PREFIX = "https"
+const val FTP_PREFIX = "ftp"
+const val FILE_PREFIX = "file"
+const val CONTENT_PREFIX = "content"
 
 
 fun AppCompatActivity.makePagerAdapter(fragments: List<BaseFragment>) =
@@ -176,7 +188,41 @@ fun Long.prettyTime(): String? {
     return PrettyTime().format(DateTimeUtils.toDate(Instant.ofEpochSecond(this)))
 }
 
+
+fun Long.formatRemainingTime(): String {
+    var n = this
+    val day = n / (24 * 3600)
+
+    n %= (24 * 3600)
+    val hour = n / 3600
+
+    n %= 3600
+    val minutes = n / 60
+
+    n %= 60
+    val seconds = n
+    return "$day:$hour:$minutes:$seconds"
+}
+
+fun Float.formatProgress() = String.format("%.1f%%", this)
+
 fun View.string(@StringRes id: Int) = context.getString(id)
+fun Context.string(@StringRes id: Int) = getString(id)
+
+fun Context.color(@ColorRes id: Int) = ContextCompat.getColor(this, id)
+
+fun TextView.showProgress(@StringRes resId: Int = 0, b: Boolean = false, progColor: Int? = null) {
+    if (b) {
+        this.showProgress {
+            buttonTextRes = resId
+            progressRadiusRes = R.dimen.progress_radius_dimen
+            progressStrokeRes = R.dimen.progress_stroke_dimen
+            progressColor = progColor ?: DynamicTheme.getInstance().get().tintAccentColor
+        }
+    } else {
+        this.hideProgress(resId)
+    }
+}
 
 
 fun Context.getClipBoardText(): String {
