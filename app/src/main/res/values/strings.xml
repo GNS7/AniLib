@@ -236,6 +236,16 @@
     <string name="recheck">Recheck</string>
     <string name="loading">Loading</string>
     <string name="unable_to_load_torrent">Unable to load torrent</string>
+    <string name="add_torrent">Add Torrent</string>
+    <string name="add_torrent_file">Add Torrent File</string>
+    <string name="add_torrent_magnet">Add Torrent Magnet</string>
+    <string name="percent_s">%.1f%%</string>
+    <string name="unknown_scheme">Unknown Scheme</string>
+    <string name="hash">Hash</string>
+    <string name="path">Path</string>
+    <string name="size">Size</string>
+    <string name="pieces">Pieces</string>
+    <string name="files">Files</string>
 
     <string-array name="media_format">
         <item>Tv</item>

@@ -1,9 +1,12 @@
 package com.revolgenx.anilib.activity
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.NonNull
@@ -20,6 +23,9 @@ import androidx.core.view.iterator
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import com.facebook.drawee.view.SimpleDraweeView
+import com.google.android.material.snackbar.Snackbar
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.listener.multi.SnackbarOnAnyDeniedMultiplePermissionsListener
 import com.otaliastudios.elements.Adapter
 import com.pranavpandey.android.dynamic.support.dialog.fragment.DynamicDialogFragment
 import com.pranavpandey.android.dynamic.support.theme.DynamicTheme
@@ -58,6 +64,7 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
+
 //todo use common activity to subscribe event
 class MainActivity : BaseDynamicActivity(), CoroutineScope,
     BrowseFilterNavigationView.AdvanceBrowseNavigationCallbackListener
@@ -89,6 +96,7 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        checkPermission()
         bottomNav.setBackgroundColor(DynamicTheme.getInstance().get().backgroundColor)
         setSupportActionBar(mainToolbar)
         themeBottomNavigation()
@@ -517,7 +525,6 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
     }
 
 
-
     //torrent
 
     private val torrentPreferenceModel by inject<TorrentPreference>()
@@ -580,5 +587,37 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
         }
         uri = null
     }
+
+
+    fun checkPermission(): Boolean {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                Dexter.withActivity(this)
+                    .withPermissions(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ).withListener(permissionsListener())
+                    .check()
+                return false
+            }
+        }
+        return true
+    }
+
+
+    private fun permissionsListener() = SnackbarOnAnyDeniedMultiplePermissionsListener
+        .Builder.with(
+        mainActivityCoordinatorLayout,
+        "Storage permission is required"
+    ).withOpenSettingsButton("Settings")
+        .withCallback(object : Snackbar.Callback() {
+            override fun onShown(sb: Snackbar?) {
+
+            }
+
+            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+
+            }
+        }).build()
 
 }

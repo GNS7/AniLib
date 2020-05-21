@@ -1,15 +1,24 @@
 package com.revolgenx.anilib.fragment.home
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.view.menu.MenuBuilder
+import androidx.appcompat.widget.PopupMenu
+import androidx.core.content.PermissionChecker
+import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.*
+import com.google.android.material.snackbar.Snackbar
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.listener.multi.SnackbarOnAnyDeniedMultiplePermissionsListener
 import com.revolgenx.anilib.R
 import com.revolgenx.anilib.activity.MainActivity
 import com.revolgenx.anilib.adapter.SelectableAdapter
@@ -25,6 +34,7 @@ import com.revolgenx.anilib.torrent.state.TorrentActiveState
 import com.revolgenx.anilib.torrent.state.TorrentState
 import com.revolgenx.anilib.util.*
 import com.revolgenx.anilib.viewmodel.TorrentViewModel
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.download_fragment_layout.*
 import kotlinx.android.synthetic.main.torrent_recycler_adapter_layout.*
 import org.greenrobot.eventbus.Subscribe
@@ -151,7 +161,39 @@ class TorrentFragment : BaseFragment() {
                 return true
             }
         }
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.torrent_fragment_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.addTorrentMenu -> {
+                PopupMenu(
+                    requireContext(),
+                    requireActivity().findViewById(R.id.addTorrentMenu)
+                ).let {
+                    it.inflate(R.menu.torrent_add_menu)
+                    it.setOnMenuItemClickListener {
+                        when (it.itemId) {
+                            R.id.addTorrentFileMenu -> {
+                                (activity as? MainActivity)?.checkPermission()
+                                true
+                            }
+                            R.id.addTorrentMagnetMenu -> {
+
+                                true
+                            }
+                            else -> false
+                        }
+                    }
+                    it.show()
+                }
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -217,24 +259,6 @@ class TorrentFragment : BaseFragment() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onShutdownEvent(event: ShutdownEvent) {
-        forceShutdown = true
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onSessionEvent(event:SessionEvent){
-        rotating = true
-    }
-
-    override fun onDestroy() {
-        adapter.currentList.forEach { it.removeAllListener() }
-        if ((!rotating && !torrentActiveState.serviceActive) || forceShutdown) {
-            torrentEngine.stop()
-        }
-        super.onDestroy()
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
     fun torrentEngineEvent(event: TorrentEngineEvent) {
         when (event.engineEventTypes) {
             TorrentEngineEventTypes.ENGINE_STARTING -> {
@@ -266,6 +290,25 @@ class TorrentFragment : BaseFragment() {
             it.supportActionBar?.setTitle(R.string.app_name)
             it.supportActionBar?.setSubtitle(0)
         }
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onShutdownEvent(event: ShutdownEvent) {
+        forceShutdown = true
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onSessionEvent(event: SessionEvent) {
+        rotating = true
+    }
+
+    override fun onDestroy() {
+        adapter.currentList.forEach { it.removeAllListener() }
+        if ((!rotating && !torrentActiveState.serviceActive) || forceShutdown) {
+            torrentEngine.stop()
+        }
+        super.onDestroy()
     }
 
 
