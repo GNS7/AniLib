@@ -27,7 +27,6 @@ import kotlinx.coroutines.*
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.koin.android.ext.android.inject
-import timber.log.Timber
 
 class MainService : Service() {
 
@@ -37,7 +36,8 @@ class MainService : Service() {
     private val serviceStartedNotifId: Int = 1000
     private val foregroundChanId = "com.revolgenx.anilib.FOREGROUND_DEFAULT_CHAN_ID"
     private val defChanId = "com.revolgenx.anilib.DEFAULT_CHAN_ID"
-    private val channelName = "anilib_channel_1"
+    private val channelName = "anilib_channel_0"
+    private val channelName1 = "anilib_channel_1"
     private var foregroundNotification: NotificationCompat.Builder? = null
     private var startupPendingIntent: PendingIntent? = null
     private val handler = Handler()
@@ -230,7 +230,7 @@ class MainService : Service() {
     private fun makeNotifyChans() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
             return
-
+        val chans = mutableListOf<NotificationChannel>()
         val defaultChan =
             NotificationChannel(defChanId, channelName, NotificationManager.IMPORTANCE_DEFAULT)
         defaultChan.enableVibration(true)
@@ -238,7 +238,15 @@ class MainService : Service() {
         defaultChan.enableLights(true)
         defaultChan.lightColor = Color.WHITE
 
-        notifyManager!!.createNotificationChannel(defaultChan)
+        chans.add(defaultChan)
+        chans.add(
+            NotificationChannel(
+                foregroundChanId,
+                channelName1,
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+        )
+        notifyManager!!.createNotificationChannels(chans)
     }
 
     private fun makeForegroundNotify() {

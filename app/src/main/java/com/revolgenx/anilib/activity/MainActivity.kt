@@ -96,7 +96,10 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        checkPermission()
+        if (!checkedStoragePermission()){
+            checkPermission()
+        }
+
         bottomNav.setBackgroundColor(DynamicTheme.getInstance().get().backgroundColor)
         setSupportActionBar(mainToolbar)
         themeBottomNavigation()

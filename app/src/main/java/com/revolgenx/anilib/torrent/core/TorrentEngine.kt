@@ -179,8 +179,10 @@ class TorrentEngine(val torrentPreferenceModel: TorrentPreference) : SessionMana
             try {
                 val ec = error_code()
                 p = add_torrent_params.read_resume_data(Vectors.bytes2byte_vector(resumeFile), ec)
-                require(ec.value() == 0) { "Unable to read the resume data: " + ec.message() }
-            } catch (e: Throwable) {
+                if (ec.value() != 0) {
+                    throw TorrentException("Unable to read the resume data: " + ec.message())
+                }
+            } catch (e: Exception) {
                 Timber.e(e, "Unable to set resume data")
             }
         }

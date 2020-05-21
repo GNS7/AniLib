@@ -75,4 +75,5 @@ val viewModelModules = module {
 
     //torrent
     viewModel { TorrentViewModel(get(),get(),get(),get()) }
+    viewModel { AddTorrentViewModel() }
 }

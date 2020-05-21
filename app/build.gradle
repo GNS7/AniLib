@@ -248,11 +248,6 @@ dependencies {
     //permission
     implementation 'com.karumi:dexter:5.0.0'
 
-    //material dialogs
-    implementation 'com.afollestad.material-dialogs:core:3.1.1'
-    implementation 'com.afollestad.material-dialogs:input:3.1.1'
-    implementation 'com.afollestad.material-dialogs:files:3.1.1'
-
     //file chooser
     implementation 'com.github.hedzr:android-file-chooser:devel-SNAPSHOT'
 

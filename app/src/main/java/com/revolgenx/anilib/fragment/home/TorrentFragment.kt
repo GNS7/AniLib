@@ -1,10 +1,8 @@
 package com.revolgenx.anilib.fragment.home
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.os.Build
+import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
@@ -12,20 +10,25 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.content.PermissionChecker
-import androidx.core.content.PermissionChecker.checkSelfPermission
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.net.toUri
+import androidx.core.os.bundleOf
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.*
-import com.google.android.material.snackbar.Snackbar
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.listener.multi.SnackbarOnAnyDeniedMultiplePermissionsListener
+import com.obsez.android.lib.filechooser.ChooserDialog
+import com.pranavpandey.android.dynamic.support.theme.DynamicTheme
 import com.revolgenx.anilib.R
 import com.revolgenx.anilib.activity.MainActivity
+import com.revolgenx.anilib.activity.ToolbarContainerActivity
 import com.revolgenx.anilib.adapter.SelectableAdapter
+import com.revolgenx.anilib.dialog.InputDialog
 import com.revolgenx.anilib.event.*
 import com.revolgenx.anilib.exception.TorrentPauseException
 import com.revolgenx.anilib.exception.TorrentResumeException
 import com.revolgenx.anilib.fragment.base.BaseFragment
+import com.revolgenx.anilib.fragment.base.ParcelableFragment
+import com.revolgenx.anilib.fragment.torrent.AddTorrentFragment
 import com.revolgenx.anilib.repository.util.Status
 import com.revolgenx.anilib.torrent.core.Torrent
 import com.revolgenx.anilib.torrent.core.TorrentEngine
@@ -34,9 +37,8 @@ import com.revolgenx.anilib.torrent.state.TorrentActiveState
 import com.revolgenx.anilib.torrent.state.TorrentState
 import com.revolgenx.anilib.util.*
 import com.revolgenx.anilib.viewmodel.TorrentViewModel
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.download_fragment_layout.*
-import kotlinx.android.synthetic.main.torrent_recycler_adapter_layout.*
+import kotlinx.android.synthetic.main.torrent_recycler_adapter_layout.view.*
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.koin.android.ext.android.inject
@@ -56,6 +58,11 @@ class TorrentFragment : BaseFragment() {
     private var rotating = false
     private var forceShutdown = false
 
+    private val accentColor: Int
+        get() = DynamicTheme.getInstance().get().accentColor
+
+    private val tintAccentColor: Int
+        get() = DynamicTheme.getInstance().get().tintAccentColor
 
     private var actionMode: ActionMode? = null
     private var inActionMode = false
@@ -178,11 +185,15 @@ class TorrentFragment : BaseFragment() {
                     it.setOnMenuItemClickListener {
                         when (it.itemId) {
                             R.id.addTorrentFileMenu -> {
-                                (activity as? MainActivity)?.checkPermission()
+                                if ((activity as? MainActivity)?.checkPermission() == true) {
+                                    openTorrentFileChooser()
+                                }
                                 true
                             }
                             R.id.addTorrentMagnetMenu -> {
-
+                                if ((activity as? MainActivity)?.checkPermission() == true) {
+                                    openInputDialog()
+                                }
                                 true
                             }
                             else -> false
@@ -220,14 +231,21 @@ class TorrentFragment : BaseFragment() {
             }
         }
 
-        if (savedInstanceState == null)
+        if (savedInstanceState == null){
             torrentEngine.start()
+        }
 
         torrentRecyclerview.adapter = adapter
 
         savedInstanceState?.let {
             it.getParcelable<Parcelable>(recyclerStateKey)?.let { parcel ->
                 torrentRecyclerview.layoutManager?.onRestoreInstanceState(parcel)
+            }
+
+            childFragmentManager.findFragmentByTag(InputDialog.tag)?.let {
+                (it as InputDialog).onInputDoneListener = {
+
+                }
             }
         }
     }
@@ -312,6 +330,58 @@ class TorrentFragment : BaseFragment() {
     }
 
 
+    private fun openInputDialog() {
+        InputDialog.newInstance(R.string.magnet_link).also {
+            it.onInputDoneListener = {
+                openAddTorrentActivity(it.trim().toUri())
+            }
+            it.show(childFragmentManager, InputDialog.tag)
+        }
+    }
+
+    private fun openAddTorrentActivity(it: Uri) {
+        ToolbarContainerActivity.openActivity(
+            requireContext(),
+            ParcelableFragment(
+                AddTorrentFragment::class.java,
+                bundleOf(AddTorrentFragment.uriKey to it)
+            )
+        )
+    }
+
+
+    private fun openTorrentFileChooser() {
+        ChooserDialog(requireContext())
+            .withFilter(false, false, "torrent")
+            .withStartFile(getDefualtStoragePath())
+            .withChosenListener { dir, dirFile ->
+                if (dirFile.extension != "torrent") {
+                    makeToast(R.string.not_a_torrent_file)
+                    return@withChosenListener
+                }
+
+                openAddTorrentActivity(dirFile.toUri())
+            }
+            .withResources(R.string.choose_a_file, R.string.done, R.string.cancel)
+            .titleFollowsDir(true)
+            .withFileIcons(
+                false,
+                ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.ads_ic_file
+                )?.also { DrawableCompat.setTint(it, tintAccentColor) },
+                ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.ic_folder
+                )?.also { DrawableCompat.setTint(it, tintAccentColor) }
+            )
+            .enableOptions(true)
+            .build()
+            .show()
+
+    }
+
+
     inner class TorrentRecyclerAdapter :
         SelectableAdapter<TorrentRecyclerAdapter.TorrentViewHolder, Torrent>(object :
             DiffUtil.ItemCallback<Torrent>() {
@@ -372,7 +442,7 @@ class TorrentFragment : BaseFragment() {
                 torrent = item
                 torrent!!.addListener(this)
                 v.apply {
-                    torrentAdapterConstraintLayout.isSelected = isSelected(adapterPosition)
+                    this.torrentAdapterConstraintLayout.isSelected = isSelected(adapterPosition)
                     pausePlayIv.setOnClickListener {
                         if (torrent!!.isPausedWithState()) {
                             try {

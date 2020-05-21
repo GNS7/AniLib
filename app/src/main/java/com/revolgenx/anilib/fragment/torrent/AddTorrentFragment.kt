@@ -11,8 +11,11 @@ import com.github.axet.androidlibrary.widgets.HeaderRecyclerAdapter
 import com.github.axet.androidlibrary.widgets.TreeListView
 import com.revolgenx.anilib.R
 import com.revolgenx.anilib.adapter.FilesTreeAdapter
+import com.revolgenx.anilib.event.TorrentAddedEvent
+import com.revolgenx.anilib.event.TorrentAddedEventTypes
 import com.revolgenx.anilib.exception.TorrentException
 import com.revolgenx.anilib.fragment.base.BaseLayoutFragment
+import com.revolgenx.anilib.torrent.core.Torrent
 import com.revolgenx.anilib.torrent.core.TorrentEngine
 import com.revolgenx.anilib.util.*
 import com.revolgenx.anilib.viewmodel.AddTorrentViewModel
@@ -72,6 +75,7 @@ class AddTorrentFragment : BaseLayoutFragment(), AlertListener, CoroutineScope {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        arguments?.classLoader = Uri::class.java.classLoader
         viewModel.uri = arguments?.getParcelable(uriKey) ?: return
 
         initListener()
@@ -190,6 +194,11 @@ class AddTorrentFragment : BaseLayoutFragment(), AlertListener, CoroutineScope {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.add_torrent_fragment_menu, menu)
     }
@@ -197,8 +206,47 @@ class AddTorrentFragment : BaseLayoutFragment(), AlertListener, CoroutineScope {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.addTorrentMenu -> {
+                if (viewModel.handle == null) {
+                    finishActivity()
+                    return false
+                }
 
-                true
+                return when (viewModel.uri.scheme) {
+                    MAGNET_PREFIX -> {
+                        TorrentAddedEvent(
+                            Torrent().also {
+                                it.path = torrentPathMetaTv.subtitle.toString()
+                                it.hash = torrentMetaHashTv.subtitle.toString()
+                                it.simpleState = true
+                                if (viewModel.handle!!.status().hasMetadata()) {
+                                    it.source = viewModel.handle!!.torrentFile().bencode()!!
+                                }
+                                it.magnet = arguments?.getParcelable<Uri>(uriKey).toString()
+                                it.handle = engine.loadTorrent(it.magnet, File(viewModel.path))
+                            },
+                            TorrentAddedEventTypes.TORRENT_ADDED
+                        ).postEvent
+                        rotation = true
+                        finishActivity()
+                        true
+                    }
+                    else -> {
+                        TorrentAddedEvent(
+                            Torrent().also {
+                                it.path = torrentPathMetaTv.subtitle.toString()
+                                it.hash = torrentMetaHashTv.subtitle.toString()
+                                it.handle = viewModel.handle
+                                it.simpleState = true
+                                it.magnet = viewModel.handle!!.makeMagnetUri()
+                                it.source = viewModel.handle!!.torrentFile().bencode()!!
+                            },
+                            TorrentAddedEventTypes.TORRENT_ADDED
+                        ).postEvent
+                        rotation = true
+                        finishActivity()
+                        true
+                    }
+                }
             }
             else -> super.onOptionsItemSelected(item)
         }
