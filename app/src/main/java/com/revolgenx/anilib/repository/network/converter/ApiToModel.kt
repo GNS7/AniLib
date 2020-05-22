@@ -13,10 +13,10 @@ fun NarrowMediaContent.getCommonMedia(model: CommonMediaModel): CommonMediaModel
     model.mediaId = id()
     model.title = title()?.let { title ->
         TitleModel().also { titleModel ->
-            titleModel.english = title.english() ?: title()!!.romaji()
+            titleModel.english = title.english()
             titleModel.romaji = title.romaji()
-            titleModel.native = title.native_() ?: title()!!.romaji()
-            titleModel.userPreferred = title()!!.userPreferred()
+            titleModel.native = title.native_()
+            titleModel.userPreferred = title.userPreferred()
         }
     }
     model.format = format()?.ordinal
@@ -59,7 +59,7 @@ fun NarrowMediaContent.getCommonMedia(model: CommonMediaModel): CommonMediaModel
 }
 
 
-fun BasicMediaContent.toBasiMediaContent() = CommonMediaModel().also { media ->
+fun BasicMediaContent.toBasicMediaContent() = CommonMediaModel().also { media ->
     media.mediaId = id()
     media.title = title()?.fragments()?.mediaTitle()?.toModel()
     media.coverImage = coverImage()?.fragments()?.mediaCoverImage()?.toModel()

@@ -1,79 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<com.pranavpandey.android.dynamic.support.widget.DynamicCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/torrentAdapterConstraintLayout"
+    style="@style/Widget.DynamicApp.Card.Clickable"
     android:layout_width="match_parent"
-    android:layout_height="100dp">
+    android:layout_height="wrap_content">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/torrentAdapterConstraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
 
-    <com.pranavpandey.android.dynamic.support.widget.DynamicFloatingActionButton
-        android:id="@+id/pausePlayIv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        app:elevation="1dp"
-        app:fabCustomSize="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ads_ic_play" />
-
-
-    <com.pranavpandey.android.dynamic.support.widget.DynamicLinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:orientation="vertical"
-        app:layout_constraintLeft_toRightOf="@+id/pausePlayIv"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.pranavpandey.android.dynamic.support.widget.DynamicTextView
-            android:id="@+id/torrentNameTv"
-            android:layout_width="match_parent"
+        <com.pranavpandey.android.dynamic.support.widget.DynamicFloatingActionButton
+            android:id="@+id/pausePlayIv"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textSize="16sp" />
+            android:layout_marginStart="20dp"
+            app:ads_colorType="background"
+            app:elevation="1dp"
+            app:fabCustomSize="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ads_ic_play" />
+
+        <com.pranavpandey.android.dynamic.support.widget.DynamicLinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toRightOf="@+id/pausePlayIv"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.pranavpandey.android.dynamic.support.widget.DynamicTextView
+                android:id="@+id/torrentNameTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textSize="16sp" />
 
 
-        <com.pranavpandey.android.dynamic.support.widget.DynamicProgressBar
-            android:id="@+id/torrentProgressBar"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="11dp"
-            android:max="100" />
+            <com.pranavpandey.android.dynamic.support.widget.DynamicProgressBar
+                android:id="@+id/torrentProgressBar"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="11dp"
+                android:max="100" />
 
-        <com.pranavpandey.android.dynamic.support.widget.DynamicTextView
-            android:id="@+id/torrentFirstTv"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginBottom="2dp"
-            android:layout_weight="1"
-            android:ellipsize="end"
-            android:fontFamily="@font/open_sans_light"
-            android:gravity="center_vertical"
-            android:includeFontPadding="false"
-            android:maxLines="1"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textSize="12sp" />
+            <com.pranavpandey.android.dynamic.support.widget.DynamicTextView
+                android:id="@+id/torrentFirstTv"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="2dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:fontFamily="@font/open_sans_light"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="12sp" />
 
-        <com.pranavpandey.android.dynamic.support.widget.DynamicTextView
-            android:id="@+id/torrentSecondTv"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:fontFamily="@font/open_sans_light"
-            android:gravity="center_vertical"
-            android:includeFontPadding="false"
-            android:maxLines="1"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textSize="12sp" />
+            <com.pranavpandey.android.dynamic.support.widget.DynamicTextView
+                android:id="@+id/torrentSecondTv"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/open_sans_light"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="12sp" />
 
-    </com.pranavpandey.android.dynamic.support.widget.DynamicLinearLayout>
+        </com.pranavpandey.android.dynamic.support.widget.DynamicLinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.pranavpandey.android.dynamic.support.widget.DynamicCardView>
