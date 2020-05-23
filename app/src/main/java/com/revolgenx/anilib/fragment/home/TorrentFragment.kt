@@ -6,11 +6,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
@@ -20,15 +22,23 @@ import com.obsez.android.lib.filechooser.ChooserDialog
 import com.pranavpandey.android.dynamic.support.theme.DynamicTheme
 import com.revolgenx.anilib.R
 import com.revolgenx.anilib.activity.MainActivity
+import com.revolgenx.anilib.activity.NavViewPagerContainerActivity
 import com.revolgenx.anilib.activity.ToolbarContainerActivity
+import com.revolgenx.anilib.activity.ViewPagerContainerActivity
 import com.revolgenx.anilib.adapter.SelectableAdapter
+import com.revolgenx.anilib.dialog.ConfirmationDialog
 import com.revolgenx.anilib.dialog.InputDialog
 import com.revolgenx.anilib.event.*
 import com.revolgenx.anilib.exception.TorrentPauseException
 import com.revolgenx.anilib.exception.TorrentResumeException
-import com.revolgenx.anilib.fragment.base.BaseFragment
+import com.revolgenx.anilib.fragment.base.BaseLayoutFragment
 import com.revolgenx.anilib.fragment.base.ParcelableFragment
+import com.revolgenx.anilib.fragment.base.ViewPagerParcelableFragments
 import com.revolgenx.anilib.fragment.torrent.AddTorrentFragment
+import com.revolgenx.anilib.fragment.torrent.BaseTorrentMetaFragment
+import com.revolgenx.anilib.fragment.torrent.TorrentMetaFragment
+import com.revolgenx.anilib.meta.ViewPagerContainerMeta
+import com.revolgenx.anilib.meta.ViewPagerContainerType
 import com.revolgenx.anilib.repository.util.Status
 import com.revolgenx.anilib.torrent.core.Torrent
 import com.revolgenx.anilib.torrent.core.TorrentEngine
@@ -37,14 +47,14 @@ import com.revolgenx.anilib.torrent.state.TorrentActiveState
 import com.revolgenx.anilib.torrent.state.TorrentState
 import com.revolgenx.anilib.util.*
 import com.revolgenx.anilib.viewmodel.TorrentViewModel
-import kotlinx.android.synthetic.main.download_fragment_layout.*
+import kotlinx.android.synthetic.main.torrent_fragment_layout.*
 import kotlinx.android.synthetic.main.torrent_recycler_adapter_layout.view.*
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class TorrentFragment : BaseFragment() {
+class TorrentFragment : BaseLayoutFragment() {
 
     companion object {
         private const val recyclerStateKey = "recycler_state_key"
@@ -64,6 +74,16 @@ class TorrentFragment : BaseFragment() {
     private val tintAccentColor: Int
         get() = DynamicTheme.getInstance().get().tintAccentColor
 
+    private val translucentSurfaceColor: Int by lazy {
+        ColorUtils.setAlphaComponent(
+            DynamicTheme.getInstance().get().tintSurfaceColor, 80
+        )
+    }
+
+    override val layoutRes: Int = R.layout.torrent_fragment_layout
+    override var titleRes: Int? = R.string.torrent
+    override var setHomeAsUp: Boolean = false
+
     private var actionMode: ActionMode? = null
     private var inActionMode = false
         set(value) {
@@ -81,6 +101,16 @@ class TorrentFragment : BaseFragment() {
         override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
             return when (item?.itemId) {
                 R.id.torrentDeleteItem -> {
+
+                    ConfirmationDialog.Companion.Builder().apply {
+                        titleRes(R.string.delete)
+                        messageTextRes(R.string.are_you_sure)
+                        neutralTextRes(R.string.with_files)
+                        onButtonClicked { dialogInterface, which ->
+                            deleteTorrent(which)
+                        }
+                    }.build().show(childFragmentManager, ConfirmationDialog.TAG)
+
 //                    MaterialDialog(this@TorrentFragment.context!!).show {
 //                        var withFiles = false
 //                        checkBoxPrompt(R.string.delete_with_files) {
@@ -125,6 +155,10 @@ class TorrentFragment : BaseFragment() {
             mode?.menuInflater?.inflate(R.menu.torrent_action_menu, menu)
             if (menu is MenuBuilder) {
                 menu.setOptionalIconsVisible(true)
+                val primaryColorDark = DynamicTheme.getInstance().get().tintPrimaryColor
+                menu.findItem(R.id.torrentSelectAllItem).icon?.setTint(primaryColorDark)
+                menu.findItem(R.id.torrentDeleteItem).icon?.setTint(primaryColorDark)
+                menu.findItem(R.id.recheckTorrentItem).icon?.setTint(primaryColorDark)
             }
             return true
         }
@@ -137,14 +171,24 @@ class TorrentFragment : BaseFragment() {
         }
     }
 
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.download_fragment_layout, container, false)
+    private fun deleteTorrent(which: Int) {
+        when (which) {
+            AlertDialog.BUTTON_POSITIVE -> {
+                TorrentRemovedEvent(
+                    (adapter as TorrentRecyclerAdapter).getSelectedHashes(),
+                    false
+                ).postEvent
+            }
+            AlertDialog.BUTTON_NEUTRAL -> {
+                TorrentRemovedEvent(
+                    (adapter as TorrentRecyclerAdapter).getSelectedHashes(),
+                    true
+                ).postEvent
+            }
+        }
+        inActionMode = false
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -155,19 +199,7 @@ class TorrentFragment : BaseFragment() {
                 this.context,
                 if (requireContext().resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) 2 else 1
             )
-
-        torrentRecyclerview.addItemDecoration(
-            DividerItemDecoration(
-                this.context,
-                DividerItemDecoration.VERTICAL
-            )
-        )
-
-        torrentRecyclerview.itemAnimator = object : DefaultItemAnimator() {
-            override fun canReuseUpdatedViewHolder(viewHolder: RecyclerView.ViewHolder): Boolean {
-                return true
-            }
-        }
+        torrentRecyclerview.adapter = adapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -209,7 +241,7 @@ class TorrentFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        registerForEvent()
         viewModel.torrentLiveData.observe(viewLifecycleOwner) { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
@@ -231,11 +263,10 @@ class TorrentFragment : BaseFragment() {
             }
         }
 
-        if (savedInstanceState == null){
+        if (savedInstanceState == null) {
             torrentEngine.start()
         }
 
-        torrentRecyclerview.adapter = adapter
 
         savedInstanceState?.let {
             it.getParcelable<Parcelable>(recyclerStateKey)?.let { parcel ->
@@ -244,7 +275,7 @@ class TorrentFragment : BaseFragment() {
 
             childFragmentManager.findFragmentByTag(InputDialog.tag)?.let {
                 (it as InputDialog).onInputDoneListener = {
-
+                    openAddTorrentActivity(it.trim().toUri())
                 }
             }
         }
@@ -254,18 +285,8 @@ class TorrentFragment : BaseFragment() {
         super.onResume()
         invalidateOptionMenu()
         setHasOptionsMenu(true)
-        updateToolbarTitle()
     }
 
-    override fun onStart() {
-        super.onStart()
-        registerForEvent()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        unRegisterForEvent()
-    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         rotating = true
@@ -303,13 +324,6 @@ class TorrentFragment : BaseFragment() {
         }
     }
 
-    private fun updateToolbarTitle() {
-        (activity as? AppCompatActivity)?.let {
-            it.supportActionBar?.setTitle(R.string.app_name)
-            it.supportActionBar?.setSubtitle(0)
-        }
-    }
-
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onShutdownEvent(event: ShutdownEvent) {
@@ -326,6 +340,7 @@ class TorrentFragment : BaseFragment() {
         if ((!rotating && !torrentActiveState.serviceActive) || forceShutdown) {
             torrentEngine.stop()
         }
+        unRegisterForEvent()
         super.onDestroy()
     }
 
@@ -442,7 +457,13 @@ class TorrentFragment : BaseFragment() {
                 torrent = item
                 torrent!!.addListener(this)
                 v.apply {
-                    this.torrentAdapterConstraintLayout.isSelected = isSelected(adapterPosition)
+                    this.torrentAdapterConstraintLayout.setBackgroundColor(
+                        if (isSelected(adapterPosition)) {
+                            translucentSurfaceColor
+                        } else {
+                            DynamicTheme.getInstance().get().surfaceColor
+                        }
+                    )
                     pausePlayIv.setOnClickListener {
                         if (torrent!!.isPausedWithState()) {
                             try {
@@ -472,9 +493,13 @@ class TorrentFragment : BaseFragment() {
                             }
                         }
 
-//                        startActivity(Intent(context, TorrentMetaActivity::class.java).apply {
-//                            putExtra(TorrentMetaActivity.torrentKey, torrent!!)
-//                        })
+                        ViewPagerContainerActivity.openActivity(
+                            requireContext(),
+                            ViewPagerContainerMeta(
+                                ViewPagerContainerType.TORRENT_META,
+                                torrent
+                            )
+                        )
                     }
 
                     setOnLongClickListener {

@@ -41,6 +41,8 @@ class App : DynamicApplication() {
     }
 
     override fun onInitialize() {
+        Timber.plant(Timber.DebugTree())
+
         AndroidThreeTen.init(this)
 //        Fresco.initialize(this)
 
@@ -50,13 +52,8 @@ class App : DynamicApplication() {
             .setRequestListeners(requestListeners)
             .build()
         BigImageViewer.initialize(FrescoImageLoader.with(this, config))
-        FLog.setMinimumLoggingLevel(FLog.VERBOSE);
-
-        Timber.plant(Timber.DebugTree())
-//        MarkwonImpl.createHtmlInstance(this)
         startKoin {
             androidContext(this@App)
-
             modules(
                 listOf(
                     viewModelModules,

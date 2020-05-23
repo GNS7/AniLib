@@ -32,6 +32,7 @@ import com.revolgenx.anilib.fragment.staff.StaffFragment
 import com.revolgenx.anilib.fragment.staff.StaffMediaCharacterFragment
 import com.revolgenx.anilib.fragment.staff.StaffMediaRoleFragment
 import com.revolgenx.anilib.fragment.studio.StudioFragment
+import com.revolgenx.anilib.fragment.torrent.*
 import com.revolgenx.anilib.fragment.user.*
 import com.revolgenx.anilib.util.registerForEvent
 import com.revolgenx.anilib.util.unRegisterForEvent
@@ -189,6 +190,33 @@ class ViewPagerContainerActivity : BaseDynamicActivity() {
                         ),
                         bundleOf(
                             UserFavouriteFragment.USER_FAVOURITE_PARCELABLE_KEY to viewPagerMeta.data
+                        )
+                    )
+                )
+            }
+
+            ViewPagerContainerType.TORRENT_META -> {
+                supportActionBar?.title = getString(R.string.torrent_meta)
+                containerBottomNav.inflateMenu(R.menu.torrent_meta_bottom_menu)
+                viewPagerParcelableFragments = ViewPagerParcelableFragments(
+                    listOf(
+                        TorrentMetaFragment::class.java.name,
+                        TorrentFileFragment::class.java.name,
+                        TorrentTrackerFragment::class.java.name,
+                        TorrentPeerFragment::class.java.name
+                    ),
+                    listOf(
+                        bundleOf(
+                            BaseTorrentMetaFragment.meta_key to viewPagerMeta.data
+                        ),
+                        bundleOf(
+                            BaseTorrentMetaFragment.meta_key to viewPagerMeta.data
+                        ),
+                        bundleOf(
+                            BaseTorrentMetaFragment.meta_key to viewPagerMeta.data
+                        ),
+                        bundleOf(
+                            BaseTorrentMetaFragment.meta_key to viewPagerMeta.data
                         )
                     )
                 )

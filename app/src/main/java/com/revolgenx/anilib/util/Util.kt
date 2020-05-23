@@ -1,6 +1,7 @@
 package com.revolgenx.anilib.util
 
 import android.app.Activity
+import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
@@ -225,7 +226,17 @@ fun TextView.showProgress(@StringRes resId: Int = 0, b: Boolean = false, progCol
 }
 
 
+//clipboard
 fun Context.getClipBoardText(): String {
     val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     return clipboard.primaryClip?.getItemAt(0)?.text?.toString() ?: ""
+}
+
+fun Context.copyToClipBoard(str: String?) {
+    if (str == null) return
+    val clipboard: ClipboardManager =
+        ContextCompat.getSystemService<ClipboardManager>(this, ClipboardManager::class.java)!!
+    val clip = ClipData.newPlainText(string(R.string.app_name), str)
+    clipboard.setPrimaryClip(clip)
+    makeToast(R.string.copied_to_clipboard)
 }

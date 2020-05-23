@@ -22,15 +22,15 @@ abstract class BaseLayoutFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        if (setHomeAsUp) {
-            (activity as AppCompatActivity).supportActionBar?.let {
-                titleRes?.let { title ->
-                    it.setTitle(title)
-                }
+        (activity as AppCompatActivity).supportActionBar?.let {
+            titleRes?.let { title ->
+                it.setTitle(title)
+            }
+            if (setHomeAsUp) {
                 it.setDisplayShowHomeEnabled(true)
                 it.setDisplayHomeAsUpEnabled(true)
             }
         }
-
     }
+
 }

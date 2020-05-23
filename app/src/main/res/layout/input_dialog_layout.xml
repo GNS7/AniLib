@@ -5,31 +5,24 @@
     android:layout_height="wrap_content"
     android:padding="4dp">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/textInputEt"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/pasteInputIv"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textInputEt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLines="1" />
-
-    </com.google.android.material.textfield.TextInputLayout>
 
     <com.pranavpandey.android.dynamic.support.widget.DynamicImageView
         android:id="@+id/pasteInputIv"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:padding="6dp"
-        app:layout_constraintBottom_toBottomOf="@id/textInputLayout"
-        app:layout_constraintDimensionRatio="1:1"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:layout_constraintBottom_toBottomOf="@id/textInputEt"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/textInputLayout"
+        app:layout_constraintTop_toTopOf="@id/textInputEt"
         app:srcCompat="@drawable/ic_paste" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

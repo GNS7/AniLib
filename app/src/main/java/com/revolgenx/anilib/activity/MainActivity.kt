@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
@@ -81,6 +82,8 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
         private const val authorizationExtra = "com.revolgenx.anilib.HANDLE_AUTHORIZATION_RESPONSE"
     }
 
+    private var pressedTwice = false
+
     private val tagAdapter: Adapter.Builder
         get() {
             return Adapter.builder(this)
@@ -96,7 +99,7 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!checkedStoragePermission()){
+        if (!checkedStoragePermission()) {
             checkPermission()
         }
 
@@ -384,8 +387,17 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
-        } else
-            super.onBackPressed()
+        } else {
+            if (pressedTwice) {
+                finish()
+            } else {
+                makeToast(R.string.press_again_to_exit, icon = R.drawable.ic_exit)
+                Handler().postDelayed({
+                    pressedTwice = false
+                }, 1000)
+            }
+            pressedTwice = true
+        }
     }
 
 

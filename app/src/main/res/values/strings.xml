@@ -251,6 +251,21 @@
     <string name="choose_a_file">Choose a file</string>
     <string name="magnet_link">Magnet Link</string>
     <string name="input_text">Input Text</string>
+    <string name="torrent">Torrent</string>
+    <string name="with_files">With files</string>
+    <string name="press_again_to_exit">Press again to exit</string>
+    <string name="seeders_leechers">Seeders(S) · Leechers(L)</string>
+    <string name="peers">Peers</string>
+    <string name="speed">Speed</string>
+    <string name="downloaded_uploaded">Downloaded · Uploaded</string>
+    <string name="eta">Eta</string>
+    <string name="added">Added</string>
+    <string name="created">Created</string>
+    <string name="size_free">Size: Free %s</string>
+    <string name="torrent_meta">Torrent Meta</string>
+    <string name="general">General</string>
+    <string name="copied_to_clipboard">Copied to clipboard</string>
+    <string name="trackers">Trackers</string>
 
     <string-array name="media_format">
         <item>Tv</item>
