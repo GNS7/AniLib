@@ -26,7 +26,7 @@ import kotlin.coroutines.CoroutineContext
 
 typealias TorrentProgressListener = (() -> Unit)?
 
-class Torrent() : Parcelable, KoinComponent, AlertListener, CoroutineScope {
+class Torrent() : Parcelable, KoinComponent, AlertListener {
 
     constructor(parcel: Parcel) : this() {
         hash = parcel.readString()!!
@@ -38,11 +38,6 @@ class Torrent() : Parcelable, KoinComponent, AlertListener, CoroutineScope {
         hasError = parcel.readInt() == 1
         errorMsg = parcel.readString()!!
     }
-
-    private val job = Job()
-    override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.Main
-
     private var lastSaveResumeTime: Long = 0
     private val saveResumeSyncTime: Long = 10000 /* ms */
 
@@ -327,10 +322,6 @@ class Torrent() : Parcelable, KoinComponent, AlertListener, CoroutineScope {
     /*
      * Generate fast-resume data for the torrent, see libtorrent documentation
      */
-
-    /*
-     * Generate fast-resume data for the torrent, see libtorrent documentation
-     */
     private fun saveResumeData(force: Boolean) {
         val now = System.currentTimeMillis()
         if (force || now - lastSaveResumeTime >= saveResumeSyncTime) {
@@ -556,9 +547,7 @@ class Torrent() : Parcelable, KoinComponent, AlertListener, CoroutineScope {
 
     fun addListener(torrentProgressListener: TorrentProgressListener) {
         listeners.add(torrentProgressListener)
-        Timber.d("add listener ${listeners.size}")
     }
-
 
     fun addEngineListener() {
         engine.addListener(this)

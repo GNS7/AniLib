@@ -6,11 +6,13 @@
     android:padding="4dp">
 
 
-    <com.google.android.material.textfield.TextInputEditText
+    <com.pranavpandey.android.dynamic.support.widget.DynamicEditText
         android:id="@+id/textInputEt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:maxLines="1"
+        android:inputType="text"
+        android:textSize="13sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/pasteInputIv"
         app:layout_constraintTop_toTopOf="parent" />

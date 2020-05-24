@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.revolgenx.anilib.R
 import com.revolgenx.anilib.torrent.core.TorrentProgressListener
+import com.revolgenx.anilib.util.ThreadUtil.runOnUiThread
 import com.revolgenx.anilib.util.formatSpeed
 import kotlinx.android.synthetic.main.peer_adapter_layout.view.*
 import org.libtorrent4j.PeerInfo
@@ -22,6 +23,9 @@ class TorrentPeerFragment :
         super.onViewCreated(view, savedInstanceState)
         adapter = PeerRecyclerAdapter()
         adapter.setHasStableIds(true)
+    }
+
+    override fun setHasOptionsMenu(hasMenu: Boolean) {
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -38,9 +42,11 @@ class TorrentPeerFragment :
     }
 
     private fun updateView() {
-        if (!canUpdateView()) return
-        val info = torrent.handle!!.peerInfo()
-        adapter.submitList(info)
+        runOnUiThread {
+            if (!canUpdateView()) return@runOnUiThread
+            val info = torrent.handle!!.peerInfo()
+            adapter.submitList(info)
+        }
     }
 
     override fun onDestroy() {

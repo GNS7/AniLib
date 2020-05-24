@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.revolgenx.anilib.R
 import com.revolgenx.anilib.adapter.FilesTreeAdapter
 import com.revolgenx.anilib.torrent.core.TorrentProgressListener
+import com.revolgenx.anilib.util.ThreadUtil.runOnUiThread
 import kotlinx.android.synthetic.main.torrent_file_header_layout.*
 import kotlinx.android.synthetic.main.torrent_file_meta_layout.*
 
@@ -13,6 +14,8 @@ class TorrentFileFragment : BaseTorrentMetaFragment(), TorrentProgressListener {
     override val layoutRes: Int = R.layout.torrent_file_meta_layout
     private lateinit var adapter: FilesTreeAdapter
 
+    override fun setHasOptionsMenu(hasMenu: Boolean) {
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -34,21 +37,22 @@ class TorrentFileFragment : BaseTorrentMetaFragment(), TorrentProgressListener {
     }
 
     private fun updateView() {
-        if (!checkValidity()) return
+        runOnUiThread {
+            if (!checkValidity()) return@runOnUiThread
 
-        if (!torrent.handle!!.status().hasMetadata()) return
+            if (!torrent.handle!!.status().hasMetadata()) return@runOnUiThread
 
-        if (adapter.folders.isEmpty()) {
-            adapter.update {
-                adapter.load()
-                adapter.updateTotal()
-            }
-        } else {
-            treeRecyclerView.post {
-                adapter.updateItems()
+            if (adapter.folders.isEmpty()) {
+                adapter.update {
+                    adapter.load()
+                    adapter.updateTotal()
+                }
+            } else {
+                treeRecyclerView.post {
+                    adapter.updateItems()
+                }
             }
         }
-
     }
 
     override fun invoke() {

@@ -46,6 +46,7 @@ import com.revolgenx.anilib.torrent.core.TorrentProgressListener
 import com.revolgenx.anilib.torrent.state.TorrentActiveState
 import com.revolgenx.anilib.torrent.state.TorrentState
 import com.revolgenx.anilib.util.*
+import com.revolgenx.anilib.util.ThreadUtil.runOnUiThread
 import com.revolgenx.anilib.viewmodel.TorrentViewModel
 import kotlinx.android.synthetic.main.torrent_fragment_layout.*
 import kotlinx.android.synthetic.main.torrent_recycler_adapter_layout.view.*
@@ -202,8 +203,12 @@ class TorrentFragment : BaseLayoutFragment() {
         torrentRecyclerview.adapter = adapter
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.torrent_fragment_menu, menu)
+        if (menu is MenuBuilder) {
+            menu.setOptionalIconsVisible(true)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -233,6 +238,18 @@ class TorrentFragment : BaseLayoutFragment() {
                     }
                     it.show()
                 }
+                true
+            }
+            R.id.resumeAllMenu -> {
+                resumeAll()
+                true
+            }
+            R.id.pauseAllMenu -> {
+                pauseAll()
+                true
+            }
+            R.id.exitMenu -> {
+                ShutdownEvent().postEvent
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -396,6 +413,14 @@ class TorrentFragment : BaseLayoutFragment() {
 
     }
 
+    private fun resumeAll() {
+        viewModel.resumeAll()
+    }
+
+    private fun pauseAll() {
+        viewModel.pauseAll()
+    }
+
 
     inner class TorrentRecyclerAdapter :
         SelectableAdapter<TorrentRecyclerAdapter.TorrentViewHolder, Torrent>(object :
@@ -521,35 +546,36 @@ class TorrentFragment : BaseLayoutFragment() {
 
             @SuppressLint("SetTextI18n")
             private fun updateView() {
-                v.apply {
-                    if (context == null) return
+                runOnUiThread {
+                    v.apply {
+                        if (context == null) return@runOnUiThread
 
-                    torrentNameTv.text = torrent!!.name
-                    val progress = torrent!!.progress
-                    torrentProgressBar.progress = progress.toInt()
+                        torrentNameTv.text = torrent!!.name
+                        val progress = torrent!!.progress
+                        torrentProgressBar.progress = progress.toInt()
 
 //                    if (torrent!!.hasError) {
 //                        indicatorView.setBackgroundColor(context.color(R.color.errorColor))
 //                    }
 
-                    val state = torrent!!.state
-                    torrentFirstTv.text =
-                        "${torrent!!.state.name} · S:${torrent!!.connectedSeeders()} · L:${torrent!!.connectedLeechers()}${
-                        if (state == TorrentState.DOWNLOADING) {
-                            " · ET: ${torrent!!.eta().formatRemainingTime()}"
-                        } else ""}"
+                        val state = torrent!!.state
+                        torrentFirstTv.text =
+                            "${torrent!!.state.name} · S:${torrent!!.connectedSeeders()} · L:${torrent!!.connectedLeechers()}${
+                            if (state == TorrentState.DOWNLOADING) {
+                                " · ET: ${torrent!!.eta().formatRemainingTime()}"
+                            } else ""}"
 
-                    torrentSecondTv.text =
-                        if (state == TorrentState.COMPLETED || state == TorrentState.SEEDING) {
-                            "${torrent!!.totalCompleted.formatSize()}/${torrent!!.totalSize.formatSize()} · " +
-                                    "↑ ${torrent!!.uploadSpeed.formatSpeed()}"
-                        } else
-                            "${torrent!!.totalCompleted.formatSize()}/${torrent!!.totalSize.formatSize()} · " +
-                                    "↓ ${torrent!!.downloadSpeed.formatSpeed()} · ↑ ${torrent!!.uploadSpeed.formatSpeed()}"
+                        torrentSecondTv.text =
+                            if (state == TorrentState.COMPLETED || state == TorrentState.SEEDING) {
+                                "${torrent!!.totalCompleted.formatSize()}/${torrent!!.totalSize.formatSize()} · " +
+                                        "↑ ${torrent!!.uploadSpeed.formatSpeed()}"
+                            } else
+                                "${torrent!!.totalCompleted.formatSize()}/${torrent!!.totalSize.formatSize()} · " +
+                                        "↓ ${torrent!!.downloadSpeed.formatSpeed()} · ↑ ${torrent!!.uploadSpeed.formatSpeed()}"
 
-                    if (currentState == state) return
+                        if (currentState == state) return@runOnUiThread
 
-                    currentState = state
+                        currentState = state
 
 //                    indicatorView.setBackgroundColor(
 //                        when (currentState) {
@@ -579,21 +605,21 @@ class TorrentFragment : BaseLayoutFragment() {
 //                        }
 //                    )
 
-                    pausePlayIv.setImageResource(
-                        if (torrent!!.isPausedWithState()) {
-                            R.drawable.ic_play
-                        } else {
-                            R.drawable.ic_pause
-                        }
-                    )
+                        pausePlayIv.setImageResource(
+                            if (torrent!!.isPausedWithState()) {
+                                R.drawable.ic_play
+                            } else {
+                                R.drawable.ic_pause
+                            }
+                        )
 
+                    }
                 }
             }
 
+
             override fun invoke() {
-                activity?.runOnUiThread {
-                    updateView()
-                }
+                updateView()
             }
 
 

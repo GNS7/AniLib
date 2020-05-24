@@ -222,7 +222,7 @@
     <string name="review_of_s_by_s">Review of %s by %s</string>
     <string name="recent_reviews">Recent Reviews</string>
     <string name="reviews">Reviews</string>
-    <string name="exit">exit</string>
+    <string name="exit">Exit</string>
     <string name="torrent_d">Torrent  %d</string>
     <string name="foreground_notification">AniLib is running in background</string>
 
@@ -266,6 +266,15 @@
     <string name="general">General</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="trackers">Trackers</string>
+    <string name="reannounce">Re-Announce</string>
+    <string name="add_tracker">Add Tracker</string>
+    <string name="speed_limit">Speed limit</string>
+    <string name="pause">Pause</string>
+    <string name="upload_speed">Upload Speed</string>
+    <string name="download_speed">Download Speed</string>
+    <string name="add_space_between_trackers">Add space between trackers</string>
+    <string name="resume_all">Resume All</string>
+    <string name="pause_all">Pause All</string>
 
     <string-array name="media_format">
         <item>Tv</item>

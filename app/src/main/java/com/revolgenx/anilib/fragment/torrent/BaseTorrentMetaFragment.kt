@@ -14,9 +14,10 @@ abstract class BaseTorrentMetaFragment : BaseLayoutFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         arguments?.classLoader = Torrent::class.java.classLoader
-        torrent = arguments?.getParcelable<Torrent>(meta_key) ?: return
+        torrent = arguments?.getParcelable(meta_key) ?: return
     }
 
-    fun checkValidity() = ::torrent.isInitialized && torrent.handle != null && torrent.handle?.isValid == true
+    fun checkValidity() =
+        ::torrent.isInitialized && torrent.handle != null && torrent.handle?.isValid == true
 
 }

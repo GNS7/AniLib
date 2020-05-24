@@ -12,6 +12,7 @@ import com.revolgenx.anilib.model.torrent.TrackerModel
 import com.revolgenx.anilib.model.torrent.TrackerStatus
 import com.revolgenx.anilib.preference.TorrentPreference
 import com.revolgenx.anilib.torrent.core.TorrentProgressListener
+import com.revolgenx.anilib.util.ThreadUtil.runOnUiThread
 import kotlinx.android.synthetic.main.tracker_adapter_layout.view.*
 import org.koin.android.ext.android.inject
 
@@ -30,6 +31,10 @@ class TorrentTrackerFragment :
         adapter = TrackerRecyclerAdapter()
     }
 
+    override fun setHasOptionsMenu(hasMenu: Boolean) {
+    }
+
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         if (!checkValidity()) return
@@ -43,69 +48,71 @@ class TorrentTrackerFragment :
     }
 
     private fun updateView() {
-        if (!canUpdateView()) return
+        runOnUiThread {
+            if (!canUpdateView()) return@runOnUiThread
 
-        torrent.handle!!.status().let {
-            trackerModels[lsd] = trackerModels[lsd]?.apply {
-                working =
-                    if (torrentPref.lsdEnabled) TrackerStatus.WORKING else TrackerStatus.NOT_WORKING
-            } ?: TrackerModel(
-                lsd,
-                if (torrentPref.lsdEnabled) TrackerStatus.WORKING else TrackerStatus.NOT_WORKING,
-                ""
-            )
+            torrent.handle!!.status().let {
+                trackerModels[lsd] = trackerModels[lsd]?.apply {
+                    working =
+                        if (torrentPref.lsdEnabled) TrackerStatus.WORKING else TrackerStatus.NOT_WORKING
+                } ?: TrackerModel(
+                    lsd,
+                    if (torrentPref.lsdEnabled) TrackerStatus.WORKING else TrackerStatus.NOT_WORKING,
+                    ""
+                )
 
-            trackerModels[dht] = trackerModels[dht]?.apply {
-                working =
-                    if (torrentPref.dhtEnabled) TrackerStatus.WORKING else TrackerStatus.NOT_WORKING
-            } ?: TrackerModel(
-                dht,
-                if (torrentPref.dhtEnabled) TrackerStatus.WORKING else TrackerStatus.NOT_WORKING,
-                ""
-            )
+                trackerModels[dht] = trackerModels[dht]?.apply {
+                    working =
+                        if (torrentPref.dhtEnabled) TrackerStatus.WORKING else TrackerStatus.NOT_WORKING
+                } ?: TrackerModel(
+                    dht,
+                    if (torrentPref.dhtEnabled) TrackerStatus.WORKING else TrackerStatus.NOT_WORKING,
+                    ""
+                )
 
-            trackerModels[pex] = trackerModels[pex]?.apply {
-                working = TrackerStatus.WORKING
-            } ?: TrackerModel(
-                pex,
-                TrackerStatus.WORKING,
-                ""
-            )
+                trackerModels[pex] = trackerModels[pex]?.apply {
+                    working = TrackerStatus.WORKING
+                } ?: TrackerModel(
+                    pex,
+                    TrackerStatus.WORKING,
+                    ""
+                )
 
-        }
-        torrent.handle!!.trackers().map { entry ->
-            val name = entry.url()
-            var message = ""
-            var status = TrackerStatus.NOT_WORKING
-            if (entry.endpoints().isNotEmpty()) {
-                entry.endpoints().sortedWith(compareBy { it.fails() }).first().let { endP ->
-                    message = endP.message()
-                    status = if (entry.isVerified && endP.isWorking) TrackerStatus.WORKING
-                    else if (endP.fails() == 0 && endP.updating()) TrackerStatus.UPDATING
-                    else if (endP.fails() == 0) TrackerStatus.NOT_CONTACTED
-                    else TrackerStatus.NOT_WORKING
+            }
+            torrent.handle!!.trackers().map { entry ->
+                val name = entry.url()
+                var message = ""
+                var status = TrackerStatus.NOT_WORKING
+                if (entry.endpoints().isNotEmpty()) {
+                    entry.endpoints().sortedWith(compareBy { it.fails() }).first().let { endP ->
+                        message = endP.message()
+                        status = if (entry.isVerified && endP.isWorking) TrackerStatus.WORKING
+                        else if (endP.fails() == 0 && endP.updating()) TrackerStatus.UPDATING
+                        else if (endP.fails() == 0) TrackerStatus.NOT_CONTACTED
+                        else TrackerStatus.NOT_WORKING
+                    }
                 }
+
+                trackerModels[name]?.let {
+                    it.name = name
+                    it.working = status
+                    it.message = message
+                    it
+                } ?: let {
+                    trackerModels[name] =
+                        TrackerModel(
+                            name,
+                            status,
+                            message
+                        )
+                }
+
+                trackerModels[name]
+
             }
 
-            trackerModels[name]?.let {
-                it.name = name
-                it.working = status
-                it.message = message
-                it
-            } ?: let {
-                trackerModels[name] =
-                    TrackerModel(
-                        name,
-                        status,
-                        message
-                    )
-            }
-
-            trackerModels[name]
-
+            adapter.submitList(trackerModels.values.toList())
         }
-
-        adapter.submitList(trackerModels.values.toList())
     }
 
 

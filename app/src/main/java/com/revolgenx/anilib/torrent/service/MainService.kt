@@ -273,7 +273,7 @@ class MainService : Service() {
             .setContentText(getString(R.string.foreground_notification))
             .setTicker(getString(R.string.foreground_notification))
             .setWhen(System.currentTimeMillis())
-            .setSmallIcon(R.drawable.ic_launcher)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
             .addAction(makeShutdownAction())
             .setCategory(Notification.CATEGORY_SERVICE)
 
@@ -353,7 +353,7 @@ class MainService : Service() {
     private fun notificationStyle(): NotificationCompat.Style {
         val inboxStyle = NotificationCompat.InboxStyle()
         torrentHashMap.values.take(3).forEach {
-            inboxStyle.addLine("(T)" + "·" + it.name + " · " + it.downloadSpeed.formatSpeed() + " · " + it.progress.formatProgress())
+            inboxStyle.addLine(it.name + " · " + it.downloadSpeed.formatSpeed() + " · " + it.progress.formatProgress())
         }
         return inboxStyle
     }

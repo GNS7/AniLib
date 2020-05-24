@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/torrentPauseItem"
+        android:icon="@drawable/ic_pause"
+        android:title="@string/pause"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/recheckItem"
+        android:icon="@drawable/ic_rewatching"
+        android:title="@string/recheck"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/reannounceItem"
+        android:icon="@drawable/ic_reannounce"
+        android:title="@string/reannounce"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/speedLimitItem"
+        android:icon="@drawable/ic_speed_limit"
+        android:title="@string/speed_limit"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/addTrackerItem"
+        android:icon="@drawable/ic_genre"
+        android:title="@string/add_tracker"
+        app:showAsAction="never" />
+
+</menu>
