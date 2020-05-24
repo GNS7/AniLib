@@ -31,9 +31,6 @@ class TorrentTrackerFragment :
         adapter = TrackerRecyclerAdapter()
     }
 
-    override fun setHasOptionsMenu(hasMenu: Boolean) {
-    }
-
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

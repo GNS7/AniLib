@@ -25,9 +25,6 @@ class TorrentPeerFragment :
         adapter.setHasStableIds(true)
     }
 
-    override fun setHasOptionsMenu(hasMenu: Boolean) {
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         if (!checkValidity()) return

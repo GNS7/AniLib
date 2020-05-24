@@ -275,6 +275,8 @@
     <string name="add_space_between_trackers">Add space between trackers</string>
     <string name="resume_all">Resume All</string>
     <string name="pause_all">Pause All</string>
+    <string name="unsupported_format">Unsupported format</string>
+    <string name="please_wait_starting_engine">Please wait starting engine.</string>
 
     <string-array name="media_format">
         <item>Tv</item>
@@ -505,6 +507,17 @@
         <item>Created At Desc</item>
         <item>Updated At</item>
         <item>Updated At Desc</item>
+    </string-array>
+
+    <string-array name="torrent_sort">
+        <item>Name Asc</item>
+        <item>Name Desc</item>
+        <item>Size Asc</item>
+        <item>Size Desc</item>
+        <item>Progress Asc</item>
+        <item>Progress Desc</item>
+        <item>Date Asc</item>
+        <item>Date Desc</item>
     </string-array>
 
 </resources>

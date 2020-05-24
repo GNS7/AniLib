@@ -87,7 +87,6 @@ class AddTorrentFragment : BaseLayoutFragment(), AlertListener, CoroutineScope {
 
         if (viewModel.handle == null) return
 
-
         adapter = FilesTreeAdapter(viewModel.handle!!) {
             headerLayout.torrentMetaTotalSizeTv.text = it
         }
@@ -220,6 +219,8 @@ class AddTorrentFragment : BaseLayoutFragment(), AlertListener, CoroutineScope {
                                 it.simpleState = true
                                 if (viewModel.handle!!.status().hasMetadata()) {
                                     it.source = viewModel.handle!!.torrentFile().bencode()!!
+                                }else{
+
                                 }
                                 it.magnet = arguments?.getParcelable<Uri>(uriKey).toString()
                                 it.handle = engine.loadTorrent(it.magnet, File(viewModel.path))

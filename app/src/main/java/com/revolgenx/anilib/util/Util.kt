@@ -145,9 +145,13 @@ fun Fragment.makeToast(@StringRes str: Int? = null, msg: String? = null, @Drawab
 fun Context.makeToast(@StringRes str: Int? = null, msg: String? = null, @DrawableRes icon: Int? = null) {
     if (icon != null) {
         val drawable = ContextCompat.getDrawable(this, icon)
-        DynamicToast.make(this, str?.let { getString(it) } ?: msg, drawable).show()
+        DynamicToast.make(this, str?.let { getString(it) } ?: msg, drawable).also {
+            it.view.findViewById<TextView?>(com.pranavpandey.android.dynamic.toasts.R.id.adt_toast_text)?.textSize = 13f
+        }.show()
     } else {
-        DynamicToast.make(this, str?.let { getString(it) } ?: msg).show()
+        DynamicToast.make(this, str?.let { getString(it) } ?: msg).also {
+            it.view.findViewById<TextView?>(com.pranavpandey.android.dynamic.toasts.R.id.adt_toast_text)?.textSize = 13f
+        }.show()
     }
 }
 

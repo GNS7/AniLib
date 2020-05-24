@@ -26,8 +26,10 @@ import com.revolgenx.anilib.activity.NavViewPagerContainerActivity
 import com.revolgenx.anilib.activity.ToolbarContainerActivity
 import com.revolgenx.anilib.activity.ViewPagerContainerActivity
 import com.revolgenx.anilib.adapter.SelectableAdapter
+import com.revolgenx.anilib.dialog.BaseDialogFragment
 import com.revolgenx.anilib.dialog.ConfirmationDialog
 import com.revolgenx.anilib.dialog.InputDialog
+import com.revolgenx.anilib.dialog.TorrentSortDialog
 import com.revolgenx.anilib.event.*
 import com.revolgenx.anilib.exception.TorrentPauseException
 import com.revolgenx.anilib.exception.TorrentResumeException
@@ -39,10 +41,12 @@ import com.revolgenx.anilib.fragment.torrent.BaseTorrentMetaFragment
 import com.revolgenx.anilib.fragment.torrent.TorrentMetaFragment
 import com.revolgenx.anilib.meta.ViewPagerContainerMeta
 import com.revolgenx.anilib.meta.ViewPagerContainerType
+import com.revolgenx.anilib.preference.torrentSort
 import com.revolgenx.anilib.repository.util.Status
 import com.revolgenx.anilib.torrent.core.Torrent
 import com.revolgenx.anilib.torrent.core.TorrentEngine
 import com.revolgenx.anilib.torrent.core.TorrentProgressListener
+import com.revolgenx.anilib.torrent.sort.makeTorrentSortingComparator
 import com.revolgenx.anilib.torrent.state.TorrentActiveState
 import com.revolgenx.anilib.torrent.state.TorrentState
 import com.revolgenx.anilib.util.*
@@ -54,6 +58,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 class TorrentFragment : BaseLayoutFragment() {
 
@@ -91,7 +96,7 @@ class TorrentFragment : BaseLayoutFragment() {
             field = value
 
             actionMode = if (value) {
-                (activity as? MainActivity)?.startSupportActionMode(actionModeCallback)
+                (activity as? AppCompatActivity)?.startSupportActionMode(actionModeCallback)
             } else {
                 actionMode?.finish()
                 null
@@ -102,34 +107,14 @@ class TorrentFragment : BaseLayoutFragment() {
         override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
             return when (item?.itemId) {
                 R.id.torrentDeleteItem -> {
-
                     ConfirmationDialog.Companion.Builder().apply {
                         titleRes(R.string.delete)
                         messageTextRes(R.string.are_you_sure)
                         neutralTextRes(R.string.with_files)
-                        onButtonClicked { dialogInterface, which ->
+                        onButtonClicked { _, which ->
                             deleteTorrent(which)
                         }
                     }.build().show(childFragmentManager, ConfirmationDialog.TAG)
-
-//                    MaterialDialog(this@TorrentFragment.context!!).show {
-//                        var withFiles = false
-//                        checkBoxPrompt(R.string.delete_with_files) {
-//                            withFiles = it
-//                        }
-//                        message(R.string.are_you_sure)
-//                        title(R.string.delete_files)
-//                        positiveButton(R.string.yes) {
-//                            postEvent(
-//                                TorrentRemovedEvent(
-//                                    (adapter as TorrentRecyclerAdapter).getSelectedHashes(),
-//                                    withFiles
-//                                )
-//                            )
-//                            inActionMode = false
-//                        }
-//                        negativeButton(R.string.no)
-//                    }
                     true
                 }
 
@@ -156,7 +141,7 @@ class TorrentFragment : BaseLayoutFragment() {
             mode?.menuInflater?.inflate(R.menu.torrent_action_menu, menu)
             if (menu is MenuBuilder) {
                 menu.setOptionalIconsVisible(true)
-                val primaryColorDark = DynamicTheme.getInstance().get().tintPrimaryColor
+                val primaryColorDark = DynamicTheme.getInstance().get().primaryColorDark
                 menu.findItem(R.id.torrentSelectAllItem).icon?.setTint(primaryColorDark)
                 menu.findItem(R.id.torrentDeleteItem).icon?.setTint(primaryColorDark)
                 menu.findItem(R.id.recheckTorrentItem).icon?.setTint(primaryColorDark)
@@ -176,13 +161,13 @@ class TorrentFragment : BaseLayoutFragment() {
         when (which) {
             AlertDialog.BUTTON_POSITIVE -> {
                 TorrentRemovedEvent(
-                    (adapter as TorrentRecyclerAdapter).getSelectedHashes(),
+                    adapter.getSelectedHashes(),
                     false
                 ).postEvent
             }
             AlertDialog.BUTTON_NEUTRAL -> {
                 TorrentRemovedEvent(
-                    (adapter as TorrentRecyclerAdapter).getSelectedHashes(),
+                    adapter.getSelectedHashes(),
                     true
                 ).postEvent
             }
@@ -248,6 +233,10 @@ class TorrentFragment : BaseLayoutFragment() {
                 pauseAll()
                 true
             }
+            R.id.sortTorrentMenu -> {
+                makeTorrentSortDialog()
+                true
+            }
             R.id.exitMenu -> {
                 ShutdownEvent().postEvent
                 true
@@ -256,8 +245,25 @@ class TorrentFragment : BaseLayoutFragment() {
         }
     }
 
+    private fun makeTorrentSortDialog() {
+        TorrentSortDialog.newInstance(torrentSort(requireContext())).also {
+            it.addListener()
+            it.show(childFragmentManager, TorrentSortDialog.tag)
+        }
+    }
+
+    private fun TorrentSortDialog.addListener() {
+        onButtonClickedListener = { _, which ->
+            if (which == AlertDialog.BUTTON_POSITIVE) {
+                makeTorrentSort()
+                Timber.d("onpositive clicked  ${torrentSort(requireContext())}")
+            }
+        }
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        makeTorrentSort()
         registerForEvent()
         viewModel.torrentLiveData.observe(viewLifecycleOwner) { resource ->
             when (resource.status) {
@@ -289,13 +295,13 @@ class TorrentFragment : BaseLayoutFragment() {
             it.getParcelable<Parcelable>(recyclerStateKey)?.let { parcel ->
                 torrentRecyclerview.layoutManager?.onRestoreInstanceState(parcel)
             }
-
-            childFragmentManager.findFragmentByTag(InputDialog.tag)?.let {
-                (it as InputDialog).onInputDoneListener = {
-                    openAddTorrentActivity(it.trim().toUri())
-                }
-            }
+            (childFragmentManager.findFragmentByTag(InputDialog.tag) as? InputDialog)?.addListener()
+            (childFragmentManager.findFragmentByTag(TorrentSortDialog.tag) as? TorrentSortDialog)?.addListener()
         }
+    }
+
+    private fun makeTorrentSort() {
+        viewModel.torrentSort = makeTorrentSortingComparator(torrentSort(requireContext()))
     }
 
     override fun onResume() {
@@ -321,7 +327,6 @@ class TorrentFragment : BaseLayoutFragment() {
                 progressText.showProgress(R.string.starting_engine, true)
             }
             TorrentEngineEventTypes.ENGINE_STARTED -> {
-                makeToast(msg = "Engine started")
                 progressText.visibility = View.GONE
                 viewModel.getAllTorrents()
             }
@@ -364,23 +369,20 @@ class TorrentFragment : BaseLayoutFragment() {
 
     private fun openInputDialog() {
         InputDialog.newInstance(R.string.magnet_link).also {
-            it.onInputDoneListener = {
-                openAddTorrentActivity(it.trim().toUri())
-            }
+            it.addListener()
             it.show(childFragmentManager, InputDialog.tag)
         }
     }
 
-    private fun openAddTorrentActivity(it: Uri) {
-        ToolbarContainerActivity.openActivity(
-            requireContext(),
-            ParcelableFragment(
-                AddTorrentFragment::class.java,
-                bundleOf(AddTorrentFragment.uriKey to it)
-            )
-        )
+    private fun InputDialog.addListener() {
+        onInputDoneListener = {
+            openAddTorrentActivity(it.trim().toUri())
+        }
     }
 
+    private fun openAddTorrentActivity(uri: Uri) {
+        AddTorrentEvent(uri).postEvent
+    }
 
     private fun openTorrentFileChooser() {
         ChooserDialog(requireContext())

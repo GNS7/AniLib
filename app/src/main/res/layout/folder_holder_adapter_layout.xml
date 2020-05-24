@@ -36,5 +36,6 @@
         android:layout_gravity="center"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
+        app:ads_colorType="tint_surface"
         app:srcCompat="@drawable/ic_arrow_down" />
 </com.pranavpandey.android.dynamic.support.widget.DynamicLinearLayout>

@@ -330,7 +330,7 @@ class Torrent() : Parcelable, KoinComponent, AlertListener {
             return
         }
 
-        if (saveResumeCounter > 5) return
+        if (saveResumeCounter > 5 && !force) return
 
         try {
             if (checkValidity()) {

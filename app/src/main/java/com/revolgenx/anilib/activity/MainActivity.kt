@@ -125,6 +125,17 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
         silentFetchUserInfo()
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (((intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0)) return
+
+        if (intent.data != null) {
+            uri = intent.data
+        } else if (intent.hasExtra("uri")) {
+            uri = intent.getParcelableExtra("uri")
+        }
+    }
+
 
     private fun updateRightNavView() {
         val filter = BrowseFilterDataProvider.getBrowseFilterData(this) ?: return
@@ -557,6 +568,15 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onShutdownEvent(event: ShutdownEvent) {
+        val intent = Intent(Intent.ACTION_MAIN)
+        intent.addCategory(Intent.CATEGORY_HOME)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        startActivity(intent)
+        finish()
+    }
+
 
     private fun checkNewTorrentIntent(intent: Intent?) {
         if (intent == null) return
@@ -568,6 +588,8 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
 
         if (torrentEngine.isEngineRunning()) {
             initDecode()
+        }else{
+            makeToast(R.string.please_wait_starting_engine)
         }
     }
 
@@ -575,29 +597,11 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
         if (uri == null) return
 
         when (uri!!.scheme) {
-            MAGNET_PREFIX -> {
-//                AddTorrentBottomSheetDialog.newInstance(uri!!)
-//                    .show(supportFragmentManager, "add_torrent_bottom_sheet_dialog")
-            }
-            FILE_PREFIX -> {
-//                AddTorrentBottomSheetDialog.newInstance(uri!!)
-//                    .show(supportFragmentManager, "add_torrent_bottom_sheet_dialog")
-            }
-            HTTP_PREFIX, HTTPS_PREFIX -> {
-//                if (CheckUtil.checkUrl(uri.toString())) {
-//                    AddBookBottomSheetDialog.newInstance(uri.toString().trim())
-//                        .show(supportFragmentManager, "add_book_fragment_tag")
-//
-//                } else {
-//                    showErrorDialog(getString(R.string.invalid_url))
-//                }
-            }
-            CONTENT_PREFIX -> {
-//                AddTorrentBottomSheetDialog.newInstance(uri!!)
-//                    .show(supportFragmentManager, "add_torrent_bottom_sheet_dialog")
+            MAGNET_PREFIX, FILE_PREFIX, CONTENT_PREFIX -> {
+                AddTorrentEvent(uri!!).postEvent
             }
             else -> {
-//                showErrorDialog(getString(R.string.unsupported_format))
+                makeToast(R.string.unsupported_format)
             }
         }
         uri = null

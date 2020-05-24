@@ -21,6 +21,14 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/sortTorrentMenu"
+        android:icon="@drawable/ads_ic_sort"
+        android:title="@string/sort"
+        app:showAsAction="never" />
+
+
+
+    <item
         android:id="@+id/exitMenu"
         android:icon="@drawable/ic_exit"
         android:title="@string/exit"

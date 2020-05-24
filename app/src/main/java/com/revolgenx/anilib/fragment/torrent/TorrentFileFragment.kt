@@ -14,9 +14,6 @@ class TorrentFileFragment : BaseTorrentMetaFragment(), TorrentProgressListener {
     override val layoutRes: Int = R.layout.torrent_file_meta_layout
     private lateinit var adapter: FilesTreeAdapter
 
-    override fun setHasOptionsMenu(hasMenu: Boolean) {
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         if (!checkValidity())

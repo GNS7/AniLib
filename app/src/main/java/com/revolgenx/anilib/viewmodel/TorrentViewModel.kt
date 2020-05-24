@@ -14,6 +14,9 @@ import com.revolgenx.anilib.repository.util.Status
 import com.revolgenx.anilib.torrent.core.Torrent
 import com.revolgenx.anilib.torrent.service.ServiceConnector
 import com.revolgenx.anilib.torrent.service.isServiceRunning
+import com.revolgenx.anilib.torrent.sort.BaseSorting
+import com.revolgenx.anilib.torrent.sort.TorrentSorting
+import com.revolgenx.anilib.torrent.sort.TorrentSortingComparator
 import com.revolgenx.anilib.torrent.state.TorrentActiveState
 import com.revolgenx.anilib.util.makeToast
 import com.revolgenx.anilib.util.registerForEvent
@@ -41,6 +44,17 @@ class TorrentViewModel(
     }
 
     val torrentField = TorrentField()
+
+    var torrentSort = TorrentSortingComparator(
+        TorrentSorting(
+            TorrentSorting.SortingColumns.NAME,
+            BaseSorting.Direction.ASC
+        )
+    )
+        set(value) {
+            field = value
+            updateResource()
+        }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onTorrentAddedEvent(event: TorrentAddedEvent) {
@@ -244,7 +258,7 @@ class TorrentViewModel(
 
     private fun updateResource() {
         torrentLiveData.postValue(
-            Resource.success(torrentHashMap.values.toMutableList())
+            Resource.success(torrentHashMap.values.sortedWith(torrentSort).toMutableList())
         )
     }
 

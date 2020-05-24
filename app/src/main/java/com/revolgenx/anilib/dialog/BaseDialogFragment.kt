@@ -11,7 +11,7 @@ import com.pranavpandey.android.dynamic.support.widget.DynamicButton
 typealias OnShowListener = ((dialog: DynamicDialog) -> Unit)?
 typealias OnButtonClickedListener = ((dialogInterface: DialogInterface, which: Int) -> Unit)?
 
-abstract class BaseDialogFragment : DynamicDialogFragment() {
+open class BaseDialogFragment : DynamicDialogFragment() {
 
     protected open var titleRes: Int = 0
     protected open var viewRes: Int = 0
