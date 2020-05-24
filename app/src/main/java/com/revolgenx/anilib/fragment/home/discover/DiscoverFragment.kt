@@ -1,7 +1,10 @@
 package com.revolgenx.anilib.fragment.home.discover
 
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import com.revolgenx.anilib.R

@@ -4,8 +4,8 @@ import androidx.room.Room
 import com.revolgenx.anilib.repository.db.AnilibDatabase
 import com.revolgenx.anilib.repository.db.TorrentRepository
 import com.revolgenx.anilib.repository.network.BaseGraphRepository
-import com.revolgenx.anilib.repository.network.NetworkProvider
 import com.revolgenx.anilib.repository.network.GraphRepositoryImpl
+import com.revolgenx.anilib.repository.network.NetworkProvider
 import org.koin.dsl.module
 
 val networkModules = module {

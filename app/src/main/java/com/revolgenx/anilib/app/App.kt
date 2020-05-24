@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import androidx.annotation.StyleRes
 import androidx.multidex.MultiDex
 import androidx.work.*
-import com.facebook.common.logging.FLog
 import com.facebook.imagepipeline.core.ImagePipelineConfig
 import com.facebook.imagepipeline.listener.RequestListener
 import com.facebook.imagepipeline.listener.RequestLoggingListener

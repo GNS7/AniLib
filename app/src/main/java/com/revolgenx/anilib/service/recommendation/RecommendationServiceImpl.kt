@@ -2,10 +2,10 @@ package com.revolgenx.anilib.service.recommendation
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.revolgenx.anilib.field.recommendation.AddRecommendationField
-import com.revolgenx.anilib.field.recommendation.UpdateRecommendationField
 import com.revolgenx.anilib.field.media.MediaRecommendationField
+import com.revolgenx.anilib.field.recommendation.AddRecommendationField
 import com.revolgenx.anilib.field.recommendation.RecommendationField
+import com.revolgenx.anilib.field.recommendation.UpdateRecommendationField
 import com.revolgenx.anilib.model.*
 import com.revolgenx.anilib.model.recommendation.RecommendationModel
 import com.revolgenx.anilib.repository.network.BaseGraphRepository
