@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.pranavpandey.android.dynamic.support.widget.DynamicLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/resource_status_container_layout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.pranavpandey.android.dynamic.support.widget.DynamicNestedScrollView
+        android:id="@+id/addTorrentNestedLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <com.pranavpandey.android.dynamic.support.widget.DynamicLinearLayout
+            android:id="@+id/addTorrentLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+
+            <com.revolgenx.anilib.view.header.CustomDynamicHeader
+                android:id="@+id/torrentMetaNameTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ads_fillSpace="true"
+                app:ads_title="@string/name" />
+
+            <com.revolgenx.anilib.view.header.CustomDynamicHeader
+                android:id="@+id/torrentMetaHashTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ads_fillSpace="true"
+                app:ads_title="@string/hash" />
+
+            <com.revolgenx.anilib.view.header.CustomDynamicHeader
+                android:id="@+id/torrentPathMetaTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ads_fillSpace="true"
+                app:ads_title="@string/path"
+                app:ads_subtitle=""/>
+
+
+            <com.revolgenx.anilib.view.header.CustomDynamicHeader
+                android:id="@+id/torrentSizeTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ads_fillSpace="true"
+                app:ads_title="@string/size"
+                app:ads_subtitle="0"/>
+
+            <com.revolgenx.anilib.view.header.CustomDynamicHeader
+                android:id="@+id/torrentPiecesTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ads_fillSpace="true"
+                app:ads_title="@string/pieces"
+                app:ads_subtitle="0"/>
+
+            <com.revolgenx.anilib.view.header.CustomDynamicHeader
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ads_fillSpace="true"
+                android:layout_marginTop="10dp"
+                app:ads_title="@string/files" />
+
+
+            <com.github.axet.androidlibrary.widgets.TreeRecyclerView
+                android:id="@+id/treeRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:nestedScrollingEnabled="true" />
+
+        </com.pranavpandey.android.dynamic.support.widget.DynamicLinearLayout>
+    </com.pranavpandey.android.dynamic.support.widget.DynamicNestedScrollView>
+</com.pranavpandey.android.dynamic.support.widget.DynamicLinearLayout>

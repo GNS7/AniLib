@@ -17,6 +17,7 @@ import com.revolgenx.anilib.fragment.base.ParcelableFragment
 import com.revolgenx.anilib.fragment.review.AllReviewFragment
 import com.revolgenx.anilib.fragment.review.ReviewFragment
 import com.revolgenx.anilib.fragment.studio.StudioFragment
+import com.revolgenx.anilib.fragment.torrent.AddTorrentFragment
 import com.revolgenx.anilib.meta.*
 import com.revolgenx.anilib.util.openLink
 import com.revolgenx.anilib.util.registerForEvent
@@ -30,7 +31,6 @@ abstract class BaseDynamicActivity : DynamicSystemActivity() {
     override fun getLocale(): Locale? {
         return null
     }
-
 
     override fun getThemeRes(): Int {
         return ThemeController.appStyle
@@ -150,6 +150,7 @@ abstract class BaseDynamicActivity : DynamicSystemActivity() {
                     )
                 )
             }
+
             is BrowseStaffEvent -> {
                 ViewPagerContainerActivity.openActivity(
                     this,
@@ -159,6 +160,7 @@ abstract class BaseDynamicActivity : DynamicSystemActivity() {
                     )
                 )
             }
+
             is BrowseStudioEvent -> {
                 ContainerActivity.openActivity(
                     this,
@@ -168,6 +170,7 @@ abstract class BaseDynamicActivity : DynamicSystemActivity() {
                     )
                 )
             }
+
             is BrowseTagEvent -> {
                 BrowseActivity.openActivity(
                     this, event.model
@@ -196,6 +199,20 @@ abstract class BaseDynamicActivity : DynamicSystemActivity() {
                         null
                     )
                 )
+            }
+
+
+            //torrent
+            is AddTorrentEvent -> {
+                event.uri?.let {
+                    ToolbarContainerActivity.openActivity(
+                        this,
+                        ParcelableFragment(
+                            AddTorrentFragment::class.java,
+                            bundleOf(AddTorrentFragment.uriKey to it)
+                        )
+                    )
+                }
             }
         }
     }

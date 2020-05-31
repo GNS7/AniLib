@@ -72,4 +72,8 @@ val viewModelModules = module {
     viewModel { ReviewComposerViewModel(get()) }
     viewModel { ReviewViewModel(get()) }
     viewModel { AllReviewViewModel(get()) }
+
+    //torrent
+    viewModel { TorrentViewModel(get(),get(),get(),get()) }
+    viewModel { AddTorrentViewModel() }
 }

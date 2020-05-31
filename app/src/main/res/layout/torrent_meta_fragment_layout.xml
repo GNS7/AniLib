@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.pranavpandey.android.dynamic.support.widget.DynamicNestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scrollViewLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <com.pranavpandey.android.dynamic.support.widget.DynamicLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="vertical">
+
+        <com.revolgenx.anilib.view.header.CustomDynamicHeader
+            android:id="@+id/torrentNameTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ads_fillSpace="true"
+            app:ads_title="@string/name"
+            app:ads_subtitle=""/>
+
+        <com.revolgenx.anilib.view.header.CustomDynamicHeader
+            android:id="@+id/torrentHashTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ads_fillSpace="true"
+            app:ads_title="@string/hash"
+            app:ads_subtitle=""/>
+
+        <com.revolgenx.anilib.view.header.CustomDynamicHeader
+            android:id="@+id/torrentPathTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ads_fillSpace="true"
+            app:ads_title="@string/path"
+            app:ads_subtitle="" />
+
+        <com.revolgenx.anilib.view.header.CustomDynamicHeader
+            android:id="@+id/torrentFileSizeTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ads_fillSpace="true"
+            app:ads_title="@string/size"
+            app:ads_subtitle=""/>
+
+
+        <com.revolgenx.anilib.view.header.CustomDynamicHeader
+            android:id="@+id/torrentSeedersLeechersTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ads_fillSpace="true"
+            app:ads_title="@string/seeders_leechers"
+            app:ads_subtitle="" />
+
+        <com.revolgenx.anilib.view.header.CustomDynamicHeader
+            android:id="@+id/torrentPeersTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ads_fillSpace="true"
+            app:ads_title="@string/peers"
+            app:ads_subtitle="" />
+
+        <com.revolgenx.anilib.view.header.CustomDynamicHeader
+            android:id="@+id/torrentSpeedTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ads_fillSpace="true"
+            app:ads_title="@string/speed"
+            app:ads_subtitle=""/>
+
+        <com.revolgenx.anilib.view.header.CustomDynamicHeader
+            android:id="@+id/torrentDownloadedUploadedTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ads_fillSpace="true"
+            app:ads_title="@string/downloaded_uploaded"
+            app:ads_subtitle="" />
+
+        <com.revolgenx.anilib.view.header.CustomDynamicHeader
+            android:id="@+id/torrentEtaTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ads_fillSpace="true"
+            app:ads_title="@string/eta"
+            app:ads_subtitle="" />
+
+        <com.revolgenx.anilib.view.header.CustomDynamicHeader
+            android:id="@+id/torrentPiecesTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ads_fillSpace="true"
+            app:ads_title="@string/pieces"
+            app:ads_subtitle="" />
+
+        <com.revolgenx.anilib.view.header.CustomDynamicHeader
+            android:id="@+id/torrentAddedTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ads_fillSpace="true"
+            app:ads_title="@string/added"
+            app:ads_subtitle=""/>
+
+
+        <com.revolgenx.anilib.view.header.CustomDynamicHeader
+            android:id="@+id/torrentCreatedTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ads_fillSpace="true"
+            app:ads_title="@string/created"
+            app:ads_subtitle="" />
+
+    </com.pranavpandey.android.dynamic.support.widget.DynamicLinearLayout>
+</com.pranavpandey.android.dynamic.support.widget.DynamicNestedScrollView>

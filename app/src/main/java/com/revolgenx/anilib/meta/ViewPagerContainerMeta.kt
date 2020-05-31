@@ -6,9 +6,9 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class ViewPagerContainerMeta<T : Parcelable>(
     var containerType: ViewPagerContainerType,
-    var data: T
+    var data: T?
 ) : Parcelable
 
 enum class ViewPagerContainerType {
-    CHARACTER, STAFF, FAVOURITE
+    CHARACTER, STAFF, FAVOURITE, TORRENT_META
 }

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.pranavpandey.android.dynamic.support.widget.DynamicLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <com.pranavpandey.android.dynamic.support.widget.DynamicTextInputLayout
+        android:id="@+id/uploadSpeedLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/upload_speed">
+
+        <com.pranavpandey.android.dynamic.support.widget.DynamicTextInputEditText
+            android:id="@+id/uploadSpeedEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:textSize="13sp"/>
+
+    </com.pranavpandey.android.dynamic.support.widget.DynamicTextInputLayout>
+
+    <com.pranavpandey.android.dynamic.support.widget.DynamicTextInputLayout
+        android:id="@+id/downloadSpeedLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:hint="@string/download_speed">
+
+        <com.pranavpandey.android.dynamic.support.widget.DynamicTextInputEditText
+            android:id="@+id/downloadSpeedEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:textSize="13sp"/>
+
+    </com.pranavpandey.android.dynamic.support.widget.DynamicTextInputLayout>
+
+</com.pranavpandey.android.dynamic.support.widget.DynamicLinearLayout>

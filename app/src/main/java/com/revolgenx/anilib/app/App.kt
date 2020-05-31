@@ -17,10 +17,12 @@ import com.revolgenx.anilib.controller.AppController
 import com.revolgenx.anilib.controller.Constants
 import com.revolgenx.anilib.controller.ThemeController
 import com.revolgenx.anilib.preference.loggedIn
+import com.revolgenx.anilib.repository.databaseModules
 import com.revolgenx.anilib.repository.networkModules
 import com.revolgenx.anilib.repository.repositoryModules
 import com.revolgenx.anilib.service.notification.NotificationWorker
 import com.revolgenx.anilib.service.serviceModule
+import com.revolgenx.anilib.torrent.torrentModules
 import com.revolgenx.anilib.viewmodel.viewModelModules
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -55,6 +57,8 @@ class App : DynamicApplication() {
                 listOf(
                     viewModelModules,
                     repositoryModules,
+                    databaseModules,
+                    torrentModules,
                     networkModules,
                     serviceModule
                 )
@@ -68,9 +72,14 @@ class App : DynamicApplication() {
                 .build()
             val periodicWork = PeriodicWorkRequestBuilder<NotificationWorker>(15, TimeUnit.MINUTES)
                 .setConstraints(constraints).build()
-            WorkManager.getInstance(this).enqueueUniquePeriodicWork(NotificationWorker.NOTIFICATION_WORKER_TAG, ExistingPeriodicWorkPolicy.REPLACE, periodicWork)
-        }else{
-            WorkManager.getInstance(this).cancelUniqueWork(NotificationWorker.NOTIFICATION_WORKER_TAG)
+            WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+                NotificationWorker.NOTIFICATION_WORKER_TAG,
+                ExistingPeriodicWorkPolicy.REPLACE,
+                periodicWork
+            )
+        } else {
+            WorkManager.getInstance(this)
+                .cancelUniqueWork(NotificationWorker.NOTIFICATION_WORKER_TAG)
         }
     }
 
