@@ -78,7 +78,8 @@ open class DiscoverTrendingFragment : DiscoverAiringFragment() {
                 }
             }
         }
-        invalidateAdapter()
+        if (savedInstanceState == null)
+            invalidateAdapter()
     }
 
 

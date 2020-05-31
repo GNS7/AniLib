@@ -2,7 +2,6 @@ package com.revolgenx.anilib.activity
 
 import android.os.Bundle
 import com.pranavpandey.android.dynamic.support.activity.DynamicActivity
-import com.revolgenx.anilib.R
 import com.revolgenx.anilib.controller.AppController
 import com.revolgenx.anilib.controller.ThemeController
 import com.revolgenx.anilib.fragment.about.AboutFragment
@@ -32,7 +31,7 @@ class AboutActivity : DynamicActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setNavigationClickListener(R.drawable.ic_close) {
+        setNavigationClickListener {
             finish()
         }
         if (savedInstanceState == null) {
