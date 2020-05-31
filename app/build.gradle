@@ -18,8 +18,8 @@ android {
         applicationId "com.revolgenx.anilib"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode 13
+        versionName "1.1.0"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
 
@@ -249,6 +249,7 @@ dependencies {
     //permission
     implementation 'com.karumi:dexter:5.0.0'
 
+<<<<<<< HEAD
     //file chooser
     implementation 'com.github.hedzr:android-file-chooser:devel-SNAPSHOT'
 
@@ -257,6 +258,8 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
+=======
+>>>>>>> master
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
