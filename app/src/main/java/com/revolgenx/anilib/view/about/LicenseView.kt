@@ -358,6 +358,7 @@ class LicenseView : DynamicRecyclerViewFrame {
      licenses.add(DynamicInfo()
             .setTitle(context
                 .getString(R.string.license_rangeseekbar))
+         .setDescription(context.getString(R.string.license_copy_rangeseekbar))
             .setLinks(resources.getStringArray(
                 R.array.license_links_rangeseekbar))
             .setLinksSubtitles(resources.getStringArray(
