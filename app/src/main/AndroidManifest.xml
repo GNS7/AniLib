@@ -3,18 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.revolgenx.anilib">
 
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-
 
     <application
         android:name=".app.App"
@@ -22,11 +13,10 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:targetApi="q">
+        tools:targetApi="m">
 
         <activity android:name=".activity.SplashActivity">
             <intent-filter>
@@ -37,65 +27,7 @@
 
         <activity
             android:name=".activity.MainActivity"
-            android:launchMode="singleTask">
-
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="*"
-                    android:mimeType="application/x-bittorrent"
-                    android:scheme="file" />
-            </intent-filter>
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="*"
-                    android:pathPattern=".*\\.torrent"
-                    android:scheme="file" />
-            </intent-filter>
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="*"
-                    android:mimeType="application/x-bittorrent"
-                    android:scheme="content" />
-            </intent-filter>
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="*"
-                    android:pathPattern=".*\\.torrent"
-                    android:scheme="content" />
-            </intent-filter>
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="magnet" />
-            </intent-filter>
-        </activity>
+            android:launchMode="singleTask"/>
 
         <activity android:name=".activity.MediaBrowseActivity" />
         <activity android:name=".activity.ContainerActivity" />
@@ -128,12 +60,6 @@
         <activity android:name=".activity.NavViewPagerContainerActivity" />
         <activity android:name=".activity.ToolbarContainerActivity" />
         <activity android:name=".activity.AboutActivity" />
-
-        <provider
-            android:name="androidx.work.impl.WorkManagerInitializer"
-            android:authorities="${applicationId}.workmanager-init"
-            tools:node="remove" />
-        <service android:name=".torrent.service.MainService" />
 
         <provider
             android:name="androidx.work.impl.WorkManagerInitializer"

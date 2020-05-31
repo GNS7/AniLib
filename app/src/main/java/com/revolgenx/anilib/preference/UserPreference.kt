@@ -15,7 +15,6 @@ private const val userNameKey = "user_name_key"
 private const val userAvatarKey = "user_avatar_key"
 private const val userBannerImageKey = "user_banner_image_key"
 private const val scoreFormatKey = "score_format_key"
-private const val userPermissionKey = "user_permission_key"
 
 private const val lastNotificationKey = "last_notification_key"
 
@@ -46,13 +45,6 @@ fun Context.userAvatar(avatar: String?) = putString(userAvatarKey, avatar)
 
 fun Context.userBannerImage() = getString(userBannerImageKey, "")
 fun Context.userBannerImage(banner: String?) = putString(userBannerImageKey, banner)
-
-fun Context.checkedStoragePermission(): Boolean {
-    val permission = getBoolean(userPermissionKey, false)
-    if (!permission)
-        putBoolean(userPermissionKey, true)
-    return permission
-}
 
 
 fun Context.saveBasicUserDetail(user: BasicUserModel) {

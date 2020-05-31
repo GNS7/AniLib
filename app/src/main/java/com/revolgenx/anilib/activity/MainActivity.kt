@@ -1,12 +1,9 @@
 package com.revolgenx.anilib.activity
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -24,9 +21,6 @@ import androidx.core.view.iterator
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import com.facebook.drawee.view.SimpleDraweeView
-import com.google.android.material.snackbar.Snackbar
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.listener.multi.SnackbarOnAnyDeniedMultiplePermissionsListener
 import com.otaliastudios.elements.Adapter
 import com.pranavpandey.android.dynamic.support.dialog.fragment.DynamicDialogFragment
 import com.pranavpandey.android.dynamic.support.theme.DynamicTheme
@@ -34,22 +28,23 @@ import com.revolgenx.anilib.BuildConfig
 import com.revolgenx.anilib.R
 import com.revolgenx.anilib.dialog.AuthDialog
 import com.revolgenx.anilib.dialog.TagChooserDialogFragment
-import com.revolgenx.anilib.event.*
-import com.revolgenx.anilib.meta.MediaListMeta
+import com.revolgenx.anilib.event.SessionEvent
 import com.revolgenx.anilib.field.TagChooserField
 import com.revolgenx.anilib.field.TagField
-import com.revolgenx.anilib.fragment.*
+import com.revolgenx.anilib.fragment.SettingFragment
 import com.revolgenx.anilib.fragment.base.BaseFragment
 import com.revolgenx.anilib.fragment.base.ParcelableFragment
-import com.revolgenx.anilib.fragment.home.discover.DiscoverFragment
-import com.revolgenx.anilib.fragment.home.TorrentFragment
 import com.revolgenx.anilib.fragment.home.RecommendationFragment
 import com.revolgenx.anilib.fragment.home.SeasonFragment
+import com.revolgenx.anilib.fragment.home.discover.DiscoverFragment
+import com.revolgenx.anilib.meta.MediaListMeta
 import com.revolgenx.anilib.meta.UserMeta
 import com.revolgenx.anilib.preference.*
-import com.revolgenx.anilib.torrent.core.TorrentEngine
 import com.revolgenx.anilib.type.MediaType
-import com.revolgenx.anilib.util.*
+import com.revolgenx.anilib.util.BrowseFilterDataProvider
+import com.revolgenx.anilib.util.makeLogInSnackBar
+import com.revolgenx.anilib.util.makePagerAdapter
+import com.revolgenx.anilib.util.makeToast
 import com.revolgenx.anilib.view.navigation.BrowseFilterNavigationView
 import com.revolgenx.anilib.viewmodel.MainActivityViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -59,9 +54,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import net.openid.appauth.*
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
@@ -98,10 +90,6 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!checkedStoragePermission()) {
-            checkPermission()
-        }
-
         bottomNav.setBackgroundColor(DynamicTheme.getInstance().get().backgroundColor)
         setSupportActionBar(mainToolbar)
         themeBottomNavigation()
@@ -111,8 +99,7 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
                 listOf(
                     DiscoverFragment::class.java,
                     SeasonFragment::class.java,
-                    RecommendationFragment::class.java,
-                    TorrentFragment::class.java
+                    RecommendationFragment::class.java
                 )
             )
         )
@@ -122,17 +109,6 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
         updateNavView()
         updateRightNavView()
         silentFetchUserInfo()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (((intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0)) return
-
-        if (intent.data != null) {
-            uri = intent.data
-        } else if (intent.hasExtra("uri")) {
-            uri = intent.getParcelableExtra("uri")
-        }
     }
 
 
@@ -281,7 +257,7 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
                             clientId,
                             ResponseTypeValues.CODE,
                             redirectUri
-                        ).setPromptValues(listOf("login"))
+                        )
                         val request = builder.build()
                         val authorizationService = AuthorizationService(this)
 
@@ -296,7 +272,6 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
                             postAuthorizationIntent,
                             0
                         )
-
                         launch(Dispatchers.IO) {
                             authorizationService.performAuthorizationRequest(request, pendingIntent)
                         }
@@ -352,9 +327,7 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
 
     override fun onNewIntent(intent: Intent?) {
         checkIntent(intent)
-        checkNewTorrentIntent(intent)
         super.onNewIntent(intent)
-
     }
 
 
@@ -548,94 +521,5 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
             show(supportFragmentManager, dialogTag)
         }
     }
-
-
-    //torrent
-
-    private val torrentPreferenceModel by inject<TorrentPreference>()
-    private val torrentEngine by inject<TorrentEngine>()
-    private var uri: Uri? = null
-    private val uriKey = "uri_key"
-
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onTorrentEngineEvent(event: TorrentEngineEvent) {
-        when (event.engineEventTypes) {
-            TorrentEngineEventTypes.ENGINE_STARTED -> {
-                initDecode()
-            }
-        }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onShutdownEvent(event: ShutdownEvent) {
-        val intent = Intent(Intent.ACTION_MAIN)
-        intent.addCategory(Intent.CATEGORY_HOME)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-        startActivity(intent)
-        finish()
-    }
-
-
-    private fun checkNewTorrentIntent(intent: Intent?) {
-        if (intent == null) return
-        if (intent.data != null) {
-            uri = intent.data
-        } else if (intent.hasExtra("uri")) {
-            uri = intent.getParcelableExtra("uri")
-        }
-
-        if (torrentEngine.isEngineRunning()) {
-            initDecode()
-        }else{
-            makeToast(R.string.please_wait_starting_engine)
-        }
-    }
-
-    private fun initDecode() {
-        if (uri == null) return
-
-        when (uri!!.scheme) {
-            MAGNET_PREFIX, FILE_PREFIX, CONTENT_PREFIX -> {
-                AddTorrentEvent(uri!!).postEvent
-            }
-            else -> {
-                makeToast(R.string.unsupported_format)
-            }
-        }
-        uri = null
-    }
-
-
-    fun checkPermission(): Boolean {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                Dexter.withActivity(this)
-                    .withPermissions(
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    ).withListener(permissionsListener())
-                    .check()
-                return false
-            }
-        }
-        return true
-    }
-
-
-    private fun permissionsListener() = SnackbarOnAnyDeniedMultiplePermissionsListener
-        .Builder.with(
-        mainActivityCoordinatorLayout,
-        "Storage permission is required"
-    ).withOpenSettingsButton("Settings")
-        .withCallback(object : Snackbar.Callback() {
-            override fun onShown(sb: Snackbar?) {
-
-            }
-
-            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-
-            }
-        }).build()
 
 }

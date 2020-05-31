@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">AniLib</string>
     <string name="app_subtitle">By the power of AniList</string>
+    <string name="app_description">Your to be favourite place to manage, track, browse your Anime and Manga and much more.</string>
     <string name="discover">Discover</string>
     <string name="season">Season</string>
-    <string name="download">Download</string>
 
     <string name="dynamically_apply_theme">Dynamically appy theme.</string>
     <string name="something_went_wrong">Something went wrong</string>
@@ -198,7 +198,80 @@
     <string name="review_of_s_by_s">Review of %s by %s</string>
     <string name="recent_reviews">Recent Reviews</string>
     <string name="reviews">Reviews</string>
-    <string name="exit">Exit</string>
+    <string name="press_again_to_exit">Press again to exit</string>
+    <string name="patreon">Patreon</string>
+    <string name="support_the_app">Support Me On Patreon</string>
+    <string name="help_this_app">Contribute AniLib to help me create and maintain awesome features.</string>
+
+
+    <!--LICENSE-->
+    <string name="apache_2">Apache 2.0</string>
+    <string name="mit">MIT</string>
+    <string name="sources">Sources</string>
+    <string name="license_desc">View full license.</string>
+    <string name="license_sources_desc">View sources on GitHub.</string>
+    <string name="apache_url">http://www.apache.org/licenses/LICENSE-2.0</string>
+    <!--Apollo Android-->
+    <string name="license_apollo_android">Apollo-Android</string>
+    <string name="license_copy_apollo_android">Copyright © 2019 Meteor Development Group, Inc.</string>
+    <!--rx-->
+    <string name="license_rx_android">RxAndroid</string>
+    <string name="license_copy_rx_android">Copyright 2015 The RxAndroid authors</string>
+    <!--EventBus-->
+    <string name="license_eventbus">EventBus</string>
+    <string name="license_copy_eventbus">CCopyright © 2012–2020 Markus Junginger, greenrobot</string>
+    <!--Koin-->
+    <string name="license_koin">Koin</string>
+    <!--Coroutines-->
+    <string name="license_coroutines">Coroutines</string>
+    <!--Elements-->
+    <string name="license_elements">Elements</string>
+    <!--fresco-->
+    <string name="license_fresco">Fresco</string>
+    <string name="license_copy_fresco">Copyright © Facebook, Inc. and its affiliates.</string>
+    <!--timber-->
+    <string name="license_timber">Timber</string>
+    <string name="license_copy_timber">Copyright 2013 Jake Wharton</string>
+    <!--AppAuth-->
+    <string name="license_app_auth">app_auth</string>
+    <!--JWTDecode-->
+    <string name="license_jwt_auth">jwt_auth</string>
+    <string name="license_copy_jwt_auth">Copyright © 2016 Auth0</string>
+    <!--SmartTab-->
+    <string name="license_smarttab">SmartTab</string>
+    <string name="license_copy_smarttab">Copyright © 2015 ogaclejapan \n Copyright © 2013 The Android Open Source Project</string>
+    <!--MPAndroidChart-->
+    <string name="license_mpandroidchart">MPAndroidChart</string>
+    <string name="license_copy_mpandroidchart">Copyright 2020 Philipp Jahoda</string>
+    <!--Markwon-->
+    <string name="license_markwon">Markwon</string>
+    <string name="license_copy_markwon">Copyright 2019 Dimitry Ivanov (legal@noties.io)</string>
+    <!--Jsoup-->
+    <string name="license_jsoup">Jsoup</string>
+    <string name="license_copy_jsoup">Copyright © 2009–2020 Jonathan Hedley </string>
+    <!--ExoPlayer-->
+    <string name="license_exoplayer">ExoPlayer</string>
+    <!--persistentsearchview-->
+    <string name="license_persistentsearchview">PersistentSearchView</string>
+    <!--RangeSeekBar-->
+    <string name="license_rangeseekbar">RangeSeekBar</string>
+    <string name="license_copy_rangeseekbar">Copyright 2018–2019 JayGoo</string>
+    <!--Android-Toggle-Switch-->
+    <string name="license_android_toggle_switch">Android-Toggle-Switch</string>
+    <string name="license_copy_android_toggle_switch">Copyright © 2017 Lorenzo Rigato</string>
+    <!--Hauler-->
+    <string name="license_hauler">Hauler</string>
+    <string name="license_copy_hauler">Copyright © 2020 Futured apps s.r.o.</string>
+    <!--BigImageViewer-->
+    <string name="license_bigimageviewer">BigImageViewer</string>
+    <string name="license_copy_bigimageviewer">Copyright © 2018 Piasy</string>
+    <!--PrettyTime-->
+    <string name="license_prettytime">PrettyTime</string>
+    <!--LICENSE-END-->
+
+    <string name="privacy_policy">Privacy Policy.</string>
+    <string name="privacy_policy_desc">View complete privacy policy.</string>
+    <string name="privacy_policy_url">https://anilib.flycricket.io/privacy.html</string>
 
 
     <string-array name="media_format">

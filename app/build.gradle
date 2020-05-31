@@ -27,10 +27,6 @@ android {
                 appAuthRedirectScheme: 'callback'
         ]
 
-        ndk {
-            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
-        }
-
         buildConfigField "String", "anilistclientId", anilistProperties['anilist_client_id']
         buildConfigField "String", "anilistclientSecret", anilistProperties['anilist_client_secret']
         buildConfigField "String", "anilistRedirectUri", anilistProperties['anilist_redirect_uri']
@@ -52,16 +48,6 @@ android {
         exclude 'META-INF/NOTICE.txt'
     }
 
-
-    splits {
-        abi {
-            enable true
-            reset()
-            include 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
-            universalApk true
-        }
-    }
-
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8
     }
@@ -80,7 +66,6 @@ android {
         }
         release {
             minifyEnabled false
-            signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -102,8 +87,6 @@ ext {
     persistent_s_ver = '1.1.2'
     exo_ver = '2.11.4'
     work_version = "2.4.0-alpha03"
-    libtorrent4j_version = '1.2.3.0'
-    room_version = '2.2.5'
 }
 
 dependencies {
@@ -232,34 +215,7 @@ dependencies {
     //workmanager
     implementation "androidx.work:work-runtime-ktx:$work_version"
 
-    //progressbutton
-    implementation 'com.github.razir.progressbutton:progressbutton:1.0.3'
 
-    //jlibtorrent
-    implementation 'org.libtorrent4j:libtorrent4j:' + libtorrent4j_version
-    implementation 'org.libtorrent4j:libtorrent4j-android-arm:' + libtorrent4j_version
-    implementation 'org.libtorrent4j:libtorrent4j-android-arm64:' + libtorrent4j_version
-    implementation 'org.libtorrent4j:libtorrent4j-android-x86:' + libtorrent4j_version
-    implementation 'org.libtorrent4j:libtorrent4j-android-x86_64:' + libtorrent4j_version
-
-
-    //axet libraries
-    implementation 'com.github.axet:android-library:1.32.20'
-    
-    //permission
-    implementation 'com.karumi:dexter:5.0.0'
-
-<<<<<<< HEAD
-    //file chooser
-    implementation 'com.github.hedzr:android-file-chooser:devel-SNAPSHOT'
-
-    //room
-    implementation "androidx.room:room-runtime:$room_version"
-    implementation "androidx.room:room-ktx:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
-
-=======
->>>>>>> master
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

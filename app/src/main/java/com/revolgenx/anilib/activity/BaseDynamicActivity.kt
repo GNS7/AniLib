@@ -17,7 +17,6 @@ import com.revolgenx.anilib.fragment.base.ParcelableFragment
 import com.revolgenx.anilib.fragment.review.AllReviewFragment
 import com.revolgenx.anilib.fragment.review.ReviewFragment
 import com.revolgenx.anilib.fragment.studio.StudioFragment
-import com.revolgenx.anilib.fragment.torrent.AddTorrentFragment
 import com.revolgenx.anilib.meta.*
 import com.revolgenx.anilib.util.openLink
 import com.revolgenx.anilib.util.registerForEvent
@@ -199,20 +198,6 @@ abstract class BaseDynamicActivity : DynamicSystemActivity() {
                         null
                     )
                 )
-            }
-
-
-            //torrent
-            is AddTorrentEvent -> {
-                event.uri?.let {
-                    ToolbarContainerActivity.openActivity(
-                        this,
-                        ParcelableFragment(
-                            AddTorrentFragment::class.java,
-                            bundleOf(AddTorrentFragment.uriKey to it)
-                        )
-                    )
-                }
             }
         }
     }

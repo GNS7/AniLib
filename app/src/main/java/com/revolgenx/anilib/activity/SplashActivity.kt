@@ -65,7 +65,6 @@ class SplashActivity : DynamicSplashActivity() {
 
     override fun doBehindSplash() {
         // TODO: Do any operation behind the splash.
-
     }
 
     override fun onPostSplash() {
