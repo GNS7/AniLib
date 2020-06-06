@@ -30,12 +30,14 @@ import com.karumi.dexter.listener.multi.SnackbarOnAnyDeniedMultiplePermissionsLi
 import com.otaliastudios.elements.Adapter
 import com.pranavpandey.android.dynamic.support.dialog.fragment.DynamicDialogFragment
 import com.pranavpandey.android.dynamic.support.theme.DynamicTheme
+import com.pranavpandey.android.dynamic.utils.DynamicPackageUtils
 import com.revolgenx.anilib.BuildConfig
 import com.revolgenx.anilib.R
 import com.revolgenx.anilib.dialog.AuthDialog
+import com.revolgenx.anilib.dialog.ReleaseInfoDialog
 import com.revolgenx.anilib.dialog.TagChooserDialogFragment
-import com.revolgenx.anilib.event.*
-import com.revolgenx.anilib.meta.MediaListMeta
+import com.revolgenx.anilib.event.BrowseSiteEvent
+import com.revolgenx.anilib.event.SessionEvent
 import com.revolgenx.anilib.field.TagChooserField
 import com.revolgenx.anilib.field.TagField
 import com.revolgenx.anilib.fragment.*
@@ -100,6 +102,11 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
         super.onCreate(savedInstanceState)
         if (!checkedStoragePermission()) {
             checkPermission()
+        }
+
+
+        if (getVersion(this) != DynamicPackageUtils.getAppVersion(this)) {
+            ReleaseInfoDialog().show(supportFragmentManager, ReleaseInfoDialog.tag)
         }
 
         bottomNav.setBackgroundColor(DynamicTheme.getInstance().get().backgroundColor)
@@ -178,8 +185,11 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
             }
 
             headerView.navHeaderIcon.setOnClickListener {
-                if (checkLoggedIn())
+                if (loggedIn()) {
                     UserProfileActivity.openActivity(this, UserMeta(context.userId(), null, true))
+                } else {
+                    makeToast(R.string.please_log_in)
+                }
             }
 
             headerView.navHeaderIcon.hierarchy.let {
@@ -234,6 +244,11 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
         toggle.syncState()
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
+
+                R.id.navActivityId -> {
+                    makeToast(R.string.in_progress, icon = R.drawable.ic_planning)
+                    true
+                }
                 R.id.navSetting -> {
                     ContainerActivity.openActivity(
                         this,
@@ -242,6 +257,14 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
                     true
                 }
 
+                R.id.contribute -> {
+                    startActivity(Intent(this, AboutActivity::class.java))
+                    true
+                }
+                R.id.stageVersion -> {
+                    BrowseSiteEvent().postEvent
+                    true
+                }
                 R.id.navAnimeListId -> {
                     MediaListActivity.openActivity(
                         this,

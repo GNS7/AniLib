@@ -8,9 +8,9 @@ import com.revolgenx.anilib.R
 import com.revolgenx.anilib.activity.AboutActivity
 import com.revolgenx.anilib.activity.ContainerActivity
 import com.revolgenx.anilib.activity.ToolbarContainerActivity
-import com.revolgenx.anilib.fragment.about.AboutFragment
 import com.revolgenx.anilib.fragment.base.BaseToolbarFragment
 import com.revolgenx.anilib.fragment.base.ParcelableFragment
+import com.revolgenx.anilib.fragment.notification.NotificationSettingFragment
 import kotlinx.android.synthetic.main.setting_fragment_layout.*
 
 class SettingFragment : BaseToolbarFragment() {
@@ -41,8 +41,27 @@ class SettingFragment : BaseToolbarFragment() {
             )
         }
 
+        notificationSetting.setOnClickListener {
+            ToolbarContainerActivity.openActivity(
+                requireContext(),
+                ParcelableFragment(
+                    NotificationSettingFragment::class.java,
+                    null
+                )
+            )
+        }
+
         aboutItemView.setOnClickListener {
             startActivity(Intent(requireContext(), AboutActivity::class.java))
+        }
+        log.setOnClickListener {
+            ToolbarContainerActivity.openActivity(
+                requireContext(),
+                ParcelableFragment(
+                    LogFragment::class.java,
+                    null
+                )
+            )
         }
     }
 

@@ -626,22 +626,46 @@
 
     <!--LICENSE-END-->
 
+    <!--appinfo-->
+    <string-array name="info_app_links">
+        <item>AniLib Site</item>
+    </string-array>
+
+    <string-array name="info_app_subtitles">
+        <item>Visit AniLib to know more.</item>
+    </string-array>
+
+    <string-array name="info_app_urls">
+        <item>@string/site_url</item>
+    </string-array>
+    <!--appinfo-->
+
     <!--Patreon-->
     <string-array name="patreon_source">
         <item>Patreon Page</item>
     </string-array>
     <string-array name="patreon_source_sub">
-        <item>View Patreon Page.</item>
+        <item>Visit Patreon Page.</item>
     </string-array>
     <string-array name="patreon_source_url">
-        <item>https://patreon.com/anilib</item>
+        <item>@string/patreon_link</item>
     </string-array>
     <integer-array name="url_link_icons">
         <item>@drawable/ic_link</item>
     </integer-array>
     <!--Patreon-end-->
 
-
+    <!--bmc-begin-->
+    <string-array name="bmc_source">
+        <item>Patreon Page</item>
+    </string-array>
+    <string-array name="bmc_source_sub">
+        <item>Visit Buy Me A Coffee.</item>
+    </string-array>
+    <string-array name="bmc_source_url">
+        <item>@string/bmc_link</item>
+    </string-array>
+    <!--bmc-end-->
 
     <integer-array name="license_links_icons_license">
         <item>@drawable/ads_ic_license</item>
@@ -652,5 +676,50 @@
         <item>@color/ads_link_license</item>
         <item>@color/ads_social_github</item>
     </integer-array>
+
+
+    <!--notification-->
+    <string-array name="notification_refresh_interval_entries">
+        <item>15 min</item>
+        <item>20 min</item>
+        <item>25 min</item>
+        <item>30 min</item>
+    </string-array>
+
+
+    <string-array name="notification_refresh_interval_value">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <!--title-->
+    <string-array name="media_title_entries">
+        <item>Romaji</item>
+        <item>English</item>
+        <item>Native</item>
+        <item>User Preferred</item>
+    </string-array>
+
+    <string-array name="media_title_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <!--image-->
+    <string-array name="image_entries">
+        <item>Medium</item>
+        <item>Low</item>
+        <item>High</item>
+    </string-array>
+
+    <string-array name="image_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
 
 </resources>

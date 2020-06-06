@@ -24,20 +24,18 @@ import com.pranavpandey.android.dynamic.support.theme.DynamicTheme
 import com.revolgenx.anilib.R
 import com.revolgenx.anilib.activity.ContainerActivity
 import com.revolgenx.anilib.activity.MediaBrowseActivity
+import com.revolgenx.anilib.activity.ToolbarContainerActivity
 import com.revolgenx.anilib.activity.UserProfileActivity
 import com.revolgenx.anilib.constant.NotificationUnionType
 import com.revolgenx.anilib.field.notification.NotificationField
 import com.revolgenx.anilib.fragment.base.ParcelableFragment
-import com.revolgenx.anilib.fragment.home.NotificationFragment
+import com.revolgenx.anilib.fragment.notification.NotificationFragment
 import com.revolgenx.anilib.meta.MediaBrowserMeta
 import com.revolgenx.anilib.meta.UserMeta
 import com.revolgenx.anilib.model.notification.NotificationModel
 import com.revolgenx.anilib.model.notification.activity.*
 import com.revolgenx.anilib.model.notification.thread.*
-import com.revolgenx.anilib.preference.getLastNotification
-import com.revolgenx.anilib.preference.loggedIn
-import com.revolgenx.anilib.preference.setNewNotification
-import com.revolgenx.anilib.preference.userId
+import com.revolgenx.anilib.preference.*
 import com.revolgenx.anilib.repository.util.Resource
 import com.revolgenx.anilib.repository.util.Status
 import io.reactivex.disposables.CompositeDisposable
@@ -106,9 +104,13 @@ class NotificationWorker(private val context: Context, params: WorkerParameters)
 
     private fun showNotification(item: NotificationModel?) {
         if (item == null) return
+
+        val notificationText = getNotificationString(item)
+        if (notificationText.isEmpty()) return
+
         val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
 
-        notificationBuilder.setContentText(getNotificationString(item))
+        notificationBuilder.setContentText(notificationText)
         notificationBuilder.setContentTitle(context.getString(R.string.new_notification))
         createNotificationPendingIntent()
         pendingIntent?.let {
@@ -154,63 +156,84 @@ class NotificationWorker(private val context: Context, params: WorkerParameters)
     private fun getNotificationString(item: NotificationModel): String {
         return when (item.notificationUnionType) {
             NotificationUnionType.ACTIVITY_MESSAGE -> {
+                if(!getNotificationPreference(context.getString(R.string.activity_message_key))) return ""
                 val activity = item as ActivityMessageNotification
                 //createActivityPendingLink(activity)
                 createActivityNotif(activity)
             }
             NotificationUnionType.ACTIVITY_REPLY -> {
+                if(!getNotificationPreference(context.getString(R.string.activity_reply_mention_key))) return ""
+
                 val activity = item as ActivityReplyNotification
                 //createActivityPendingLink(activity)
                 createActivityNotif(activity)
             }
             NotificationUnionType.ACTIVITY_MENTION -> {
+                if(!getNotificationPreference(context.getString(R.string.activity_reply_mention_key))) return ""
 
                 val activity = item as ActivityMentionNotification
                 //createActivityPendingLink(activity)
                 createActivityNotif(activity)
             }
             NotificationUnionType.ACTIVITY_LIKE -> {
+                if(!getNotificationPreference(context.getString(R.string.activity_like_key))) return ""
+
                 val activity = item as ActivityLikeNotification
                 //createActivityPendingLink(activity)
                 createActivityNotif(activity)
             }
             NotificationUnionType.ACTIVITY_REPLY_LIKE -> {
+                if(!getNotificationPreference(context.getString(R.string.activity_reply_like_key))) return ""
+
                 val activity = item as ActivityReplyLikeNotification
                 //createActivityPendingLink(activity)
                 createActivityNotif(activity)
             }
             NotificationUnionType.ACTIVITY_REPLY_SUBSCRIBED -> {
+                if(!getNotificationPreference(context.getString(R.string.activity_reply_mention_key))) return ""
+
                 val activity = item as ActivityReplySubscribedNotification
                 //createActivityPendingLink(activity)
                 createActivityNotif(activity)
             }
 
             NotificationUnionType.THREAD_COMMENT_MENTION -> {
+                if(!getNotificationPreference(context.getString(R.string.thread_comment_mention_key))) return ""
+
                 val thread = item as ThreadCommentMentionNotification
                 //createThreadPendingLink(thread)
                 createThreadNotif(thread)
             }
             NotificationUnionType.THREAD_SUBSCRIBED -> {
+                //todo://check for notification not added in here
                 val thread = item as ThreadCommentSubscribedNotification
                 //createThreadPendingLink(thread)
                 createThreadNotif(thread)
             }
             NotificationUnionType.THREAD_COMMENT_REPLY -> {
+                if(!getNotificationPreference(context.getString(R.string.thread_comment_reply_key))) return ""
+
                 val thread = item as ThreadCommentReplyNotification
                 //createThreadPendingLink(thread)
                 createThreadNotif(thread)
             }
             NotificationUnionType.THREAD_LIKE -> {
+                if(!getNotificationPreference(context.getString(R.string.thread_like_key))) return ""
+
                 val thread = item as ThreadLikeNotification
                 //createThreadPendingLink(thread)
                 createThreadNotif(thread)
             }
             NotificationUnionType.THREAD_COMMENT_LIKE -> {
+                if(!getNotificationPreference(context.getString(R.string.thread_comment_like_key))) return ""
+
                 val thread = item as ThreadCommentLikeNotification
                 //createThreadPendingLink(thread)
                 createThreadNotif(thread)
             }
             NotificationUnionType.AIRING -> {
+                if(!getNotificationPreference(context.getString(R.string.airing_notification_key))) return ""
+
                 (item as AiringNotificationModel).let {
                     //                    createMediaPendingIntent(it)
                     notificationImage = it.commonMediaModel?.coverImage?.image(context)
@@ -228,10 +251,14 @@ class NotificationWorker(private val context: Context, params: WorkerParameters)
             }
 
             NotificationUnionType.FOLLOWING -> {
+                if(!getNotificationPreference(context.getString(R.string.following_key))) return ""
+
 //                createUserPendingIntent(item as ActivityNotification)
                 createActivityNotif(item as ActivityNotification)
             }
             NotificationUnionType.RELATED_MEDIA_ADDITION -> {
+                if(!getNotificationPreference(context.getString(R.string.related_media_added_notif))) return ""
+
                 (item as RelatedMediaNotificationModel)
                 notificationImage = item.commonMediaModel?.coverImage?.image
                 return context.getString(R.string.s_space_s)
@@ -256,7 +283,7 @@ class NotificationWorker(private val context: Context, params: WorkerParameters)
     }
 
     private fun createThreadPendingLink(thread: ThreadNotification) {
-        thread.threadModel?.siteUrl?.let{
+        thread.threadModel?.siteUrl?.let {
             pendingIntent = PendingIntent.getActivity(
                 context,
                 0,
@@ -268,9 +295,9 @@ class NotificationWorker(private val context: Context, params: WorkerParameters)
 
 
     private fun createNotificationPendingIntent() {
-        val intent = Intent(context, ContainerActivity::class.java).also {
+        val intent = Intent(context, ToolbarContainerActivity::class.java).also {
             it.putExtra(
-                ContainerActivity.fragmentContainerKey, ParcelableFragment(
+                ToolbarContainerActivity.toolbarFragmentContainerKey, ParcelableFragment(
                     NotificationFragment::class.java,
                     bundleOf(
                         UserMeta.userMetaKey to UserMeta(
@@ -368,5 +395,9 @@ class NotificationWorker(private val context: Context, params: WorkerParameters)
     override fun onStopped() {
         compositeDisposable.clear()
         super.onStopped()
+    }
+
+    private fun getNotificationPreference(key: String):Boolean {
+        return context.getBoolean(key, true)
     }
 }

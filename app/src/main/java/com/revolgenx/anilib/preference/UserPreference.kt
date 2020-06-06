@@ -2,6 +2,7 @@ package com.revolgenx.anilib.preference
 
 import android.content.Context
 import com.auth0.android.jwt.JWT
+import com.pranavpandey.android.dynamic.utils.DynamicPackageUtils
 import com.revolgenx.anilib.R
 import com.revolgenx.anilib.model.BasicUserModel
 import com.revolgenx.anilib.type.ScoreFormat
@@ -17,7 +18,9 @@ private const val userBannerImageKey = "user_banner_image_key"
 private const val scoreFormatKey = "score_format_key"
 private const val userPermissionKey = "user_permission_key"
 
+private const val crashReportKey = "crash_report_key"
 private const val lastNotificationKey = "last_notification_key"
+private const val versionKey = "versionKey"
 
 fun Context.loggedIn() = getBoolean(loggedInKey, false)
 fun Context.loggedIn(logIn: Boolean) = putBoolean(loggedInKey, logIn)
@@ -28,11 +31,9 @@ fun Context.token(token: String) = putString(tokenKey, token)
 fun Context.userId() = getInt(userIdKey, -1)
 fun Context.userId(userId: Int) = putInt(userIdKey, userId)
 
-fun Context.titlePref() = getInt(titleKey, 0)
-fun Context.titlePref(title: Int) = putInt(titleKey, title)
+fun Context.titlePref() = getString(titleKey, "0")
 
-fun Context.imageQuality() = getInt(imageQualityKey, 0)
-fun Context.imageQuality(quality: Int) = putInt(imageQualityKey, quality)
+fun Context.imageQuality() = getString(imageQualityKey, "0")
 
 fun Context.userScoreFormat() = getInt(scoreFormatKey, ScoreFormat.POINT_100.ordinal)
 fun Context.userScoreFormat(scoreFormat: Int?) =
@@ -96,3 +97,18 @@ fun getLastNotification(context: Context): Int {
 fun setNewNotification(context: Context, notifId: Int = -1) {
     context.putInt(lastNotificationKey, notifId)
 }
+
+fun getVersion(context: Context): String {
+    val version = context.getString(versionKey) ?: ""
+    context.putString(versionKey, DynamicPackageUtils.getAppVersion(context))
+    return version
+}
+
+fun isCrashReportEnabled(context: Context): Boolean {
+    return context.getBoolean(crashReportKey, true)
+}
+
+fun enableCrashReport(context: Context, enable: Boolean) {
+    context.putBoolean(crashReportKey, enable)
+}
+

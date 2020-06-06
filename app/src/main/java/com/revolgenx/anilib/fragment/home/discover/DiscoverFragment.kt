@@ -9,9 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import com.revolgenx.anilib.R
 import com.revolgenx.anilib.activity.ContainerActivity
+import com.revolgenx.anilib.activity.ToolbarContainerActivity
 import com.revolgenx.anilib.event.BrowseEvent
 import com.revolgenx.anilib.fragment.base.ParcelableFragment
-import com.revolgenx.anilib.fragment.home.NotificationFragment
+import com.revolgenx.anilib.fragment.notification.NotificationFragment
 import com.revolgenx.anilib.meta.UserMeta
 import com.revolgenx.anilib.preference.loggedIn
 import com.revolgenx.anilib.preference.userId
@@ -45,7 +46,7 @@ class DiscoverFragment : DiscoverReviewFragment() {
                 true
             }
             R.id.notificationMenu -> {
-                ContainerActivity.openActivity(
+                ToolbarContainerActivity.openActivity(
                     requireContext(),
                     ParcelableFragment(
                         NotificationFragment::class.java,

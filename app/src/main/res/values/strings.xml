@@ -9,11 +9,9 @@
     <string name="dynamically_apply_theme">Dynamically appy theme.</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="its_empty">Feeling empty</string>
-
+    <string name="close">Close</string>
     <string name="ep_d_s">Ep: %s · D: %s min</string>
     <string name="chap_s">Chap: %s · Vol: %s</string>
-
-    <!--Media format-->
     <string name="manga">Manga</string>
     <string name="please_log_in">Please log in.</string>
     <string name="settings">Settings</string>
@@ -23,6 +21,7 @@
     <string name="nav_open">Nav Open</string>
     <string name="dynamic_theme">Dynamic Theme</string>
     <string name="notification">Notification</string>
+    <string name="notification_setting_sub">Control what you see in notification.(Login required)</string>
     <string name="sign_out">Sign Out</string>
     <string name="feed">Feed</string>
     <string name="activity">Activity</string>
@@ -203,9 +202,11 @@
     <string name="exit">Exit</string>
 
     <string name="patreon">Patreon</string>
+    <string name="bmc_title">Buy Me A Coffee</string>
     <string name="support_the_app">Support Me On Patreon</string>
+    <string name="support_the_app_bmc">Support Me On BMC</string>
     <string name="help_this_app">Contribute AniLib to help me create and maintain awesome features.</string>
-
+    <string name="help_this_app_bmc">Help me get some caffeine power. Your one cup of coffee could bring out some latent power.⚡⚡⚡</string>
 
     <!--LICENSE-->
     <string name="apache_2">Apache 2.0</string>
@@ -274,7 +275,37 @@
 
     <string name="privacy_policy">Privacy Policy.</string>
     <string name="privacy_policy_desc">View complete privacy policy.</string>
-    <string name="privacy_policy_url">https://anilib.flycricket.io/privacy.html</string>
+    <string name="whats_new">Whats new.</string>
+    <string name="support">Support</string>
+    <string name="contribute">Contribute</string>
+    <string name="plus_ultra_version">Plus Ultra Version</string>
+    <string name="terms_and_condition">Terms and Condition</string>
+    <string name="terms_and_condition_desc">View Terms and Condition</string>
+    <string name="in_progress">In Progress.</string>
+
+
+    <!--notification-->
+    <string name="notification_setting">Notification Setting</string>
+    <string name="refresh_interval">Refresh Interval</string>
+    <string name="notifications">Notifications</string>
+    <string name="check_which_notif_to_show">Notify me when.</string>
+    <string name="when_someone_follows_me">When someone follows me</string>
+    <string name="receive_message_notif">When i receive a message</string>
+    <string name="mention_replay_notif">When I am @ mentioned in an activity or activity reply</string>
+    <string name="activity_like_notif">When someone likes my activity</string>
+    <string name="likes_activity_reply_notif">When someone likes my activity reply</string>
+    <string name="forum_reply_notif">When someone replies to my forum comment</string>
+    <string name="forum_mention_notif">When I am @ mentioned in a forum comment</string>
+    <string name="forum_coment_liked_notif">When someone likes my forum comment</string>
+    <string name="reply_to_subscribed_forum_notif">When someone replies to a forum thread I\'m subscribed to</string>
+    <string name="forum_liked_notif">When someone likes my forum thread</string>
+    <string name="episode_aired_notif">When episode on my list airs</string>
+    <string name="related_media_added_notif">When related media is added to AniList</string>
+    <string name="media_title">Media Title</string>
+    <string name="notification_interval_desc">Checks if there is any notification after specified time interval.</string>
+    <string name="preferred_media_title">Select preferred media title</string>
+    <string name="cover_image_quality">Cover Image Quality</string>
+    <string name="preferred_image_quality_desc">Select your preferred image quality</string>
 
 
     <string-array name="media_format">
@@ -507,6 +538,10 @@
         <item>Updated At</item>
         <item>Updated At Desc</item>
     </string-array>
+
+    <string name="copied_to_clipboard">Copied to clipboard</string>
+    <string name="crash_reporting">Crash Reporting</string>
+    <string name="crash_report_desc">Help improve AniLib\'s features. Automatically sends crash reports.</string>
 
 
     //torrent

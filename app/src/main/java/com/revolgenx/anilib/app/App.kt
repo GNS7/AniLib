@@ -13,9 +13,13 @@ import com.github.piasy.biv.loader.fresco.FrescoImageLoader
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.pranavpandey.android.dynamic.support.DynamicApplication
 import com.pranavpandey.android.dynamic.support.theme.DynamicTheme
+import com.revolgenx.anilib.BuildConfig
 import com.revolgenx.anilib.controller.AppController
 import com.revolgenx.anilib.controller.Constants
 import com.revolgenx.anilib.controller.ThemeController
+import com.revolgenx.anilib.logger.AniLibDebugTree
+import com.revolgenx.anilib.logger.LoggerTree
+import com.revolgenx.anilib.preference.getString
 import com.revolgenx.anilib.preference.loggedIn
 import com.revolgenx.anilib.repository.databaseModules
 import com.revolgenx.anilib.repository.networkModules
@@ -40,10 +44,13 @@ class App : DynamicApplication() {
     }
 
     override fun onInitialize() {
-        Timber.plant(Timber.DebugTree())
+        if (BuildConfig.DEBUG) {
+            Timber.plant(LoggerTree())
+        } else {
+            Timber.plant(AniLibDebugTree(this))
+        }
 
         AndroidThreeTen.init(this)
-//        Fresco.initialize(this)
 
         val requestListeners: MutableSet<RequestListener> = HashSet()
         requestListeners.add(RequestLoggingListener())
@@ -70,8 +77,26 @@ class App : DynamicApplication() {
             val constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build()
-            val periodicWork = PeriodicWorkRequestBuilder<NotificationWorker>(15, TimeUnit.MINUTES)
-                .setConstraints(constraints).build()
+            val interval = when (context.getString("notification_refresh_interval", "0")) {
+                "0" -> {
+                    15
+                }
+                "1" -> {
+                    20
+                }
+                "2" -> {
+                    25
+                }
+                "3" -> {
+                    30
+                }
+                else -> {
+                    15
+                }
+            }
+            val periodicWork =
+                PeriodicWorkRequestBuilder<NotificationWorker>(interval.toLong(), TimeUnit.MINUTES)
+                    .setConstraints(constraints).build()
             WorkManager.getInstance(this).enqueueUniquePeriodicWork(
                 NotificationWorker.NOTIFICATION_WORKER_TAG,
                 ExistingPeriodicWorkPolicy.REPLACE,
