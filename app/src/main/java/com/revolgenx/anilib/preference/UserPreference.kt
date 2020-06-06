@@ -17,6 +17,7 @@ private const val userAvatarKey = "user_avatar_key"
 private const val userBannerImageKey = "user_banner_image_key"
 private const val scoreFormatKey = "score_format_key"
 private const val userPermissionKey = "user_permission_key"
+private const val canShowAdultKey = "can_show_adult_key"
 
 private const val crashReportKey = "crash_report_key"
 private const val lastNotificationKey = "last_notification_key"
@@ -96,6 +97,11 @@ fun getLastNotification(context: Context): Int {
 
 fun setNewNotification(context: Context, notifId: Int = -1) {
     context.putInt(lastNotificationKey, notifId)
+}
+
+
+fun canShowAdult(context: Context):Boolean {
+    return context.getBoolean(canShowAdultKey, true)
 }
 
 fun getVersion(context: Context): String {

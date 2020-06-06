@@ -10,13 +10,13 @@ import com.revolgenx.anilib.R
 import com.revolgenx.anilib.adapter.AppInfoAdapter
 import com.revolgenx.anilib.util.openLink
 
-class PrivacyPolicyBinder(binderAdapter: AppInfoAdapter) :
-    DynamicRecyclerViewBinder<PrivacyPolicyBinder.ViewHolder>(binderAdapter) {
+class AboutOtherInfoBinder(binderAdapter: AppInfoAdapter) :
+    DynamicRecyclerViewBinder<AboutOtherInfoBinder.ViewHolder>(binderAdapter) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.privacy_policy_info, parent, false)
+                .inflate(R.layout.about_other_info, parent, false)
         )
     }
 

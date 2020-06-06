@@ -11,5 +11,4 @@ class CharacterVoiceActorField :
             .characterId(characterId)
             .build()
     }
-
 }

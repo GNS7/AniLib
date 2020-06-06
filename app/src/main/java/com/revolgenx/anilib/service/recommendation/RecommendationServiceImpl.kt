@@ -2,6 +2,7 @@ package com.revolgenx.anilib.service.recommendation
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.apollographql.apollo.exception.ApolloHttpException
 import com.revolgenx.anilib.field.media.MediaRecommendationField
 import com.revolgenx.anilib.field.recommendation.AddRecommendationField
 import com.revolgenx.anilib.field.recommendation.RecommendationField
@@ -14,6 +15,7 @@ import com.revolgenx.anilib.repository.util.Resource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
+import java.net.HttpURLConnection
 
 class RecommendationServiceImpl(graphRepository: BaseGraphRepository) :
     RecommendationService(graphRepository) {
@@ -67,6 +69,13 @@ class RecommendationServiceImpl(graphRepository: BaseGraphRepository) :
             .subscribe({
                 resourceCallback.invoke(Resource.success(it))
             }, {
+                if (it is ApolloHttpException) {
+                    if (it.code() == HttpURLConnection.HTTP_NOT_FOUND) {
+                        resourceCallback.invoke(Resource.success(null))
+                        return@subscribe
+                    }
+                }
+
                 Timber.w(it)
                 resourceCallback.invoke(Resource.error(it.message ?: ERROR, null))
             })

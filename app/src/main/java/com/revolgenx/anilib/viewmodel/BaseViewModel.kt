@@ -2,8 +2,9 @@ package com.revolgenx.anilib.viewmodel
 
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
+import org.koin.core.KoinComponent
 
-abstract class BaseViewModel : ViewModel() {
+abstract class BaseViewModel : ViewModel(), KoinComponent {
     protected val compositeDisposable: CompositeDisposable by lazy {
         CompositeDisposable()
     }
