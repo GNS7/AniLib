@@ -13,13 +13,13 @@ typealias OnButtonClickedListener = ((dialogInterface: DialogInterface, which: I
 
 open class BaseDialogFragment : DynamicDialogFragment() {
 
-    protected open var titleRes: Int = 0
-    protected open var viewRes: Int = 0
-    protected open var positiveText: Int = 0
-    protected open var negativeText: Int = 0
+    protected open var titleRes: Int? = null
+    protected open var viewRes: Int? = null
+    protected open var positiveText: Int? = null
+    protected open var negativeText: Int? = null
 
-    protected open var neutralText: Int = 0
-    protected open var messageText: Int = 0
+    protected open var neutralText: Int? = null
+    protected open var messageText: Int? = null
 
     var isAutoDismissEnabled = false
 
@@ -48,22 +48,35 @@ open class BaseDialogFragment : DynamicDialogFragment() {
         savedInstanceState: Bundle?
     ): DynamicDialog.Builder {
         with(dialogBuilder) {
-            setTitle(titleRes)
-            if (viewRes != 0)
-                setView(viewRes)
-            if (messageText != 0)
-                setMessage(messageText)
-            setPositiveButton(positiveText) { dialog, which ->
-                onPositiveClicked(dialog, which)
+            titleRes?.let {
+                setTitle(it)
             }
-            setNegativeButton(negativeText) { dialog, which ->
-                onNegativeClicked(dialog, which)
+            viewRes?.let {
+                setView(it)
             }
-            if (neutralText != 0) {
-                setNeutralButton(neutralText) { dialog, which ->
+            messageText?.let {
+
+                setMessage(it)
+            }
+
+            positiveText?.let {
+                setPositiveButton(it) { dialog, which ->
+                    onPositiveClicked(dialog, which)
+                }
+            }
+
+            negativeText?.let {
+                setNegativeButton(it) { dialog, which ->
+                    onNegativeClicked(dialog, which)
+                }
+            }
+
+            neutralText?.let {
+                setNeutralButton(it) { dialog, which ->
                     onNeutralClicked(dialog, which)
                 }
             }
+
             isAutoDismiss = isAutoDismissEnabled
         }
         return super.onCustomiseBuilder(dialogBuilder, savedInstanceState)

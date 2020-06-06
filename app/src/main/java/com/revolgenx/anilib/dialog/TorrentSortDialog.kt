@@ -11,10 +11,10 @@ import com.revolgenx.anilib.util.onItemSelected
 import kotlinx.android.synthetic.main.torrent_sort_dialog_layout.*
 
 class TorrentSortDialog : BaseDialogFragment() {
-    override var titleRes: Int = R.string.sort
-    override var positiveText: Int = R.string.done
-    override var negativeText: Int = R.string.cancel
-    override var viewRes: Int = R.layout.torrent_sort_dialog_layout
+    override var titleRes: Int? = R.string.sort
+    override var positiveText: Int? = R.string.done
+    override var negativeText: Int? = R.string.cancel
+    override var viewRes: Int? = R.layout.torrent_sort_dialog_layout
 
     companion object {
         val tag = TorrentSortDialog::class.java.simpleName

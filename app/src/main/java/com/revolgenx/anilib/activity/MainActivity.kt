@@ -38,15 +38,17 @@ import com.revolgenx.anilib.dialog.ReleaseInfoDialog
 import com.revolgenx.anilib.dialog.TagChooserDialogFragment
 import com.revolgenx.anilib.event.BrowseSiteEvent
 import com.revolgenx.anilib.event.SessionEvent
+import com.revolgenx.anilib.event.*
 import com.revolgenx.anilib.field.TagChooserField
 import com.revolgenx.anilib.field.TagField
-import com.revolgenx.anilib.fragment.*
+import com.revolgenx.anilib.fragment.SettingFragment
 import com.revolgenx.anilib.fragment.base.BaseFragment
 import com.revolgenx.anilib.fragment.base.ParcelableFragment
-import com.revolgenx.anilib.fragment.home.discover.DiscoverFragment
 import com.revolgenx.anilib.fragment.home.TorrentFragment
 import com.revolgenx.anilib.fragment.home.RecommendationFragment
 import com.revolgenx.anilib.fragment.home.SeasonFragment
+import com.revolgenx.anilib.fragment.home.discover.DiscoverFragment
+import com.revolgenx.anilib.meta.MediaListMeta
 import com.revolgenx.anilib.meta.UserMeta
 import com.revolgenx.anilib.preference.*
 import com.revolgenx.anilib.torrent.core.TorrentEngine
@@ -304,7 +306,7 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
                             clientId,
                             ResponseTypeValues.CODE,
                             redirectUri
-                        ).setPromptValues(listOf("login"))
+                        )
                         val request = builder.build()
                         val authorizationService = AuthorizationService(this)
 
@@ -319,7 +321,6 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
                             postAuthorizationIntent,
                             0
                         )
-
                         launch(Dispatchers.IO) {
                             authorizationService.performAuthorizationRequest(request, pendingIntent)
                         }
@@ -377,7 +378,6 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
         checkIntent(intent)
         checkNewTorrentIntent(intent)
         super.onNewIntent(intent)
-
     }
 
 

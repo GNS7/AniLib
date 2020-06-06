@@ -1,12 +1,8 @@
 package com.revolgenx.anilib.dialog
 
-import android.content.DialogInterface
-import com.pranavpandey.android.dynamic.support.dialog.DynamicDialog
 import com.revolgenx.anilib.R
 
-
 class ConfirmationDialog : BaseDialogFragment() {
-
 
     companion object {
         val TAG: String = ConfirmationDialog::class.java.simpleName
@@ -67,7 +63,7 @@ class ConfirmationDialog : BaseDialogFragment() {
         }
     }
 
-    override var positiveText: Int = R.string.yes
-    override var negativeText: Int = R.string.no
+    override var positiveText: Int? = R.string.yes
+    override var negativeText: Int? = R.string.no
 
 }

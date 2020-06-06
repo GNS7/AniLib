@@ -22,12 +22,12 @@ class InputDialog : BaseDialogFragment() {
 
     var onInputDoneListener: ((str: String) -> Unit)? = null
 
-    override var titleRes: Int = 0
+    override var titleRes: Int? = 0
         get() = arguments?.getInt(titleKey) ?: R.string.input_text
 
-    override var viewRes: Int = R.layout.input_dialog_layout
-    override var positiveText: Int = R.string.done
-    override var negativeText: Int = R.string.cancel
+    override var viewRes: Int? = R.layout.input_dialog_layout
+    override var positiveText: Int? = R.string.done
+    override var negativeText: Int? = R.string.cancel
 
     override fun onShowListener(alertDialog: DynamicDialog) {
         alertDialog.apply {

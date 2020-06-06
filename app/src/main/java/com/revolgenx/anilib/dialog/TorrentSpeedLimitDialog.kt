@@ -17,9 +17,9 @@ class TorrentSpeedLimitDialog : BaseDialogFragment() {
         }
     }
 
-    override var viewRes: Int = R.layout.torrent_speed_limit_dialog_layout
-    override var positiveText: Int = R.string.done
-    override var negativeText: Int = R.string.cancel
+    override var viewRes: Int? = R.layout.torrent_speed_limit_dialog_layout
+    override var positiveText: Int? = R.string.done
+    override var negativeText: Int? = R.string.cancel
 
     override fun onShowListener(alertDialog: DynamicDialog) {
         val metaData = arguments?.getParcelable<TorrentSpeedMeta>(metaKey) ?: return

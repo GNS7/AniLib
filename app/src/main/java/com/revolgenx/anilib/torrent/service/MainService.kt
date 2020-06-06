@@ -273,7 +273,7 @@ class MainService : Service() {
             .setContentText(getString(R.string.foreground_notification))
             .setTicker(getString(R.string.foreground_notification))
             .setWhen(System.currentTimeMillis())
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_anilib_inline)
             .addAction(makeShutdownAction())
             .setCategory(Notification.CATEGORY_SERVICE)
 
