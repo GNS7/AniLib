@@ -47,7 +47,8 @@ class DynamicInputPreference : DynamicSimplePreference {
             (context as? AppCompatActivity)?.supportFragmentManager?.let { fragmentManager ->
                 InputDialog.newInstance(
                     inputType = this@DynamicInputPreference.inputTextType,
-                    default = prefValue
+                    default = prefValue,
+                    showPasteButton = false
                 ).let { dialog ->
                     dialog.onInputDoneListener = list@{ inputValue ->
                         if (inputValue.isEmpty()) return@list

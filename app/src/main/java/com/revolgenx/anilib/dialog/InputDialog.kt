@@ -2,6 +2,7 @@ package com.revolgenx.anilib.dialog
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.View
 import androidx.core.os.bundleOf
 import com.pranavpandey.android.dynamic.support.dialog.DynamicDialog
 import com.pranavpandey.android.dynamic.support.dialog.fragment.DynamicDialogFragment
@@ -14,17 +15,20 @@ class InputDialog : BaseDialogFragment() {
         const val titleKey = "title_key"
         private const val inputTypeKey = "input_type_key"
         private const val defaultInputKey = "default_input_key"
+        private const val showPasteButtonKey = "show_paste_button_key"
         val tag = InputDialog::class.java.simpleName
         fun newInstance(
             title: Int? = null,
             inputType: Int? = null,
-            default: String? = null
+            default: String? = null,
+            showPasteButton: Boolean = true
         ): InputDialog {
             return InputDialog().also {
                 it.arguments = bundleOf(
                     titleKey to title,
                     inputTypeKey to inputType,
-                    defaultInputKey to default
+                    defaultInputKey to default,
+                    showPasteButtonKey to showPasteButton
                 )
             }
         }
@@ -48,8 +52,13 @@ class InputDialog : BaseDialogFragment() {
             arguments?.getString(defaultInputKey)?.let {
                 textInputEt.setText(it)
             }
-            pasteInputIv.setOnClickListener {
-                textInputEt.setText(requireContext().getClipBoardText())
+
+            if (arguments?.getBoolean(showPasteButtonKey) == true) {
+                pasteInputIv.setOnClickListener {
+                    textInputEt.setText(requireContext().getClipBoardText())
+                }
+            } else {
+                pasteInputIv.visibility = View.GONE
             }
         }
     }
