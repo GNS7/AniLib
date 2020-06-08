@@ -1,6 +1,7 @@
 package com.revolgenx.anilib.preference
 
 import android.content.Context
+import com.revolgenx.anilib.util.getDefaultStoragePath
 import org.libtorrent4j.swig.settings_pack
 
 
@@ -95,13 +96,17 @@ class TorrentPreference(
         get() = context.getBoolean(Key.AUTO_MANAGED.name, field)
         set(value) = context.putBoolean(Key.AUTO_MANAGED.name, value)
 
+    var storagePath = getDefaultStoragePath()
+        get() = context.getString(Key.STORAGE_PATH.name, field)!!
+        set(value) = context.putString(Key.STORAGE_PATH.name, value)
+
 
     companion object {
         fun getTorrentPreferenceInstance(context: Context) = TorrentPreference(context)
 
         const val DEFAULT_CACHE_SIZE = 256
-        const val DEFAULT_ACTIVE_DOWNLOADS = 4
-        const val DEFAULT_ACTIVE_SEEDS = 4
+        const val DEFAULT_ACTIVE_DOWNLOADS = 3
+        const val DEFAULT_ACTIVE_SEEDS = 3
         const val DEFAULT_MAX_PEER_LIST_SIZE = 200
         const val DEFAULT_TICK_INTERVAL = 1000
         const val DEFAULT_INACTIVITY_TIMEOUT = 60
@@ -128,7 +133,8 @@ class TorrentPreference(
 
     enum class Key {
         CACHE_SIZE,
-        ACTIVE_DOWNLOADS, ACTIVE_SEEDS,
+        ACTIVE_DOWNLOADS,
+        ACTIVE_SEEDS,
         MAX_PEER_LIST_SIZE,
         TICK_INTERVAL,
         INACTIVITY_TIMEOUT,
@@ -150,6 +156,7 @@ class TorrentPreference(
         ENCRYPT_IN_CONNECTIONS,
         ENCRYPT_OUT_CONNECTIONS,
         ENCRYPT_MODE,
-        AUTO_MANAGED
+        AUTO_MANAGED,
+        STORAGE_PATH
     }
 }

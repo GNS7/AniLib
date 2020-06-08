@@ -308,6 +308,14 @@
     <string name="preferred_image_quality_desc">Select your preferred image quality</string>
 
 
+
+    <string name="copied_to_clipboard">Copied to clipboard</string>
+
+    <!--crash report-->
+    <string name="crash_reporting">Crash Reporting</string>
+    <string name="crash_report_desc">Help improve AniLib\'s features. Automatically sends crash reports.</string>
+
+
     <string-array name="media_format">
         <item>Tv</item>
         <item>Tv Short</item>
@@ -538,9 +546,5 @@
         <item>Updated At</item>
         <item>Updated At Desc</item>
     </string-array>
-
-    <string name="copied_to_clipboard">Copied to clipboard</string>
-    <string name="crash_reporting">Crash Reporting</string>
-    <string name="crash_report_desc">Help improve AniLib\'s features. Automatically sends crash reports.</string>
 
 </resources>

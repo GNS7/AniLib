@@ -11,6 +11,7 @@ import com.revolgenx.anilib.activity.ToolbarContainerActivity
 import com.revolgenx.anilib.fragment.base.BaseToolbarFragment
 import com.revolgenx.anilib.fragment.base.ParcelableFragment
 import com.revolgenx.anilib.fragment.notification.NotificationSettingFragment
+import com.revolgenx.anilib.fragment.torrent.TorrentSettingFragment
 import kotlinx.android.synthetic.main.setting_fragment_layout.*
 
 class SettingFragment : BaseToolbarFragment() {
@@ -46,6 +47,16 @@ class SettingFragment : BaseToolbarFragment() {
                 requireContext(),
                 ParcelableFragment(
                     NotificationSettingFragment::class.java,
+                    null
+                )
+            )
+        }
+
+        torrentSettingView.setOnClickListener {
+            ToolbarContainerActivity.openActivity(
+                requireContext(),
+                ParcelableFragment(
+                    TorrentSettingFragment::class.java,
                     null
                 )
             )

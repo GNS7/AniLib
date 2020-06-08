@@ -36,7 +36,6 @@ import com.revolgenx.anilib.R
 import com.revolgenx.anilib.dialog.AuthDialog
 import com.revolgenx.anilib.dialog.ReleaseInfoDialog
 import com.revolgenx.anilib.dialog.TagChooserDialogFragment
-import com.revolgenx.anilib.event.BrowseSiteEvent
 import com.revolgenx.anilib.event.SessionEvent
 import com.revolgenx.anilib.event.*
 import com.revolgenx.anilib.field.TagChooserField
@@ -163,6 +162,8 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
     private fun updateNavView() {
         if (navView == null) return
 
+        navView.menu.findItem(R.id.stageVersion)?.isVisible = false
+
         if (!loggedIn()) {
             simpleNavView()
         } else {
@@ -263,10 +264,7 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
                     startActivity(Intent(this, AboutActivity::class.java))
                     true
                 }
-                R.id.stageVersion -> {
-                    BrowseSiteEvent().postEvent
-                    true
-                }
+
                 R.id.navAnimeListId -> {
                     MediaListActivity.openActivity(
                         this,

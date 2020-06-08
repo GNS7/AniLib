@@ -8,13 +8,15 @@ import android.view.*
 import androidx.core.net.toFile
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.github.axet.androidlibrary.widgets.HeaderRecyclerAdapter
-import com.github.axet.androidlibrary.widgets.TreeListView
+import com.pranavpandey.android.dynamic.utils.DynamicLinkUtils
 import com.revolgenx.anilib.R
 import com.revolgenx.anilib.adapter.FilesTreeAdapter
+import com.revolgenx.anilib.dialog.InputDialog
+import com.revolgenx.anilib.dialog.openFolderChooser
 import com.revolgenx.anilib.event.TorrentAddedEvent
 import com.revolgenx.anilib.event.TorrentAddedEventTypes
-import com.revolgenx.anilib.exception.TorrentException
 import com.revolgenx.anilib.fragment.base.BaseLayoutFragment
+import com.revolgenx.anilib.preference.TorrentPreference
 import com.revolgenx.anilib.torrent.core.Torrent
 import com.revolgenx.anilib.torrent.core.TorrentEngine
 import com.revolgenx.anilib.util.*
@@ -54,6 +56,7 @@ class AddTorrentFragment : BaseLayoutFragment(), AlertListener, CoroutineScope {
     override val layoutRes: Int = R.layout.add_torrent_fragment_layout
     private lateinit var headerLayout: View
     private val engine by inject<TorrentEngine>()
+    private val torrentPreference by inject<TorrentPreference>()
     private var rotation = false
 
     private var adapter: FilesTreeAdapter? = null
@@ -81,7 +84,7 @@ class AddTorrentFragment : BaseLayoutFragment(), AlertListener, CoroutineScope {
         initListener()
 
         if (savedInstanceState == null) {
-            viewModel.path = getDefualtStoragePath()
+            viewModel.path = torrentPreference.storagePath
             decodeUri()
         }
 
@@ -106,6 +109,30 @@ class AddTorrentFragment : BaseLayoutFragment(), AlertListener, CoroutineScope {
         headerLayout.torrentMetaFileCheckBox.setOnCheckedChangeListener { _, isChecked ->
             adapter?.checkAll(isChecked)
         }
+
+        torrentMetaNameTv.setOnClickListener {
+            val inputDialog =
+                InputDialog.newInstance(default = torrentMetaNameTv.subtitle?.toString())
+            inputDialog.onInputDoneListener = {
+                if(it.isNotEmpty()){
+                    viewModel.handle!!.torrentFile().files().name(it)
+                    torrentMetaNameTv.subtitle = it
+                }
+            }
+        }
+
+        torrentMetaHashTv.setOnClickListener {
+            val text = torrentMetaHashTv.subtitle?.toString()
+            requireContext().copyToClipBoard(text)
+        }
+
+        torrentPathMetaTv.setOnClickListener {
+            openFolderChooser(requireContext(), viewModel.path) {
+                viewModel.handle!!.moveStorage(it)
+                torrentPathMetaTv.subtitle = it
+            }
+        }
+
     }
 
     private fun updateView() {
@@ -219,7 +246,7 @@ class AddTorrentFragment : BaseLayoutFragment(), AlertListener, CoroutineScope {
                                 it.simpleState = true
                                 if (viewModel.handle!!.status().hasMetadata()) {
                                     it.source = viewModel.handle!!.torrentFile().bencode()!!
-                                }else{
+                                } else {
 
                                 }
                                 it.magnet = arguments?.getParcelable<Uri>(uriKey).toString()

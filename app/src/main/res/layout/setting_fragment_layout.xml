@@ -40,6 +40,20 @@
 
         <com.pranavpandey.android.dynamic.support.widget.DynamicCardView style="@style/Widget.DynamicApp.Card">
 
+            <com.pranavpandey.android.dynamic.support.view.DynamicItemView
+                android:id="@+id/torrentSettingView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ads_colorType="tint_surface"
+                app:ads_icon="@drawable/ic_download"
+                app:ads_subtitle="@string/torrent_setting_desc"
+                app:ads_title="@string/torrent_setting" />
+
+        </com.pranavpandey.android.dynamic.support.widget.DynamicCardView>
+
+
+        <com.pranavpandey.android.dynamic.support.widget.DynamicCardView style="@style/Widget.DynamicApp.Card">
+
             <com.pranavpandey.android.dynamic.support.setting.DynamicSpinnerPreference
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -76,12 +90,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:ads_checked="true"
-                app:ads_key="can_show_adult_key"
+                app:ads_description="@string/show_adult_content_desc"
                 app:ads_icon="@drawable/ic_dropped"
-                app:ads_title="@string/show_adult_content"
-                app:ads_description="@string/show_adult_content_desc"/>
+                app:ads_key="can_show_adult_key"
+                app:ads_title="@string/show_adult_content" />
 
         </com.pranavpandey.android.dynamic.support.widget.DynamicCardView>
+
 
         <com.pranavpandey.android.dynamic.support.widget.DynamicCardView style="@style/Widget.DynamicApp.Card">
 

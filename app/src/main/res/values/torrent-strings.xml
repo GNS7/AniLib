@@ -26,6 +26,7 @@
     <string name="files">Files</string>
     <string name="not_a_torrent_file">Not a torrent file</string>
     <string name="choose_a_file">Choose a file</string>
+    <string name="choose_a_directory">Choose a directory</string>
     <string name="magnet_link">Magnet Link</string>
     <string name="input_text">Input Text</string>
     <string name="torrent">Torrent</string>
@@ -54,6 +55,25 @@
     <string name="please_wait_starting_engine">Please wait starting engine.</string>
     <string name="show_adult_content">Show Adult Content</string>
     <string name="show_adult_content_desc">Enabling it will show include adult media content.</string>
+    <string name="torrent_setting">Torrent Setting</string>
+    <string name="storage_path">Storage Path</string>
+    <string name="bandwidth">Bandwidth</string>
+    <string name="torrent_setting_desc">Settings for torrent</string>
+    <string name="storage">Storage</string>
+    <string name="connection_setting">Connection Setting</string>
+    <string name="max_upload_speed">Maximum Upload Speed</string>
+    <string name="max_download_speed">Maximum Download Speed</string>
+    <string name="max_no_connection">Maximum number of connections</string>
+    <string name="queue">Queue</string>
+    <string name="max_active_downloads">Maximum Active Downloads</string>
+    <string name="max_active_upload">Maximum Active Uploads</string>
+    <string name="max_active_torrents">Maximum Active Torrents</string>
+    <string name="network">Network</string>
+    <string name="enable_dht">Enable DHT</string>
+    <string name="enable_lsd">Enable LSD</string>
+    <string name="enable_utp">Enable uTP</string>
+    <string name="enable_upnp">Enable UPnP</string>
+    <string name="enable_nat_pmp">Enable NAT-PMP</string>
 
     <string-array name="torrent_sort">
         <item>Name Asc</item>

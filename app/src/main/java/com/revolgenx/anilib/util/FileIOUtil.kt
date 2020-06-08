@@ -15,7 +15,7 @@ val MB: Long = 1048576 // 1024 * 1024
 val KB: Long = 1024
 
 
-fun getDefualtStoragePath(): String {
+fun getDefaultStoragePath(): String {
     val path = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS)
         .absolutePath
 

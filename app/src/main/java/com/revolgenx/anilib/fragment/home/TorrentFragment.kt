@@ -15,32 +15,25 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.net.toUri
-import androidx.core.os.bundleOf
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.*
 import com.obsez.android.lib.filechooser.ChooserDialog
 import com.pranavpandey.android.dynamic.support.theme.DynamicTheme
 import com.revolgenx.anilib.R
 import com.revolgenx.anilib.activity.MainActivity
-import com.revolgenx.anilib.activity.NavViewPagerContainerActivity
-import com.revolgenx.anilib.activity.ToolbarContainerActivity
 import com.revolgenx.anilib.activity.ViewPagerContainerActivity
 import com.revolgenx.anilib.adapter.SelectableAdapter
-import com.revolgenx.anilib.dialog.BaseDialogFragment
 import com.revolgenx.anilib.dialog.ConfirmationDialog
 import com.revolgenx.anilib.dialog.InputDialog
 import com.revolgenx.anilib.dialog.TorrentSortDialog
+import com.revolgenx.anilib.dialog.openFileChooser
 import com.revolgenx.anilib.event.*
 import com.revolgenx.anilib.exception.TorrentPauseException
 import com.revolgenx.anilib.exception.TorrentResumeException
 import com.revolgenx.anilib.fragment.base.BaseLayoutFragment
-import com.revolgenx.anilib.fragment.base.ParcelableFragment
-import com.revolgenx.anilib.fragment.base.ViewPagerParcelableFragments
-import com.revolgenx.anilib.fragment.torrent.AddTorrentFragment
-import com.revolgenx.anilib.fragment.torrent.BaseTorrentMetaFragment
-import com.revolgenx.anilib.fragment.torrent.TorrentMetaFragment
 import com.revolgenx.anilib.meta.ViewPagerContainerMeta
 import com.revolgenx.anilib.meta.ViewPagerContainerType
+import com.revolgenx.anilib.preference.TorrentPreference
 import com.revolgenx.anilib.preference.torrentSort
 import com.revolgenx.anilib.repository.util.Status
 import com.revolgenx.anilib.torrent.core.Torrent
@@ -69,6 +62,7 @@ class TorrentFragment : BaseLayoutFragment() {
     private val viewModel by viewModel<TorrentViewModel>()
     private val torrentEngine by inject<TorrentEngine>()
     private val torrentActiveState by inject<TorrentActiveState>()
+    private val torrentPreference by inject<TorrentPreference>()
     private lateinit var adapter: TorrentRecyclerAdapter
 
     private var rotating = false
@@ -256,7 +250,6 @@ class TorrentFragment : BaseLayoutFragment() {
         onButtonClickedListener = { _, which ->
             if (which == AlertDialog.BUTTON_POSITIVE) {
                 makeTorrentSort()
-                Timber.d("onpositive clicked  ${torrentSort(requireContext())}")
             }
         }
     }
@@ -385,34 +378,16 @@ class TorrentFragment : BaseLayoutFragment() {
     }
 
     private fun openTorrentFileChooser() {
-        ChooserDialog(requireContext())
-            .withFilter(false, false, "torrent")
-            .withStartFile(getDefualtStoragePath())
-            .withChosenListener { dir, dirFile ->
-                if (dirFile.extension != "torrent") {
-                    makeToast(R.string.not_a_torrent_file)
-                    return@withChosenListener
-                }
-
-                openAddTorrentActivity(dirFile.toUri())
+        openFileChooser(
+            requireContext(),
+            torrentPreference.storagePath
+        ) withChosenListener@{ _, file ->
+            if (file.extension != "torrent") {
+                makeToast(R.string.not_a_torrent_file)
+                return@withChosenListener
             }
-            .withResources(R.string.choose_a_file, R.string.done, R.string.cancel)
-            .titleFollowsDir(true)
-            .withFileIcons(
-                false,
-                ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.ads_ic_file
-                )?.also { DrawableCompat.setTint(it, tintAccentColor) },
-                ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.ic_folder
-                )?.also { DrawableCompat.setTint(it, tintAccentColor) }
-            )
-            .enableOptions(true)
-            .build()
-            .show()
-
+            openAddTorrentActivity(file.toUri())
+        }
     }
 
     private fun resumeAll() {

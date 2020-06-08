@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.pranavpandey.android.dynamic.support.widget.DynamicNestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.DynamicApp.Scroller.Nested.Padding"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.pranavpandey.android.dynamic.support.view.DynamicHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ads_fillSpace="true"
+            app:ads_title="@string/storage" />
+
+        <com.pranavpandey.android.dynamic.support.view.DynamicItemView
+            android:id="@+id/torrentStorageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            app:ads_colorType="tint_surface"
+            app:ads_fillSpace="true"
+            app:ads_subtitle="/"
+            app:ads_title="@string/storage_path" />
+
+        <include layout="@layout/divider_background" />
+
+        <com.pranavpandey.android.dynamic.support.view.DynamicHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ads_fillSpace="true"
+            app:ads_title="@string/bandwidth" />
+
+
+        <com.revolgenx.anilib.view.preference.DynamicInputPreference
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:inputType="number"
+            app:preferenceType="integer"
+            app:ads_key="DOWNLOAD_RATE_LIMIT"
+            app:ads_value="0"
+            app:ads_title="@string/max_download_speed"
+            />
+
+        <com.revolgenx.anilib.view.preference.DynamicInputPreference
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:inputType="number"
+            app:preferenceType="integer"
+            app:ads_key="UPLOAD_RATE_LIMIT"
+            app:ads_value="0"
+            app:ads_title="@string/max_upload_speed"
+            />
+
+        <include layout="@layout/divider_background" />
+
+        <com.pranavpandey.android.dynamic.support.view.DynamicHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ads_fillSpace="true"
+            app:ads_title="@string/connection_setting" />
+
+
+        <com.revolgenx.anilib.view.preference.DynamicInputPreference
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:inputType="number"
+            app:preferenceType="integer"
+            app:ads_key="CONNECTION_LIMIT"
+            app:ads_value="200"
+            app:ads_title="@string/max_no_connection"
+            />
+
+        <include layout="@layout/divider_background" />
+
+        <com.pranavpandey.android.dynamic.support.view.DynamicHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ads_fillSpace="true"
+            app:ads_title="@string/queue" />
+
+
+        <com.revolgenx.anilib.view.preference.DynamicInputPreference
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:inputType="number"
+            app:preferenceType="integer"
+            app:ads_key="ACTIVE_DOWNLOADS"
+            app:ads_value="3"
+            app:ads_title="@string/max_active_downloads"
+            />
+
+
+        <com.revolgenx.anilib.view.preference.DynamicInputPreference
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:inputType="number"
+            app:preferenceType="integer"
+            app:ads_key="ACTIVE_SEEDS"
+            app:ads_value="3"
+            app:ads_title="@string/max_active_upload"
+            />
+
+
+        <com.revolgenx.anilib.view.preference.DynamicInputPreference
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:inputType="number"
+            app:preferenceType="integer"
+            app:ads_key="ACTIVE_LIMIT"
+            app:ads_value="6"
+            app:ads_title="@string/max_active_torrents"
+            />
+
+        <include layout="@layout/divider_background"/>
+
+        <com.pranavpandey.android.dynamic.support.view.DynamicHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ads_title="@string/network"
+            app:ads_fillSpace="true"/>
+
+        <com.revolgenx.anilib.view.CustomCheckPreference
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ads_title="@string/enable_dht"
+            app:ads_key="DHT_ENABLED"
+            app:ads_checked="true"/>
+
+
+        <com.revolgenx.anilib.view.CustomCheckPreference
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ads_title="@string/enable_lsd"
+            app:ads_key="LSD_ENABLED"
+            app:ads_checked="true"/>
+
+
+        <com.revolgenx.anilib.view.CustomCheckPreference
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ads_title="@string/enable_utp"
+            app:ads_key="UTP_ENABLED"
+            app:ads_checked="true"/>
+
+
+        <com.revolgenx.anilib.view.CustomCheckPreference
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ads_title="@string/enable_upnp"
+            app:ads_key="UPNP_ENABLED"
+            app:ads_checked="true"/>
+
+        <com.revolgenx.anilib.view.CustomCheckPreference
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ads_title="@string/enable_nat_pmp"
+            app:ads_key="NATPMP_ENABLED"
+            app:ads_checked="true"/>
+
+    </LinearLayout>
+
+</com.pranavpandey.android.dynamic.support.widget.DynamicNestedScrollView>
