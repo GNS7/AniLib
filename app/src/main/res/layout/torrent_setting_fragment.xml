@@ -125,7 +125,7 @@
             app:ads_title="@string/network"
             app:ads_fillSpace="true"/>
 
-        <com.revolgenx.anilib.view.CustomCheckPreference
+        <com.revolgenx.anilib.view.preference.CustomCheckPreference
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:ads_title="@string/enable_dht"
@@ -133,7 +133,7 @@
             app:ads_checked="true"/>
 
 
-        <com.revolgenx.anilib.view.CustomCheckPreference
+        <com.revolgenx.anilib.view.preference.CustomCheckPreference
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:ads_title="@string/enable_lsd"
@@ -141,7 +141,7 @@
             app:ads_checked="true"/>
 
 
-        <com.revolgenx.anilib.view.CustomCheckPreference
+        <com.revolgenx.anilib.view.preference.CustomCheckPreference
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:ads_title="@string/enable_utp"
@@ -149,14 +149,14 @@
             app:ads_checked="true"/>
 
 
-        <com.revolgenx.anilib.view.CustomCheckPreference
+        <com.revolgenx.anilib.view.preference.CustomCheckPreference
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:ads_title="@string/enable_upnp"
             app:ads_key="UPNP_ENABLED"
             app:ads_checked="true"/>
 
-        <com.revolgenx.anilib.view.CustomCheckPreference
+        <com.revolgenx.anilib.view.preference.CustomCheckPreference
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:ads_title="@string/enable_nat_pmp"

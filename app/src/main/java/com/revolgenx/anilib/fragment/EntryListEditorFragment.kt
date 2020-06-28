@@ -57,8 +57,10 @@ class EntryListEditorFragment : BaseFragment() {
     private var saving = false
     private var deleting = false
     private var toggling = false
-    private var apiModelEntry: EntryListEditorMediaModel? = null
     private var isFavourite = false
+
+    private val apiModelEntry
+        get() = viewModel.apiModelEntry
 
 
     private val calendarDrawable by lazy {
@@ -144,7 +146,7 @@ class EntryListEditorFragment : BaseFragment() {
                     fetched = true
                     modelEntry = resource.data
 
-                    apiModelEntry = if (savedInstanceState == null) {
+                    viewModel.apiModelEntry = if (savedInstanceState == null) {
                         if (modelEntry == null) createListEditorMediaModel() else modelEntry
                     } else {
                         savedInstanceState.getParcelable(LIST_EDITOR_MODEL)
@@ -211,7 +213,7 @@ class EntryListEditorFragment : BaseFragment() {
                     ListEditorResultEvent(
                         ListEditorResultMeta(
                             apiModelEntry!!.mediaId,
-                            apiModelEntry!!.progress?:0,
+                            apiModelEntry!!.progress ?: 0,
                             apiModelEntry!!.status
                         )
                     ).postSticky
@@ -237,7 +239,7 @@ class EntryListEditorFragment : BaseFragment() {
                         ListEditorResultMeta(
                             apiModelEntry!!.mediaId,
                             status = apiModelEntry!!.status,
-                            deleted =  true
+                            deleted = true
                         )
                     ).postSticky
                     finishActivity()

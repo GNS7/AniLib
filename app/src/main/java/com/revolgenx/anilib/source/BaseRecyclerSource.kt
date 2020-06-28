@@ -26,6 +26,7 @@ abstract class BaseRecyclerSource<M : Any, F>(protected var field: F) : MainSour
             Status.ERROR -> {
                 postResult(page, Exception(resource.exception))
             }
+            else -> {}
         }
     }
 

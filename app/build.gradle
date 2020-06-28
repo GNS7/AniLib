@@ -91,11 +91,20 @@ android {
         applicationVariants.all { variant ->
             if(variant.buildType.name == "release"){
                 variant.outputs.all {
-                    outputFileName = "AniLib-${defaultConfig.versionName}.apk"
+                    def architecture = getFilter(com.android.build.OutputFile.ABI)
+                    if(architecture == null){
+                        architecture = "universal"
+                    }
+
+                    outputFileName = "AniLib-${defaultConfig.versionName}-${architecture}.apk"
                 }
             }else if(variant.buildType.name == "debug"){
                 variant.outputs.all {
-                    outputFileName = "AniLib-${defaultConfig.versionName}-debug.apk"
+                    def architecture = getFilter(com.android.build.OutputFile.ABI)
+                    if(architecture == null){
+                        architecture = "universal"
+                    }
+                    outputFileName = "AniLib-${defaultConfig.versionName}-${architecture}-debug.apk"
                 }
             }
         }
