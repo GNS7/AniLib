@@ -2,6 +2,7 @@ package com.revolgenx.anilib.preference
 
 import android.content.Context
 import com.auth0.android.jwt.JWT
+import com.google.gson.Gson
 import com.pranavpandey.android.dynamic.utils.DynamicPackageUtils
 import com.revolgenx.anilib.R
 import com.revolgenx.anilib.model.UserPrefModel
@@ -14,6 +15,10 @@ private const val tokenKey = "token_key"
 private const val titleKey = "title_key"
 private const val imageQualityKey = "image_quality_key"
 private const val userIdKey = "user_id_key"
+
+private const val userPermissionKey = "user_permission_key"
+private const val canShowAdultKey = "can_show_adult_key"
+
 private const val crashReportKey = "crash_report_key"
 private const val lastNotificationKey = "last_notification_key"
 private const val versionKey = "versionKey"
@@ -68,6 +73,13 @@ fun Context.removeBasicUserDetail() {
         }
     }
     this.putString(userModelKey, Gson().toJson(userPrefModelPref))
+}
+
+fun Context.checkedStoragePermission(): Boolean {
+    val permission = getBoolean(userPermissionKey, false)
+    if (!permission)
+        putBoolean(userPermissionKey, true)
+    return permission
 }
 
 fun Context.logOut() {

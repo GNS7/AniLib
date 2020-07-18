@@ -598,7 +598,7 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
 
 
     private fun checkNewTorrentIntent(intent: Intent?) {
-        if (intent == null) return
+        if (intent == null || intent.hasExtra(authIntent)) return
         if (intent.data != null) {
             uri = intent.data
         } else if (intent.hasExtra("uri")) {
