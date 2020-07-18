@@ -171,11 +171,11 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
         }
 
         navView.getHeaderView(0).let { headerView ->
-            val userAvatar = userAvatar()!!
-            val userBanner = userBannerImage()!!
+            val userAvatar = userAvatar()
+            val userBanner = userBannerImage()
             val userName = userName()
 
-            if (userAvatar.isEmpty()) {
+            if (userAvatar.isNullOrEmpty()) {
                 headerView.navHeaderIcon.setImageDrawable(
                     AppCompatDrawableManager.get().getDrawable(
                         context,
@@ -205,7 +205,7 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
             headerView.navHeaderTitle.text = userName
             headerView.navHeaderTitle.setTextColor(ContextCompat.getColor(context, R.color.white))
 
-            if (userBanner.isNotEmpty()) {
+            if (!userBanner.isNullOrEmpty()) {
                 headerView.navHeaderBackground.setImageURI(userBanner)
             }
 
@@ -264,7 +264,6 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
                     startActivity(Intent(this, AboutActivity::class.java))
                     true
                 }
-
                 R.id.navAnimeListId -> {
                     MediaListActivity.openActivity(
                         this,

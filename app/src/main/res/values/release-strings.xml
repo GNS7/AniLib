@@ -21,7 +21,9 @@
 
     </string>
 
-    <string name="studio_note"/>
+    <string name="studio_note">
+        ### More feature available in AniLib Plus Ultra Version. Visit [AniLib](https://anilib-site.web.app/#/) for more info.
+    </string>
 
 
     <string name="site_url">https://anilib.onrender.com/#/</string>
