@@ -36,7 +36,6 @@ import com.revolgenx.anilib.R
 import com.revolgenx.anilib.dialog.AuthenticationDialog
 import com.revolgenx.anilib.dialog.ReleaseInfoDialog
 import com.revolgenx.anilib.dialog.TagChooserDialogFragment
-import com.revolgenx.anilib.event.SessionEvent
 import com.revolgenx.anilib.event.*
 import com.revolgenx.anilib.field.TagChooserField
 import com.revolgenx.anilib.field.TagField
