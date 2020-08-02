@@ -71,7 +71,7 @@ import kotlin.coroutines.CoroutineContext
 
 class MainActivity : BaseDynamicActivity(), CoroutineScope,
     BrowseFilterNavigationView.AdvanceBrowseNavigationCallbackListener
-    , TagChooserDialogFragment.OnDoneListener {
+    , TagChooserDialogFragment.TagChooserDialogCallback {
     private val job = Job()
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
@@ -99,7 +99,22 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
 
     override val layoutRes: Int = R.layout.activity_main
 
+
+    override fun onStart() {
+        super.onStart()
+        registerForEvent()
+    }
+
+
+    override fun onStop() {
+        super.onStop()
+        unRegisterForEvent()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        //update before layout inflate
+        updateSharedPreference()
+
         super.onCreate(savedInstanceState)
         if (!checkedStoragePermission()) {
             checkPermission()
@@ -140,6 +155,15 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
             uri = intent.data
         } else if (intent.hasExtra("uri")) {
             uri = intent.getParcelableExtra("uri")
+        }
+    }
+
+    private fun updateSharedPreference() {
+        if (!isSharedPreferenceSynced(context)) {
+            TagPrefUtil.reloadTagPref(context)
+            TagPrefUtil.reloadGenrePref(context)
+            TagPrefUtil.reloadStreamingPref(context)
+            isSharedPreferenceSynced(context, true)
         }
     }
 
@@ -197,7 +221,9 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
 
             headerView.navHeaderIcon.hierarchy.let {
                 it.roundingParams =
-                    it.roundingParams?.setBorderColor(DynamicTheme.getInstance().get().tintAccentColor)
+                    it.roundingParams?.setBorderColor(
+                        DynamicTheme.getInstance().get().tintAccentColor
+                    )
             }
 
             DynamicTheme.getInstance().get().primaryColorDark
@@ -415,18 +441,24 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
     }
 
     override fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            if (pressedTwice) {
-                finish()
-            } else {
-                makeToast(R.string.press_again_to_exit, icon = R.drawable.ic_exit)
-                Handler().postDelayed({
-                    pressedTwice = false
-                }, 1000)
+        when {
+            drawerLayout.isDrawerOpen(GravityCompat.START) -> {
+                drawerLayout.closeDrawer(GravityCompat.START)
             }
-            pressedTwice = true
+            drawerLayout.isDrawerOpen(GravityCompat.END) -> {
+                drawerLayout.closeDrawer(GravityCompat.END)
+            }
+            else -> {
+                if (pressedTwice) {
+                    finish()
+                } else {
+                    makeToast(R.string.press_again_to_exit, icon = R.drawable.ic_exit)
+                    Handler().postDelayed({
+                        pressedTwice = false
+                    }, 1000)
+                }
+                pressedTwice = true
+            }
         }
     }
 
@@ -437,7 +469,7 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
     }
 
 
-    override fun onDone(fragmentTag: String?, list: List<TagField>) {
+    override fun onTagChooserDone(fragmentTag: String?, list: List<TagField>) {
         when (fragmentTag) {
             BrowseActivity.TAG_CHOOSER_DIALOG_TAG -> {
                 invalidateTagFilter(list)
@@ -447,6 +479,106 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
             }
             BrowseActivity.STREAM_CHOOSER_DIALOG_TAG -> {
                 invalidateStreamFilter(list)
+            }
+        }
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onTagEvent(event: TagEvent) {
+        val fragmentTag = event.tag
+        val tagFields = event.tagFields;
+        when (event.tag) {
+            BrowseActivity.TAG_CHOOSER_DIALOG_TAG -> {
+                when (event.operationType) {
+                    TagOperationType.ADD_TAG -> {
+                        viewModel.tagTagFields.addAll(tagFields)
+                        addTagToNavView(fragmentTag, tagFields)
+                    }
+                    TagOperationType.DELETE_TAG -> {
+                        viewModel.tagTagFields.removeAll { r ->
+                            tagFields.any { it.tag == r.tag }
+                        }
+                        removeTagToNavView(fragmentTag, tagFields)
+
+                    }
+                    else -> {
+
+                    }
+                }
+            }
+            BrowseActivity.GENRE_CHOOSER_DIALOG_TAG -> {
+                when (event.operationType) {
+                    TagOperationType.ADD_GENRE -> {
+                        viewModel.genreTagFields.addAll(tagFields)
+                        addTagToNavView(fragmentTag, tagFields)
+                    }
+                    TagOperationType.DELETE_GENRE -> {
+                        viewModel.genreTagFields.removeAll { r ->
+                            tagFields.any { it.tag == r.tag }
+                        }
+                        removeTagToNavView(fragmentTag, tagFields)
+
+                    }
+                    else -> {
+
+                    }
+                }
+            }
+            BrowseActivity.STREAM_CHOOSER_DIALOG_TAG -> {
+                when (event.operationType) {
+                    TagOperationType.ADD_STREAM -> {
+                        viewModel.streamTagFields.addAll(tagFields)
+                        addTagToNavView(fragmentTag, tagFields)
+                    }
+                    TagOperationType.DELETE_STREAM -> {
+                        viewModel.streamTagFields.removeAll { r ->
+                            tagFields.any { it.tag == r.tag }
+                        }
+                        removeTagToNavView(fragmentTag, tagFields)
+                    }
+                    else -> {
+
+                    }
+                }
+            }
+            else -> {
+
+            }
+        }
+    }
+
+    private fun addTagToNavView(fragmentTag: String?, tags: List<TagField>) {
+        when (fragmentTag) {
+            BrowseActivity.TAG_CHOOSER_DIALOG_TAG -> {
+                mainBrowseFilterNavView.addTagField(tags)
+            }
+            BrowseActivity.GENRE_CHOOSER_DIALOG_TAG -> {
+                mainBrowseFilterNavView.addGenreField(tags)
+            }
+            BrowseActivity.STREAM_CHOOSER_DIALOG_TAG -> {
+                mainBrowseFilterNavView.addStreamField(tags)
+            }
+            else -> {
+
+            }
+        }
+    }
+
+    private fun removeTagToNavView(fragmentTag: String?, tags: List<TagField>) {
+        when (fragmentTag) {
+            BrowseActivity.TAG_CHOOSER_DIALOG_TAG -> {
+                mainBrowseFilterNavView.removeTagField(tags)
+            }
+            BrowseActivity.GENRE_CHOOSER_DIALOG_TAG -> {
+                mainBrowseFilterNavView.removeGenreField(tags)
+
+            }
+            BrowseActivity.STREAM_CHOOSER_DIALOG_TAG -> {
+                mainBrowseFilterNavView.removeStreamField(tags)
+            }
+            else -> {
+
             }
         }
     }
@@ -480,21 +612,29 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
      * Called by advance search filter nav view
      * */
     override fun onGenreChoose(tags: List<TagField>) {
-        openTagChooserDialog(tags, BrowseActivity.GENRE_CHOOSER_DIALOG_TAG)
+        openTagChooserDialog(
+            tags,
+            BrowseActivity.GENRE_CHOOSER_DIALOG_TAG,
+            getString(R.string.genre)
+        )
     }
 
     /**
      * Called by advance search filter nav view
      * */
     override fun onStreamChoose(tags: List<TagField>) {
-        openTagChooserDialog(tags, BrowseActivity.STREAM_CHOOSER_DIALOG_TAG)
+        openTagChooserDialog(
+            tags,
+            BrowseActivity.STREAM_CHOOSER_DIALOG_TAG,
+            getString(R.string.streaming_on)
+        )
     }
 
     /**
      * Called by advance search filter nav view
      * */
     override fun onTagChoose(tags: List<TagField>) {
-        openTagChooserDialog(tags, BrowseActivity.TAG_CHOOSER_DIALOG_TAG)
+        openTagChooserDialog(tags, BrowseActivity.TAG_CHOOSER_DIALOG_TAG, getString(R.string.tags))
     }
 
     override fun onGenreAdd(tags: List<TagField>) {
@@ -510,21 +650,15 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
     }
 
     override fun onTagRemoved(tag: String) {
-        viewModel.tagTagFields?.find { it.tag == tag }?.let {
-            viewModel.tagTagFields?.remove(it)
-        }
+        viewModel.tagTagFields.removeAll { it.tag == tag }
     }
 
     override fun onGenreRemoved(tag: String) {
-        viewModel.genreTagFields?.find { it.tag == tag }?.let {
-            viewModel.genreTagFields?.remove(it)
-        }
+        viewModel.genreTagFields.removeAll { it.tag == tag }
     }
 
     override fun onStreamRemoved(tag: String) {
-        viewModel.streamTagFields?.find { it.tag == tag }?.let {
-            viewModel.streamTagFields?.remove(it)
-        }
+        viewModel.streamTagFields.removeAll { it.tag == tag }
     }
 
     override fun updateGenre() {
@@ -557,10 +691,10 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
         }
     }
 
-    private fun openTagChooserDialog(tags: List<TagField>, dialogTag: String) {
+    private fun openTagChooserDialog(tags: List<TagField>, dialogTag: String, tagHeader: String) {
         TagChooserDialogFragment.newInstance(
             TagChooserField(
-                getString(R.string.tags),
+                tagHeader,
                 tags
             )
         ).apply {
