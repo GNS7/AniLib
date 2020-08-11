@@ -95,7 +95,9 @@ class MediaBrowseField : BrowseField() {
                     country(CountryOfOrigins.values()[it].name)
                 }
 
-                isAdult(canShowAdult)
+                if(!canShowAdult){
+                    isAdult(canShowAdult)
+                }
 
             }
             .build()
