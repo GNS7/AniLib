@@ -36,7 +36,13 @@ import com.revolgenx.anilib.R
 import com.revolgenx.anilib.dialog.AuthenticationDialog
 import com.revolgenx.anilib.dialog.ReleaseInfoDialog
 import com.revolgenx.anilib.dialog.TagChooserDialogFragment
-import com.revolgenx.anilib.event.*
+import com.revolgenx.anilib.event.AddTorrentEvent
+import com.revolgenx.anilib.event.SessionEvent
+import com.revolgenx.anilib.event.TagEvent
+import com.revolgenx.anilib.event.TagOperationType
+import com.revolgenx.anilib.event.TorrentEngineEvent
+import com.revolgenx.anilib.event.ShutdownEvent
+import com.revolgenx.anilib.event.TorrentEngineEventTypes
 import com.revolgenx.anilib.field.TagChooserField
 import com.revolgenx.anilib.field.TagField
 import com.revolgenx.anilib.fragment.SettingFragment
@@ -314,7 +320,8 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
                         })
                         finish()
                     } else {
-                        AuthenticationDialog.newInstance().show(supportFragmentManager, authDialogTag)
+                        AuthenticationDialog.newInstance()
+                            .show(supportFragmentManager, authDialogTag)
                         val serviceConfiguration =
                             AuthorizationServiceConfiguration(
                                 Uri.parse(BuildConfig.anilistAuthEndPoint) /* auth endpoint */,
@@ -470,13 +477,13 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
 
     override fun onTagChooserDone(fragmentTag: String?, list: List<TagField>) {
         when (fragmentTag) {
-            BrowseActivity.TAG_CHOOSER_DIALOG_TAG -> {
+            SearchActivity.TAG_CHOOSER_DIALOG_TAG -> {
                 invalidateTagFilter(list)
             }
-            BrowseActivity.GENRE_CHOOSER_DIALOG_TAG -> {
+            SearchActivity.GENRE_CHOOSER_DIALOG_TAG -> {
                 invalidateGenreFilter(list)
             }
-            BrowseActivity.STREAM_CHOOSER_DIALOG_TAG -> {
+            SearchActivity.STREAM_CHOOSER_DIALOG_TAG -> {
                 invalidateStreamFilter(list)
             }
         }
@@ -488,7 +495,7 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
         val fragmentTag = event.tag
         val tagFields = event.tagFields;
         when (event.tag) {
-            BrowseActivity.TAG_CHOOSER_DIALOG_TAG -> {
+            SearchActivity.TAG_CHOOSER_DIALOG_TAG -> {
                 when (event.operationType) {
                     TagOperationType.ADD_TAG -> {
                         viewModel.tagTagFields.addAll(tagFields)
@@ -506,7 +513,7 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
                     }
                 }
             }
-            BrowseActivity.GENRE_CHOOSER_DIALOG_TAG -> {
+            SearchActivity.GENRE_CHOOSER_DIALOG_TAG -> {
                 when (event.operationType) {
                     TagOperationType.ADD_GENRE -> {
                         viewModel.genreTagFields.addAll(tagFields)
@@ -524,7 +531,7 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
                     }
                 }
             }
-            BrowseActivity.STREAM_CHOOSER_DIALOG_TAG -> {
+            SearchActivity.STREAM_CHOOSER_DIALOG_TAG -> {
                 when (event.operationType) {
                     TagOperationType.ADD_STREAM -> {
                         viewModel.streamTagFields.addAll(tagFields)
@@ -549,13 +556,13 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
 
     private fun addTagToNavView(fragmentTag: String?, tags: List<TagField>) {
         when (fragmentTag) {
-            BrowseActivity.TAG_CHOOSER_DIALOG_TAG -> {
+            SearchActivity.TAG_CHOOSER_DIALOG_TAG -> {
                 mainBrowseFilterNavView.addTagField(tags)
             }
-            BrowseActivity.GENRE_CHOOSER_DIALOG_TAG -> {
+            SearchActivity.GENRE_CHOOSER_DIALOG_TAG -> {
                 mainBrowseFilterNavView.addGenreField(tags)
             }
-            BrowseActivity.STREAM_CHOOSER_DIALOG_TAG -> {
+            SearchActivity.STREAM_CHOOSER_DIALOG_TAG -> {
                 mainBrowseFilterNavView.addStreamField(tags)
             }
             else -> {
@@ -566,14 +573,14 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
 
     private fun removeTagToNavView(fragmentTag: String?, tags: List<TagField>) {
         when (fragmentTag) {
-            BrowseActivity.TAG_CHOOSER_DIALOG_TAG -> {
+            SearchActivity.TAG_CHOOSER_DIALOG_TAG -> {
                 mainBrowseFilterNavView.removeTagField(tags)
             }
-            BrowseActivity.GENRE_CHOOSER_DIALOG_TAG -> {
+            SearchActivity.GENRE_CHOOSER_DIALOG_TAG -> {
                 mainBrowseFilterNavView.removeGenreField(tags)
 
             }
-            BrowseActivity.STREAM_CHOOSER_DIALOG_TAG -> {
+            SearchActivity.STREAM_CHOOSER_DIALOG_TAG -> {
                 mainBrowseFilterNavView.removeStreamField(tags)
             }
             else -> {
@@ -613,7 +620,7 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
     override fun onGenreChoose(tags: List<TagField>) {
         openTagChooserDialog(
             tags,
-            BrowseActivity.GENRE_CHOOSER_DIALOG_TAG,
+            SearchActivity.GENRE_CHOOSER_DIALOG_TAG,
             getString(R.string.genre)
         )
     }
@@ -624,7 +631,7 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
     override fun onStreamChoose(tags: List<TagField>) {
         openTagChooserDialog(
             tags,
-            BrowseActivity.STREAM_CHOOSER_DIALOG_TAG,
+            SearchActivity.STREAM_CHOOSER_DIALOG_TAG,
             getString(R.string.streaming_on)
         )
     }
@@ -633,7 +640,7 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
      * Called by advance search filter nav view
      * */
     override fun onTagChoose(tags: List<TagField>) {
-        openTagChooserDialog(tags, BrowseActivity.TAG_CHOOSER_DIALOG_TAG, getString(R.string.tags))
+        openTagChooserDialog(tags, SearchActivity.TAG_CHOOSER_DIALOG_TAG, getString(R.string.tags))
     }
 
     override fun onGenreAdd(tags: List<TagField>) {
@@ -678,9 +685,9 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
     }
 
     override fun applyFilter() {
-        mainBrowseFilterNavView.getFilter()?.let {
+        mainBrowseFilterNavView.getFilter().let {
             BrowseFilterDataProvider.setBrowseFilterData(context, it)
-            BrowseActivity.openActivity(
+            SearchActivity.openActivity(
                 this, it
             )
         }
