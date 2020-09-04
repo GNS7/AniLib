@@ -21,8 +21,8 @@ android {
         applicationId "com.revolgenx.anilib_torrent"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 17
-        versionName "1.1.2-ultra"
+        versionCode 18
+        versionName "1.1.3-ultra"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
 
