@@ -35,19 +35,19 @@ import com.revolgenx.anilib.type.MediaType
 import com.revolgenx.anilib.util.makeToast
 import com.revolgenx.anilib.util.openLink
 import com.revolgenx.anilib.util.prettyNumberFormat
-import com.revolgenx.anilib.viewmodel.UserProfileViewModel
+import com.revolgenx.anilib.viewmodel.user.UserProfileViewModel
 import io.noties.markwon.recycler.MarkwonAdapter
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.loading_layout.*
 import kotlinx.android.synthetic.main.resource_status_container_layout.*
 import kotlinx.android.synthetic.main.user_activity_genre_presenter.view.*
-import kotlinx.android.synthetic.main.user_activity_layout.*
+import kotlinx.android.synthetic.main.user_profile_acitivty_layout.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.abs
 
 //todo://handle intent, handle review //stats
 class UserProfileActivity : BasePopupVideoActivity() {
-    override val layoutRes: Int = R.layout.user_activity_layout
+    override val layoutRes: Int = R.layout.user_profile_acitivty_layout
     private lateinit var userMeta: UserMeta
 
     companion object {
@@ -160,7 +160,7 @@ class UserProfileActivity : BasePopupVideoActivity() {
 
     private fun resolveChange() {
         (supportFragmentManager.findFragmentByTag(MessageDialog.messageDialogTag) as? MessageDialog)?.let {
-            it.dialogCallback = toggleFollowCallback
+            it.onButtonClickedListener = toggleFollowCallback
         }
     }
 
@@ -277,7 +277,7 @@ class UserProfileActivity : BasePopupVideoActivity() {
         data.mangaMeanScore?.let {
             mangaMeanScoreTv.title = it.toString()
         }
-        seasonGenreRecyclerView.layoutManager =
+        tagGenreRecyclerView.layoutManager =
             LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         Adapter.builder(this).addSource(Source.fromList(data.genreOverView.toList()))
             .addPresenter(
@@ -288,7 +288,7 @@ class UserProfileActivity : BasePopupVideoActivity() {
                 ) { view, genres ->
                     view.userGenreHeader.title = genres.first
                     view.userGenreHeader.subtitle = genres.second.toString()
-                }).into(seasonGenreRecyclerView)
+                }).into(tagGenreRecyclerView)
 
         initListener()
     }
@@ -376,7 +376,7 @@ class UserProfileActivity : BasePopupVideoActivity() {
                     positiveTextRes = R.string.yes
                     negativeTextRes = R.string.no
                     build().let {
-                        it.dialogCallback = toggleFollowCallback
+                        it.onButtonClickedListener = toggleFollowCallback
                         it.show(supportFragmentManager, messageDialogTag)
                     }
                 }

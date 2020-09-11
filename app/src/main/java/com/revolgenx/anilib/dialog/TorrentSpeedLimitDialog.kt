@@ -1,5 +1,6 @@
 package com.revolgenx.anilib.dialog
 
+import android.os.Bundle
 import androidx.core.os.bundleOf
 import com.pranavpandey.android.dynamic.support.dialog.DynamicDialog
 import com.revolgenx.anilib.R
@@ -21,7 +22,7 @@ class TorrentSpeedLimitDialog : BaseDialogFragment() {
     override var positiveText: Int? = R.string.done
     override var negativeText: Int? = R.string.cancel
 
-    override fun onShowListener(alertDialog: DynamicDialog) {
+    override fun onShowListener(alertDialog: DynamicDialog, savedInstanceState: Bundle?) {
         val metaData = arguments?.getParcelable<TorrentSpeedMeta>(metaKey) ?: return
         with(alertDialog) {
             this.uploadSpeedEt.setText(metaData.uploadSpeed.toString())

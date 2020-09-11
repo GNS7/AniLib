@@ -67,7 +67,7 @@ class AddTorrentFragment : BaseLayoutFragment(), AlertListener, CoroutineScope {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         headerLayout = LayoutInflater.from(context).inflate(
             R.layout.torrent_file_header_layout,
             container,

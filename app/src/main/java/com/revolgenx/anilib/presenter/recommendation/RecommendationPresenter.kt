@@ -28,7 +28,7 @@ import com.revolgenx.anilib.type.RecommendationRating
 import com.revolgenx.anilib.util.makeSnakeBar
 import com.revolgenx.anilib.util.makeToast
 import com.revolgenx.anilib.util.naText
-import com.revolgenx.anilib.viewmodel.RecommendationViewModel
+import com.revolgenx.anilib.viewmodel.home.RecommendationViewModel
 import kotlinx.android.synthetic.main.recommendation_presenter_layout.view.*
 
 class RecommendationPresenter(

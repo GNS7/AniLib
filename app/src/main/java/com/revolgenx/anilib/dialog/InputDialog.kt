@@ -43,7 +43,7 @@ class InputDialog : BaseDialogFragment() {
     override var positiveText: Int? = R.string.done
     override var negativeText: Int? = R.string.cancel
 
-    override fun onShowListener(alertDialog: DynamicDialog) {
+    override fun onShowListener(alertDialog: DynamicDialog, savedInstanceState: Bundle?) {
         alertDialog.apply {
             arguments?.getInt(inputTypeKey)?.let {
                 textInputEt.inputType = it

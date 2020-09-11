@@ -18,8 +18,10 @@ class ReviewPresenter(context: Context) : Presenter<ReviewModel>(context) {
     override val elementTypes: Collection<Int>
         get() = listOf(0)
 
+
     override fun onCreate(parent: ViewGroup, elementType: Int): Holder {
-        return Holder(getLayoutInflater().inflate(R.layout.review_presenter_layout, parent, false))
+        return Holder(
+            getLayoutInflater().inflate(R.layout.review_presenter_layout, parent, false))
     }
 
     override fun onBind(page: Page, holder: Holder, element: Element<ReviewModel>) {

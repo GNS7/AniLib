@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <com.pranavpandey.android.dynamic.support.widget.DynamicLinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -101,6 +101,19 @@
         <com.pranavpandey.android.dynamic.support.widget.DynamicCardView style="@style/Widget.DynamicApp.Card">
 
             <com.pranavpandey.android.dynamic.support.view.DynamicItemView
+                android:id="@+id/customizeFilterItemView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ads_colorType="tint_surface"
+                app:ads_icon="@drawable/ic_tag"
+                app:ads_subtitle="@string/custom_filter_desc"
+                app:ads_title="@string/custom_filters" />
+
+        </com.pranavpandey.android.dynamic.support.widget.DynamicCardView>
+
+        <com.pranavpandey.android.dynamic.support.widget.DynamicCardView style="@style/Widget.DynamicApp.Card">
+
+            <com.pranavpandey.android.dynamic.support.view.DynamicItemView
                 android:id="@+id/aboutItemView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -123,5 +136,5 @@
                 app:ads_title="@string/whats_new" />
 
         </com.pranavpandey.android.dynamic.support.widget.DynamicCardView>
-    </LinearLayout>
+    </com.pranavpandey.android.dynamic.support.widget.DynamicLinearLayout>
 </com.pranavpandey.android.dynamic.support.widget.DynamicNestedScrollView>

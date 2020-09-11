@@ -132,6 +132,10 @@ fun TextView.naText(text: String?) {
 
 fun String?.naText() = this.takeIf { it != null && it.isNotEmpty() } ?: "?"
 
+fun String?.getOrDefault() = this ?: ""
+fun Int?.getOrDefault() = this ?: 0
+fun Double?.getOrDefault() = this ?: 0.0
+
 //fun naText(na: String?) = na.takeIf { it != null && it.isNotEmpty() } ?: "?"
 
 fun View.makeSnakeBar(@StringRes str: Int? = null, msg: String? = null) {
@@ -242,3 +246,4 @@ fun Context.copyToClipBoard(str: String?) {
     DynamicLinkUtils.copyToClipboard(this, str, str)
     makeToast(R.string.copied_to_clipboard)
 }
+

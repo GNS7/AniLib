@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.DynamicApp.Light" />
+    <style name="AppTheme" parent="Theme.DynamicApp" />
 
     <style name="BaseTheme" parent="AppTheme">
         <!-- Customize your theme here. -->
@@ -15,7 +15,7 @@
 
     </style>
 
-    <style name="BaseTheme.Dark" parent="Theme.DynamicApp">
+    <style name="BaseTheme.Dark" parent="Theme.DynamicApp.Light">
         <!-- Customize your theme here. -->
 
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -41,9 +41,29 @@
 
 
     <style name="CollapsedTitleAppearance" parent="TextAppearance.DynamicApp.Toolbar">
-        <item name="fontFamily">@font/open_sans_regular</item>
+        <item name="fontFamily">@font/berlinrounded_extra_bold</item>
     </style>
 
+    <style name="searchFilterHeaderTextStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:layout_marginBottom">6dp</item>
+    </style>
+
+    <style name="DynamicToolbarTitleTheme" parent="TextAppearance.DynamicApp.Toolbar">
+        <item name="fontFamily">@font/berlinrounded_extra_bold</item>
+    </style>
+    <style name="DynamicToolbarSubTitleTheme" parent="TextAppearance.DynamicApp.Toolbar">
+        <item name="fontFamily">@font/berlinrounded_regular</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="BottomNavigationTextAppearance" parent="TextAppearance">
+        <item name="fontFamily">@font/berlinrounded_regular</item>
+        <item name="android:textSize">@dimen/bottom_navigation_text_size</item>
+    </style>
 
 
 </resources>

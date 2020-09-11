@@ -1,6 +1,7 @@
 package com.revolgenx.anilib.dialog
 
 import android.content.DialogInterface
+import android.os.Bundle
 import androidx.core.os.bundleOf
 import com.pranavpandey.android.dynamic.support.adapter.DynamicSpinnerImageAdapter
 import com.pranavpandey.android.dynamic.support.dialog.DynamicDialog
@@ -32,7 +33,7 @@ class TorrentSortDialog : BaseDialogFragment() {
         }
     }
 
-    override fun onShowListener(alertDialog: DynamicDialog) {
+    override fun onShowListener(alertDialog: DynamicDialog, savedInstanceState: Bundle?) {
         with(alertDialog) {
             this.torrentSortSpinner.adapter = makeSpinnerAdapter(torrentSortItems)
             arguments?.getInt(sortKey)?.let {

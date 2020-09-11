@@ -43,28 +43,34 @@ class SearchPresenter(context: Context, private val lifecycleOwner: LifecycleOwn
 
 
     override fun onCreate(parent: ViewGroup, elementType: Int): Holder {
-        val holderRes = when (elementType) {
+        val v = when (elementType) {
             SearchTypes.ANIME.ordinal, SearchTypes.MANGA.ordinal -> {
-                R.layout.search_media_layout
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.search_media_layout, parent, false)
             }
             SearchTypes.CHARACTER.ordinal -> {
-                R.layout.search_character_layout
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.search_character_layout, parent, false)
             }
             SearchTypes.STAFF.ordinal -> {
-                R.layout.search_staff_layout
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.search_staff_layout, parent, false)
             }
             SearchTypes.STUDIO.ordinal -> {
-                R.layout.search_studio_layout
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.search_studio_layout, parent, false)
             }
             SearchTypes.USER.ordinal -> {
-                R.layout.search_user_layout
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.search_user_layout, parent, false)
             }
             else -> {
-                R.layout.empty_layout
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.search_media_layout, parent, false)
             }
         }
 
-        return Holder(LayoutInflater.from(parent.context).inflate(holderRes, parent, false))
+        return Holder(v)
     }
 
     override fun onBind(page: Page, holder: Holder, element: Element<BaseModel>) {

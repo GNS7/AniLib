@@ -85,7 +85,7 @@ class AiringPresenter(context: Context) : Presenter<AiringMediaModel>(context) {
                 mediaStatus[it]
             })
 
-            mediaCardView.setOnClickListener {
+            airingCardView.setOnClickListener {
                 BrowseMediaEvent(
                     MediaBrowserMeta(
                         item.mediaId,

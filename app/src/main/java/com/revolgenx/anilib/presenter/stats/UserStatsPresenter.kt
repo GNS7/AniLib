@@ -6,11 +6,9 @@ import android.view.ViewGroup
 import com.otaliastudios.elements.Element
 import com.otaliastudios.elements.Page
 import com.otaliastudios.elements.Presenter
+import com.pranavpandey.android.dynamic.support.theme.DynamicTheme
 import com.revolgenx.anilib.R
-import com.revolgenx.anilib.event.BrowseGenreEvent
-import com.revolgenx.anilib.event.BrowseStaffEvent
-import com.revolgenx.anilib.event.BrowseStudioEvent
-import com.revolgenx.anilib.event.BrowseTagEvent
+import com.revolgenx.anilib.event.*
 import com.revolgenx.anilib.meta.StaffMeta
 import com.revolgenx.anilib.meta.StudioMeta
 import com.revolgenx.anilib.model.search.filter.MediaSearchFilterModel
@@ -29,7 +27,9 @@ class UserStatsPresenter(context: Context) : Presenter<BaseStatsModel>(context) 
                     R.layout.text_stats_presenter_layout,
                     parent,
                     false
-                )
+                ).also {
+                    it.statsMediaTv.compoundDrawablesRelative[0].setTint(DynamicTheme.getInstance().get().tintSurfaceColor)
+                }
             )
         else
             Holder(
@@ -37,7 +37,9 @@ class UserStatsPresenter(context: Context) : Presenter<BaseStatsModel>(context) 
                     R.layout.image_stats_presenter_layout,
                     parent,
                     false
-                )
+                ).also {
+                    it.statsMediaTv.compoundDrawablesRelative[0].setTint(DynamicTheme.getInstance().get().tintSurfaceColor)
+                }
             )
     }
 
@@ -61,6 +63,10 @@ class UserStatsPresenter(context: Context) : Presenter<BaseStatsModel>(context) 
                 is StatsTagModel -> {
                     item.tag?.let { tag ->
                         statsTitleTv.text = tag
+                        statsMediaLayout.setOnClickListener {
+                            MediaViewDialogEvent(item.mediaIds ?: emptyList()).postEvent;
+                            return@setOnClickListener;
+                        }
                         setOnClickListener { _ ->
                             BrowseTagEvent(MediaSearchFilterModel().also {
                                 it.tags = listOf(tag.trim())
@@ -110,6 +116,13 @@ class UserStatsPresenter(context: Context) : Presenter<BaseStatsModel>(context) 
                     imageSimpleDrawee.setImageURI(item.image)
                 }
             }
+
+            statsMediaTv.text = (item.mediaIds?.size ?: 0).toString()
+            statsMediaLayout.setOnClickListener {
+                MediaViewDialogEvent(item.mediaIds ?: emptyList()).postEvent;
+                return@setOnClickListener;
+            }
+
         }
     }
 

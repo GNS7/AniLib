@@ -32,7 +32,11 @@ class DiscoverAiringPresenter(context: Context) : Presenter<AiringMediaModel>(co
                 parent,
                 false
             ).also {
-                it.mediaMetaBackground.setBackgroundColor(ColorUtils.setAlphaComponent(DynamicTheme.getInstance().get().backgroundColor, 200))
+                it.mediaMetaBackground.setBackgroundColor(
+                    ColorUtils.setAlphaComponent(
+                        DynamicTheme.getInstance().get().backgroundColor, 200
+                    )
+                )
             }
         )
     }
@@ -40,6 +44,7 @@ class DiscoverAiringPresenter(context: Context) : Presenter<AiringMediaModel>(co
     private val mediaFormats by lazy {
         context.resources.getStringArray(R.array.media_format)
     }
+
 
     override fun onBind(page: Page, holder: Holder, element: Element<AiringMediaModel>) {
         super.onBind(page, holder, element)
