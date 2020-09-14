@@ -65,5 +65,4 @@
         <item name="android:textSize">@dimen/bottom_navigation_text_size</item>
     </style>
 
-
 </resources>
