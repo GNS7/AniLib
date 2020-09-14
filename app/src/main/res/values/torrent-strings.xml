@@ -2,6 +2,8 @@
 <resources>
 
     //torrent
+    <string name="download">Download</string>
+    <string name="exit">Exit</string>
     <string name="torrent_d">Torrent  %d</string>
     <string name="foreground_notification">AniLib is running in background</string>
     <string name="starting_engine">Starting Engine</string>

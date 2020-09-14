@@ -27,7 +27,6 @@
     <string name="previous">Previous</string>
     <string name="next">Next</string>
     <string name="filter">Filter</string>
-    <string name="download">Download</string>
 
 
     <string name="user_detail_fetch_failed">Failed to fetch user detail.</string>
@@ -197,7 +196,6 @@
     <string name="recent_reviews">Recent Reviews</string>
     <string name="reviews">Reviews</string>
     <string name="press_again_to_exit">Press again to exit</string>
-    <string name="exit">Exit</string>
 
     <string name="patreon">Patreon</string>
     <string name="bmc_title">Buy Me A Coffee</string>
