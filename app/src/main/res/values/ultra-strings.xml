@@ -76,17 +76,9 @@
     <string name="enable_utp">Enable uTP</string>
     <string name="enable_upnp">Enable UPnP</string>
     <string name="enable_nat_pmp">Enable NAT-PMP</string>
-
-    <string-array name="torrent_sort">
-        <item>Name Asc</item>
-        <item>Name Desc</item>
-        <item>Size Asc</item>
-        <item>Size Desc</item>
-        <item>Progress Asc</item>
-        <item>Progress Desc</item>
-        <item>Date Asc</item>
-        <item>Date Desc</item>
-    </string-array>
-
+    <string name="name_desc">Name Desc</string>
+    <string name="size_desc">Size Desc</string>
+    <string name="date">Date</string>
+    <string name="date_desc">Date Desc</string>
 
 </resources>

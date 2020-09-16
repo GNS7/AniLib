@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="torrent_sort">
+        <item>@string/name</item>
+        <item>@string/name_desc</item>
+        <item>@string/size</item>
+        <item>@string/size_desc</item>
+        <item>@string/progress</item>
+        <item>@string/progress_desc</item>
+        <item>@string/date</item>
+        <item>@string/date_desc</item>
+    </string-array>
+</resources>
