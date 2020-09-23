@@ -21,6 +21,7 @@ import com.revolgenx.anilib.fragment.review.ReviewFragment
 import com.revolgenx.anilib.fragment.studio.StudioFragment
 import com.revolgenx.anilib.fragment.torrent.AddTorrentFragment
 import com.revolgenx.anilib.meta.*
+import com.revolgenx.anilib.preference.getApplicationLocale
 import com.revolgenx.anilib.util.openLink
 import com.revolgenx.anilib.util.registerForEvent
 import com.revolgenx.anilib.util.unRegisterForEvent
@@ -31,7 +32,7 @@ import java.util.*
 abstract class BaseDynamicActivity : DynamicSystemActivity() {
 
     override fun getLocale(): Locale? {
-        return null
+        return Locale(getApplicationLocale())
     }
 
     override fun getThemeRes(): Int {

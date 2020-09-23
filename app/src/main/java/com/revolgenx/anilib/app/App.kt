@@ -19,7 +19,9 @@ import com.revolgenx.anilib.controller.Constants
 import com.revolgenx.anilib.controller.ThemeController
 import com.revolgenx.anilib.logger.AniLibDebugTree
 import com.revolgenx.anilib.logger.LoggerTree
+import com.revolgenx.anilib.preference.getApplicationLocale
 import com.revolgenx.anilib.preference.getString
+import com.revolgenx.anilib.preference.languagePrefKey
 import com.revolgenx.anilib.preference.loggedIn
 import com.revolgenx.anilib.repository.databaseModules
 import com.revolgenx.anilib.repository.networkModules
@@ -121,7 +123,7 @@ class App : DynamicApplication() {
 
 
     override fun getLocale(): Locale? {
-        return null
+        return Locale(getApplicationLocale())
     }
 
     override fun onDynamicChanged(context: Boolean, recreate: Boolean) {
@@ -130,7 +132,6 @@ class App : DynamicApplication() {
             AppController.instance.context = this
         }
     }
-
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         super.onSharedPreferenceChanged(sharedPreferences, key)
@@ -151,6 +152,9 @@ class App : DynamicApplication() {
                 DynamicTheme.getInstance().onDynamicChanged(false, true)
             Constants.PREF_SETTINGS_NAVIGATION_BAR_THEME ->
                 DynamicTheme.getInstance().onNavigationBarThemeChanged()
+            languagePrefKey -> {
+                DynamicTheme.getInstance().onDynamicConfigurationChanged(true, false, false, false, false)
+            }
         }
     }
 

@@ -3,6 +3,7 @@ package com.revolgenx.anilib.preference
 import android.content.Context
 import com.auth0.android.jwt.JWT
 import com.google.gson.Gson
+import com.pranavpandey.android.dynamic.preferences.DynamicPreferences
 import com.pranavpandey.android.dynamic.utils.DynamicPackageUtils
 import com.revolgenx.anilib.R
 import com.revolgenx.anilib.model.UserPrefModel
@@ -23,6 +24,8 @@ private const val crashReportKey = "crash_report_key"
 private const val lastNotificationKey = "last_notification_key"
 private const val versionKey = "versionKey"
 private const val sharedPrefSyncKey = "sharedPrefSyncKey"
+
+const val languagePrefKey = "application_language_key"
 
 fun Context.loggedIn() = getBoolean(loggedInKey, false)
 fun Context.loggedIn(logIn: Boolean) = putBoolean(loggedInKey, logIn)
@@ -137,3 +140,7 @@ fun isSharedPreferenceSynced(context: Context, synced: Boolean? = null) =
         synced
     }
 
+
+fun getApplicationLocale(): String {
+    return DynamicPreferences.getInstance().load(languagePrefKey, "en")!!
+}
