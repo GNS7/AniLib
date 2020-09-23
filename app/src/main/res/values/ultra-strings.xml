@@ -56,7 +56,7 @@
     <string name="unsupported_format">Unsupported format</string>
     <string name="please_wait_starting_engine">Please wait starting engine.</string>
     <string name="show_adult_content">Show Adult Content</string>
-    <string name="show_adult_content_desc">Enabling it will show include adult media content.</string>
+    <string name="show_adult_content_desc">Enabling it will show adult media content.</string>
     <string name="torrent_setting">Torrent Setting</string>
     <string name="storage_path">Storage Path</string>
     <string name="bandwidth">Bandwidth</string>
