@@ -20,18 +20,14 @@ android {
         applicationId "com.revolgenx.anilib_torrent"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 15
-        versionName "1.1.1-base"
+        versionCode 19
+        versionName "1.1.4-base"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
 
         manifestPlaceholders = [
                 appAuthRedirectScheme: 'callback'
         ]
-
-        ndk {
-            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
-        }
 
         buildConfigField "String", "anilistclientId", anilistProperties['anilist_client_id']
         buildConfigField "String", "anilistclientSecret", anilistProperties['anilist_client_secret']
@@ -52,16 +48,6 @@ android {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/NOTICE.txt'
-    }
-
-
-    splits {
-        abi {
-            enable true
-            reset()
-            include 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
-            universalApk true
-        }
     }
 
     kotlinOptions {
@@ -93,20 +79,11 @@ android {
         applicationVariants.all { variant ->
             if(variant.buildType.name == "release"){
                 variant.outputs.all {
-                    def architecture = getFilter(com.android.build.OutputFile.ABI)
-                    if(architecture == null){
-                        architecture = "universal"
-                    }
-
-                    outputFileName = "AniLib-${defaultConfig.versionName}-${architecture}.apk"
+                    outputFileName = "AniLib-${defaultConfig.versionName}.apk"
                 }
             }else if(variant.buildType.name == "debug"){
                 variant.outputs.all {
-                    def architecture = getFilter(com.android.build.OutputFile.ABI)
-                    if(architecture == null){
-                        architecture = "universal"
-                    }
-                    outputFileName = "AniLib-${defaultConfig.versionName}-${architecture}-debug.apk"
+                    outputFileName = "AniLib-${defaultConfig.versionName}-debug.apk"
                 }
             }
         }
