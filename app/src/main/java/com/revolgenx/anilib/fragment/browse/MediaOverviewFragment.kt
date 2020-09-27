@@ -76,7 +76,7 @@ class MediaOverviewFragment : BaseFragment() {
             viewModel
         )
     }
-    private val loadingPresenter: Presenter<Void> by lazy {
+    private val loadingPresenter: Presenter<Unit> by lazy {
         Presenter.forLoadingIndicator(
             requireContext(),
             R.layout.loading_layout
@@ -92,11 +92,11 @@ class MediaOverviewFragment : BaseFragment() {
         mutableListOf<MediaMetaCollection>()
     }
 
-    private val errorPresenter: Presenter<Void> by lazy {
+    private val errorPresenter: Presenter<Unit> by lazy {
         Presenter.forErrorIndicator(requireContext(), R.layout.error_layout)
     }
 
-    private val emptyPresenter: Presenter<Void> by lazy {
+    private val emptyPresenter: Presenter<Unit> by lazy {
         Presenter.forEmptyIndicator(requireContext(), R.layout.empty_layout)
     }
 
@@ -125,7 +125,7 @@ class MediaOverviewFragment : BaseFragment() {
             ).also {
                 it.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                     override fun getSpanSize(position: Int): Int {
-                        return if (metaContainerAdapter?.elementAt(position)?.element?.type == 0) {
+                        return if (metaContainerAdapter?.getItemViewType(position) == 0) {
                             1
                         } else {
                             span
@@ -141,7 +141,7 @@ class MediaOverviewFragment : BaseFragment() {
             ).also {
                 it.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                     override fun getSpanSize(position: Int): Int {
-                        return if (metaLinkAdapter?.elementAt(position)?.element?.type == 0) {
+                        return if (metaLinkAdapter?.getItemViewType(position) == 0) {
                             1
                         } else {
                             span

@@ -140,7 +140,6 @@ fun isSharedPreferenceSynced(context: Context, synced: Boolean? = null) =
         synced
     }
 
-
 fun getApplicationLocale(): String {
     return DynamicPreferences.getInstance().load(languagePrefKey, "en")!!
 }

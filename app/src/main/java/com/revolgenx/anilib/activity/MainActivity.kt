@@ -91,6 +91,15 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
             return Adapter.builder(this)
         }
 
+    private val discoverFragments by lazy {
+        listOf(
+            DiscoverFragment::class.java,
+            SeasonFragment::class.java,
+            RecommendationFragment::class.java,
+            TorrentFragment::class.java
+        )
+    }
+
     private fun themeBottomNavigation() {
         bottomNav.color = DynamicTheme.getInstance().get().primaryColor
         bottomNav.textColor = DynamicTheme.getInstance().get().accentColor
@@ -131,12 +140,7 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
 
         mainViewPager.adapter = makePagerAdapter(
             BaseFragment.newInstances(
-                listOf(
-                    DiscoverFragment::class.java,
-                    SeasonFragment::class.java,
-                    RecommendationFragment::class.java,
-                    TorrentFragment::class.java
-                )
+                discoverFragments
             )
         )
 
@@ -482,8 +486,6 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
             MediaTagFilterTypes.TAGS -> invalidateTagFilter(event.tagFields)
             MediaTagFilterTypes.GENRES -> invalidateGenreFilter(event.tagFields)
             MediaTagFilterTypes.STREAMING_ON -> invalidateStreamFilter(event.tagFields)
-            MediaTagFilterTypes.TAG_EXCLUDE -> invalidateTagExcludeFilter(event.tagFields)
-            MediaTagFilterTypes.GENRE_EXCLUDE -> invalidateGenreExcludeFilter(event.tagFields)
         }
     }
 
@@ -512,23 +514,6 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
         )
     }
 
-    private fun invalidateTagExcludeFilter(list: List<TagField>) {
-        viewModel.tagExcludeTagFields = list.toMutableList()
-        mainBrowseFilterNavView.buildTagExcludeAdapter(
-            tagAdapter,
-            list
-        )
-    }
-
-    private fun invalidateGenreExcludeFilter(list: List<TagField>) {
-        viewModel.genreExcludeTagFields = list.toMutableList()
-        mainBrowseFilterNavView.buildGenreExcludeAdapter(
-            tagAdapter,
-            list
-        )
-    }
-
-
     override fun openTagChooserDialog(tags: List<TagField>, tagType: MediaTagFilterTypes) {
         TagChooserDialogFragment.newInstance(
             TagChooserField(
@@ -549,12 +534,6 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
             MediaTagFilterTypes.STREAMING_ON -> {
                 viewModel.streamTagFields = tags.toMutableList()
             }
-            MediaTagFilterTypes.TAG_EXCLUDE -> {
-                viewModel.tagExcludeTagFields = tags.toMutableList()
-            }
-            MediaTagFilterTypes.GENRE_EXCLUDE -> {
-                viewModel.genreExcludeTagFields = tags.toMutableList()
-            }
         }
 
     }
@@ -570,12 +549,6 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
             MediaTagFilterTypes.STREAMING_ON -> {
                 viewModel.streamTagFields.removeAll { it.tag == tag }
             }
-            MediaTagFilterTypes.TAG_EXCLUDE -> {
-                viewModel.tagExcludeTagFields.removeAll { it.tag == tag }
-            }
-            MediaTagFilterTypes.GENRE_EXCLUDE -> {
-                viewModel.genreExcludeTagFields.removeAll { it.tag == tag }
-            }
         }
     }
 
@@ -589,12 +562,6 @@ class MainActivity : BaseDynamicActivity(), CoroutineScope,
             }
             MediaTagFilterTypes.STREAMING_ON -> {
                 mainBrowseFilterNavView.invalidateStreamAdapter(tagAdapter)
-            }
-            MediaTagFilterTypes.TAG_EXCLUDE -> {
-                mainBrowseFilterNavView.invalidateTagExcludeAdapter(tagAdapter)
-            }
-            MediaTagFilterTypes.GENRE_EXCLUDE -> {
-                mainBrowseFilterNavView.invalidateGenreExcludeAdapter(tagAdapter)
             }
         }
     }
