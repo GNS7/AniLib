@@ -234,8 +234,6 @@ fun TextView.showProgress(@StringRes resId: Int = 0, b: Boolean = false, progCol
     }
 }
 
-
-//clipboard
 fun Context.getClipBoardText(): String {
     val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     return clipboard.primaryClip?.getItemAt(0)?.text?.toString() ?: ""

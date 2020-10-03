@@ -70,7 +70,7 @@ class RecommendationServiceImpl(graphRepository: BaseGraphRepository) :
             .subscribe({
                 resourceCallback.invoke(Resource.success(it))
             }, {
-                if (it is ApolloHttpException) {
+                if ((it is ApolloHttpException)) {
                     if (it.code() == HttpURLConnection.HTTP_NOT_FOUND) {
                         resourceCallback.invoke(Resource.success(null))
                         return@subscribe
