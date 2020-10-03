@@ -35,8 +35,8 @@ android {
             buildConfigField "String", "anilistclientId", secretProps['anilist_client_id']
             buildConfigField "String", "anilistclientSecret", secretProps['anilist_client_secret']
         }else{
-            buildConfigField "String", "anilistclientId", "anilistclientId"
-            buildConfigField "String", "anilistclientSecret", "anilistclientSecret"
+            buildConfigField "String", "anilistclientId", "anilist_client_id"
+            buildConfigField "String", "anilistclientSecret", "anilist_client_secret"
         }
 
         buildConfigField "String", "anilistRedirectUri", anilistProperties['anilist_redirect_uri']
