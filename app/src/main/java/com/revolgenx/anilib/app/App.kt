@@ -23,12 +23,10 @@ import com.revolgenx.anilib.preference.getApplicationLocale
 import com.revolgenx.anilib.preference.getString
 import com.revolgenx.anilib.preference.languagePrefKey
 import com.revolgenx.anilib.preference.loggedIn
-import com.revolgenx.anilib.repository.databaseModules
 import com.revolgenx.anilib.repository.networkModules
 import com.revolgenx.anilib.repository.repositoryModules
 import com.revolgenx.anilib.service.notification.NotificationWorker
 import com.revolgenx.anilib.service.serviceModule
-import com.revolgenx.anilib.torrent.torrentModules
 import com.revolgenx.anilib.viewmodel.viewModelModules
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -37,7 +35,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 
-class App : DynamicApplication() {
+open class App : DynamicApplication() {
 
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
@@ -62,16 +60,7 @@ class App : DynamicApplication() {
         BigImageViewer.initialize(FrescoImageLoader.with(this, config))
         startKoin {
             androidContext(this@App)
-            modules(
-                listOf(
-                    viewModelModules,
-                    repositoryModules,
-                    databaseModules,
-                    torrentModules,
-                    networkModules,
-                    serviceModule
-                )
-            )
+            modules(getKoinModules())
         }
 
 
@@ -109,6 +98,13 @@ class App : DynamicApplication() {
                 .cancelUniqueWork(NotificationWorker.NOTIFICATION_WORKER_TAG)
         }
     }
+
+    protected open fun getKoinModules() = listOf(
+        viewModelModules,
+        repositoryModules,
+        networkModules,
+        serviceModule
+    )
 
     @StyleRes
     override fun getThemeRes(): Int {

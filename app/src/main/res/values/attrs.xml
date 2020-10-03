@@ -54,17 +54,4 @@
         <attr name="mode" format="integer" />
     </declare-styleable>
 
-    <declare-styleable name="DynamicInputPreference">
-        <attr name="inputType">
-            <flag name="none" value="0x00000000" />
-            <flag name="text" value="0x00000001" />
-            <flag name="number" value="0x00000002" />
-        </attr>
-        <attr name="preferenceType">
-            <flag name="string" value="0"/>
-            <flag name="integer" value="1"/>
-        </attr>
-    </declare-styleable>
-
-
 </resources>

@@ -21,13 +21,13 @@ import com.revolgenx.anilib.fragment.character.CharacterMediaFragment
 import com.revolgenx.anilib.fragment.staff.StaffFragment
 import com.revolgenx.anilib.fragment.staff.StaffMediaCharacterFragment
 import com.revolgenx.anilib.fragment.staff.StaffMediaRoleFragment
-import com.revolgenx.anilib.fragment.torrent.*
 import com.revolgenx.anilib.fragment.user.*
-import com.revolgenx.anilib.util.unRegisterForEvent
 import com.revolgenx.anilib.meta.ViewPagerContainerMeta
 import com.revolgenx.anilib.meta.ViewPagerContainerType
+import com.revolgenx.anilib.util.unRegisterForEvent
 import kotlinx.android.synthetic.main.toolbar_layout.*
 import kotlinx.android.synthetic.main.viewpager_container_activity.*
+import com.revolgenx.anilib.fragment.torrent.*
 
 class ViewPagerContainerActivity : BaseDynamicActivity() {
 

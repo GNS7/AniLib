@@ -452,12 +452,12 @@ class TorrentFragment : BaseLayoutFragment() {
 
         inner class TorrentViewHolder(private val v: View) : RecyclerView.ViewHolder(v),
             TorrentProgressListener {
-            private var torrent: Torrent? = null
+            private lateinit var torrent: Torrent
             private var currentState: TorrentState = TorrentState.UNKNOWN
 
             fun bind(item: Torrent) {
                 torrent = item
-                torrent!!.addListener(this)
+                torrent.addListener(this)
                 v.apply {
                     this.torrentAdapterConstraintLayout.setBackgroundColor(
                         if (isSelected(adapterPosition)) {
@@ -467,15 +467,15 @@ class TorrentFragment : BaseLayoutFragment() {
                         }
                     )
                     pausePlayIv.setOnClickListener {
-                        if (torrent!!.isPausedWithState()) {
+                        if (torrent.isPausedWithState()) {
                             try {
-                                torrent!!.resume()
+                                torrent.resume()
                             } catch (e: TorrentResumeException) {
                                 makeToast(msg = e.message)
                             }
                         } else {
                             try {
-                                torrent!!.pause()
+                                torrent.pause()
                             } catch (e: TorrentPauseException) {
                                 makeToast(msg = e.message)
                             }
@@ -527,28 +527,28 @@ class TorrentFragment : BaseLayoutFragment() {
                     v.apply {
                         if (context == null) return@runOnUiThread
 
-                        torrentNameTv.text = torrent!!.name
-                        val progress = torrent!!.progress
+                        torrentNameTv.text = torrent.name
+                        val progress = torrent.progress
                         torrentProgressBar.progress = progress.toInt()
 
-//                    if (torrent!!.hasError) {
+//                    if (torrent.hasError) {
 //                        indicatorView.setBackgroundColor(context.color(R.color.errorColor))
 //                    }
 
-                        val state = torrent!!.state
+                        val state = torrent.state
                         torrentFirstTv.text =
-                            "${torrent!!.state.name} · S:${torrent!!.connectedSeeders()} · L:${torrent!!.connectedLeechers()}${
+                            "${torrent.state.name} · S:${torrent.connectedSeeders()} · L:${torrent.connectedLeechers()}${
                             if (state == TorrentState.DOWNLOADING) {
-                                " · ET: ${torrent!!.eta().formatRemainingTime()}"
+                                " · ET: ${torrent.eta().formatRemainingTime()}"
                             } else ""}"
 
                         torrentSecondTv.text =
                             if (state == TorrentState.COMPLETED || state == TorrentState.SEEDING) {
-                                "${torrent!!.totalCompleted.formatSize()}/${torrent!!.totalSize.formatSize()} · " +
-                                        "↑ ${torrent!!.uploadSpeed.formatSpeed()}"
+                                "${torrent.totalCompleted.formatSize()}/${torrent.totalSize.formatSize()} · " +
+                                        "↑ ${torrent.uploadSpeed.formatSpeed()}"
                             } else
-                                "${torrent!!.totalCompleted.formatSize()}/${torrent!!.totalSize.formatSize()} · " +
-                                        "↓ ${torrent!!.downloadSpeed.formatSpeed()} · ↑ ${torrent!!.uploadSpeed.formatSpeed()}"
+                                "${torrent.totalCompleted.formatSize()}/${torrent.totalSize.formatSize()} · " +
+                                        "↓ ${torrent.downloadSpeed.formatSpeed()} · ↑ ${torrent.uploadSpeed.formatSpeed()}"
 
                         if (currentState == state) return@runOnUiThread
 
@@ -583,7 +583,7 @@ class TorrentFragment : BaseLayoutFragment() {
 //                    )
 
                         pausePlayIv.setImageResource(
-                            if (torrent!!.isPausedWithState()) {
+                            if (torrent.isPausedWithState()) {
                                 R.drawable.ic_play
                             } else {
                                 R.drawable.ic_pause
@@ -601,8 +601,7 @@ class TorrentFragment : BaseLayoutFragment() {
 
 
             fun unbind() {
-                torrent!!.removeListener(this)
-                torrent = null
+                torrent.removeListener(this)
             }
         }
     }

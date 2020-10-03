@@ -9,6 +9,4 @@
     <dimen name="dynamic_card_elevation">1dp</dimen>
     <dimen name="bottom_navigation_text_size">14sp</dimen>
     <dimen name="bottom_navigation_smart_tab_text_size">14sp</dimen>
-    <dimen name="progress_radius_dimen">7dp</dimen>
-    <dimen name="progress_stroke_dimen">2dp</dimen>
 </resources>

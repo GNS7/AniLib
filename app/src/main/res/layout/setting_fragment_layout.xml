@@ -15,10 +15,10 @@
         <com.pranavpandey.android.dynamic.support.widget.DynamicTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:text="@string/application"
             android:textSize="14sp"
-            app:fontFamily="@font/berlinrounded_bold"
-            android:layout_margin="10dp"/>
+            app:fontFamily="@font/berlinrounded_bold" />
 
         <com.pranavpandey.android.dynamic.support.widget.DynamicCardView style="@style/Widget.DynamicApp.Card">
 
@@ -34,7 +34,9 @@
         </com.pranavpandey.android.dynamic.support.widget.DynamicCardView>
 
 
-        <com.pranavpandey.android.dynamic.support.widget.DynamicCardView style="@style/Widget.DynamicApp.Card">
+        <com.pranavpandey.android.dynamic.support.widget.DynamicCardView
+            style="@style/Widget.DynamicApp.Card"
+            android:visibility="gone">
 
             <com.pranavpandey.android.dynamic.support.setting.DynamicSpinnerPreference
                 android:layout_width="match_parent"
@@ -52,10 +54,10 @@
         <com.pranavpandey.android.dynamic.support.widget.DynamicTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:text="@string/media"
             android:textSize="14sp"
-            app:fontFamily="@font/berlinrounded_bold"
-            android:layout_margin="10dp"/>
+            app:fontFamily="@font/berlinrounded_bold" />
 
         <com.pranavpandey.android.dynamic.support.widget.DynamicCardView style="@style/Widget.DynamicApp.Card">
 
@@ -69,7 +71,6 @@
                 app:ads_title="@string/notification" />
 
         </com.pranavpandey.android.dynamic.support.widget.DynamicCardView>
-
 
 
         <com.pranavpandey.android.dynamic.support.widget.DynamicCardView style="@style/Widget.DynamicApp.Card">
@@ -135,10 +136,10 @@
         <com.pranavpandey.android.dynamic.support.widget.DynamicTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:text="@string/torrent"
             android:textSize="14sp"
-            app:fontFamily="@font/berlinrounded_bold"
-            android:layout_margin="10dp"/>
+            app:fontFamily="@font/berlinrounded_bold" />
 
         <com.pranavpandey.android.dynamic.support.widget.DynamicCardView style="@style/Widget.DynamicApp.Card">
 
@@ -156,10 +157,10 @@
         <com.pranavpandey.android.dynamic.support.widget.DynamicTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:text="@string/other"
             android:textSize="14sp"
-            app:fontFamily="@font/berlinrounded_bold"
-            android:layout_margin="10dp"/>
+            app:fontFamily="@font/berlinrounded_bold" />
 
         <com.pranavpandey.android.dynamic.support.widget.DynamicCardView style="@style/Widget.DynamicApp.Card">
 

@@ -107,8 +107,4 @@ val viewModelModules = module {
 
     //setting
     viewModel { TagFilterSettingDialogViewModel() }
-
-    //torrent
-    viewModel { TorrentViewModel(get(),get(),get(),get()) }
-    viewModel { AddTorrentViewModel() }
 }
