@@ -1,6 +1,8 @@
-<p align="center"><img src="https://github.com/rev0lgenX/AnilibAssets/raw/master/1_1_4_base/simple_banner.jpg" width="20%" ></p>
+<p align="center"><img src="https://github.com/rev0lgenX/AnilibAssets/raw/master/1_1_4_base/simple_banner.jpg" width="180px" ></p>
 
 ## 
+
+[![Build Check](https://github.com/rev0lgenX/AniLib/workflows/AniLib%20build%20check/badge.svg?branch=master-torrent&event=push)](https://github.com/rev0lgenX/AniLib/actions) [![Release](https://img.shields.io/github/v/tag/rev0lgenX/AniLib?label=Release)](https://github.com/rev0lgenX/AniLib/releases/)  [![Discord](https://img.shields.io/discord/762249048748589066?color=%236E85D3&label=Discord&logo=Discord)](https://discord.gg/Gd2TVQT)
 
 ## About
 App for tracking anime/manga by the power of AniList.
@@ -34,7 +36,7 @@ Before creating an issue check if it is already opened.
         
 * Check if bug is already fixed.<br>
 * Create an issue with steps to reproduce the bug and a screenshot would help.
-* Report/Discuss about the issue in chat if you are unsure about it. 
+* Report/Discuss about the issue in chat if you are unsure about it. [![Discord Issue](https://img.shields.io/discord/762249048748589066?logo=Discord)](https://discord.gg/AtqszAG)
 
 </details>
 
