@@ -1,0 +1,37 @@
+name: AniLib build check
+on:
+  workflow_dispatch:
+
+jobs:
+  release_jars:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+          token: ${{ secrets.ACCESS_TOKEN }}
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v2.5.0
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+
+      - name: Install NDK
+        run: sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.0.6113669" &> /dev/null
+
+      - name: Build app
+        run: ./gradlew assembleDevDebug
+        
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+          repository: rev0lgenX/AniLib-Snapshot
+          event-type: build-snapshot-event
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
